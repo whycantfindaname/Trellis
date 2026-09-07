@@ -225,9 +225,11 @@ And **does NOT record** when:
 
 Every configurator that wants its writes tracked must funnel through `writeFile()` — direct `fs.writeFileSync` bypasses the recorder.
 
-#### `.trellis/` walk exemption
+#### `.trellis/` initial seeding and re-init ownership
 
-`.trellis/` files are still hashed via recursive walk (existing `collectFiles` behavior + `EXCLUDE_FROM_HASH` filters). Rationale: `trellis uninstall` step 3 does `fs.rmSync('.trellis/', { recursive: true, force: true })` regardless of manifest content, so the walk's blast radius is contained. Over-hashing inside `.trellis/` only affects `trellis update` 3-way-merge accuracy, not uninstall safety.
+Fresh initialization hashes `.trellis/` by walking it recursively and applying the `EXCLUDE_FROM_HASH` filters. Re-init (`merge: true`) hashes only the paths written and recorded during the current initialization, including eligible `.trellis/` paths. It preserves every other existing baseline and leaves unrecorded custom files untracked. If merge mode records no writes, the manifest remains unchanged.
+
+Rehashing a skipped custom workflow, configuration, or runtime file would make its modified bytes the official baseline. A later `trellis update --create-new` could then overwrite that customization automatically. Every initialization of an existing `.trellis/` tree uses merge mode, including the full-flow, `--skip-existing`, and empty-task-store recovery paths. Adding a platform must preserve both the custom bytes and the earlier template baseline. Integration regressions cover initialization, customization, all three re-init paths, and update in that order.
 
 #### Self-heal contract: `pruneOrphanManifestKeys`
 

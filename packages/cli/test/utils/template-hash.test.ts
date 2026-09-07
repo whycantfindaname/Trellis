@@ -327,7 +327,9 @@ describe("matchesOriginalTemplate", () => {
   });
 
   it("returns false when file does not exist", () => {
-    expect(matchesOriginalTemplate(tmpDir, "missing.txt", "content")).toBe(false);
+    expect(matchesOriginalTemplate(tmpDir, "missing.txt", "content")).toBe(
+      false,
+    );
   });
 
   it("returns true when file matches original content exactly", () => {
@@ -403,7 +405,7 @@ describe("initializeHashes", () => {
   });
 
   it("hashes files in .trellis/ and tracked platform paths", () => {
-    // .trellis/ is always walked recursively. Platform paths (.claude/, etc.)
+    // Fresh init walks .trellis/ recursively. Platform paths (.claude/, etc.)
     // are hashed only when explicitly listed in `trackedPaths` — the source-
     // of-truth set captured by `startRecordingWrites` during init.
     fs.mkdirSync(path.join(tmpDir, ".trellis", "scripts"), { recursive: true });
@@ -456,6 +458,61 @@ describe("initializeHashes", () => {
     expect(hashes).not.toHaveProperty(".codex/sessions/2026/x.jsonl");
     expect(hashes).not.toHaveProperty("AGENTS.md");
   });
+
+  it("merge preserves skipped baselines and only tracks current writes", () => {
+    fs.mkdirSync(path.join(tmpDir, ".trellis", "scripts"), { recursive: true });
+    fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "stock");
+    fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "stock agents");
+    initializeHashes(tmpDir);
+    const baseline = loadHashes(tmpDir);
+
+    fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "custom");
+    fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "custom agents");
+    fs.writeFileSync(path.join(tmpDir, ".trellis", "custom.md"), "untracked");
+    fs.writeFileSync(path.join(tmpDir, ".trellis", "scripts", "new.py"), "new");
+    fs.mkdirSync(path.join(tmpDir, ".trellis", "tasks"), { recursive: true });
+    fs.writeFileSync(path.join(tmpDir, ".trellis", "tasks", "task.json"), "{}");
+
+    initializeHashes(tmpDir, {
+      merge: true,
+      trackedPaths: new Set([
+        ".trellis/scripts/new.py",
+        ".trellis/tasks/task.json",
+      ]),
+    });
+    expect(loadHashes(tmpDir)).toEqual({
+      ...baseline,
+      ".trellis/scripts/new.py": computeHash("new"),
+    });
+
+    fs.writeFileSync(
+      path.join(tmpDir, ".trellis", "scripts", "new.py"),
+      "updated",
+    );
+    initializeHashes(tmpDir, {
+      merge: true,
+      trackedPaths: new Set([".trellis/scripts/new.py"]),
+    });
+    expect(loadHashes(tmpDir)[".trellis/scripts/new.py"]).toBe(
+      computeHash("updated"),
+    );
+  });
+
+  it.each([undefined, new Set<string>()])(
+    "merge without recorded writes preserves existing baselines (%s)",
+    (trackedPaths) => {
+      fs.mkdirSync(path.join(tmpDir, ".trellis"), { recursive: true });
+      fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "stock");
+      fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "stock agents");
+      initializeHashes(tmpDir);
+      const baseline = loadHashes(tmpDir);
+      fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "custom");
+      fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "custom agents");
+
+      initializeHashes(tmpDir, { merge: true, trackedPaths });
+      expect(loadHashes(tmpDir)).toEqual(baseline);
+    },
+  );
 
   it("excludes workspace and tasks directories", () => {
     fs.mkdirSync(path.join(tmpDir, ".trellis", "workspace"), { recursive: true });

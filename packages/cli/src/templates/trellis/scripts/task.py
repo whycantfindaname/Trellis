@@ -84,16 +84,17 @@ def cmd_start(args: argparse.Namespace) -> int:
     # Resolve task directory (supports task name, relative path, or absolute path)
     full_path = resolve_task_dir(task_input, repo_root)
 
-    if not full_path.is_dir():
+    if not full_path or not full_path.is_dir():
         print(colored(f"Error: Task not found: {task_input}", Colors.RED))
         print("Hint: Use task name (e.g., 'my-task') or full path (e.g., '.trellis/tasks/01-31-my-task')")
         return 1
 
     # Convert to relative path for storage
     try:
-        task_dir = full_path.relative_to(repo_root).as_posix()
+        task_dir = full_path.relative_to(repo_root.resolve()).as_posix()
     except ValueError:
-        task_dir = str(full_path)
+        print(colored(f"Error: Task not found: {task_input}", Colors.RED))
+        return 1
 
     task_json_path = full_path / FILE_TASK_JSON
 

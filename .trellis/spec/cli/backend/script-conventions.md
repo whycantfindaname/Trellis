@@ -439,9 +439,16 @@ for session/window scoped task state:
    detected platform; then a shell ticket for a matching AI-run `task.py`
    command.
 2. Read `.trellis/.runtime/sessions/<session-key>.json`.
-3. If no context key or no session task is present, return no active task.
+3. If a context key resolves but its session has no task, return no active
+   task. A unique-session fallback is allowed only when no context key can be
+   resolved; an explicit identity never borrows another session's task.
 4. If a session task exists but the task directory is stale, return stale
    session state.
+
+OpenCode's JavaScript context manager and subagent injector enforce the same
+identity boundary. A dispatch prompt may still use its explicit `Active task:`
+hint when its own session has no task, but it must not borrow an unrelated sole
+session.
 
 The env branch is the exception, not a peer alternative. **No researched
 platform exports a session id into a shell child** (2026-08-05 audit of all 21;
@@ -563,21 +570,21 @@ a `.current-task` fallback or a Python hook directory.
   filename.
 - `TRELLIS_CONTEXT_ID` is already a complete context key. Do not prepend a
   platform name to it.
-- `task.py finish` deletes only the session file that supplied the resolved
-  active task. For an exact match this is the current context key; for a
-  single-session fallback it is `ActiveTask.context_key` from that fallback.
-  Without a process context key, or when resolution returns no unique active
-  task, it deletes nothing. It must never delete `.trellis/.current-task` or
-  bulk-clear other sessions.
+- `task.py finish` deletes only the session file named by the explicit process
+  identity. If that identity has no task, it must not resolve or delete another
+  session's pointer. Without a process context key, it deletes nothing. It must
+  never delete `.trellis/.current-task` or bulk-clear other sessions.
 - `task.py archive <task>` deletes every runtime session file whose
   `current_task` points at the archived task before moving the task directory.
 - Before moving anything, `cmd_archive` (`task_store.py`) calls
   `is_within_tasks_dir(task_dir_abs, repo_root)` (`task_utils.py`) and refuses
   with "refusing to archive ..." (exit 1) unless the resolved dir is a direct
-  child of `.trellis/tasks/`. `resolve_task_dir` falls back to
-  `repo_root / <name>` for a name it can't find, so a mistyped
-  `task.py archive src` would otherwise resolve to and `shutil.move` the
-  repo's real `src/` directory. See
+  child of `.trellis/tasks/`. `resolve_task_dir` and both `resolve_task_ref`
+  entry points reject paths outside the real tasks tree and the tasks root
+  itself; unknown names return `None`, without a repository-root fallback.
+  All callers handle `None` before reading or writing a task. The complete
+  `.trellis` tree may be symlinked; returned paths retain the repository-local
+  spelling so session references remain portable. See
   [Filesystem Safety](./filesystem-safety.md#2-path--name-safety--validate-at-the-chokepoint-before-pathjoin).
 - `task.py current --json` prints `{current_task, source, stale}` on one
   line (`ensure_ascii=False`); `current_task` is `null` when there is no
@@ -1369,6 +1376,16 @@ TEAM = CONFIG.get("linear", {}).get("team", "")
 ---
 
 ## Git interaction in scripts
+
+### Session recovery and commit boundaries
+
+The beta runtime retains workflow selection and ports the session-recording behavior from stable commit `88f4834449da9b4f607ec05e322408a0aa66f2ce`. `add_session.py` writes the journal entry atomically, repairs its index row, and then performs the optional scoped commit. An identical retry resumes a matching uncommitted entry. A matching committed entry starts a new session unless `--idempotency-key` explicitly requests a no-op. Versioned retry markers work across date changes, and local Git refs contribute to session numbering without network access.
+
+Before an OID is recorded, it must resolve to its actual commit subject or have an explicit one-to-one `--commit-subject OID=SUBJECT` mapping. A failed index write or auto-commit returns nonzero and preserves a resumable checkpoint. `session_auto_commit: false`, `--no-commit`, and Git-ignored workspace paths retain their configured skip behavior.
+
+Journal and archive auto-commits pass the same explicit pathspec to both `git add` and `git commit`. Unrelated entries already in the index remain staged for their owner. `common/io.py:write_text_atomic` provides same-directory atomic replacement for journal and index writes as well as the existing JSON writer. Failed or interrupted writes preserve the previous file and remove the temporary file.
+
+Regression coverage belongs in `test/scripts/add-session.integration.test.ts` and `test/scripts/task-archive.integration.test.ts`: index/commit failure then retry, accurate commit evidence, separate committed sessions, numbering across branches, configured skips, and preservation of unrelated staged files.
 
 Scripts that auto-stage / auto-commit `.trellis/` paths must go through the
 canonical `common/safe_commit.py` helpers. Hand-rolled `git add -A` /
@@ -2313,3 +2330,7 @@ Contracts added by task `07-22-script-qol-batch` (#394, #402, meta access):
   half-created directory. `task.py set-meta <dir> <key> <value>` sets/overwrites
   one key on an existing task via the same `resolve_task_dir()` path validation
   as other subcommands. Values are plain strings (no nesting/coercion).
+
+### Dispatch mode hints
+
+`codex.dispatch_mode` selects the default context-loading breadcrumb. Hook mode banners leave implementation ownership and delegation decisions to the project workflow and routing rules; they must neither require nor prohibit sub-agents universally.

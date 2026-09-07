@@ -1967,8 +1967,12 @@ export async function init(options: InitOptions): Promise<void> {
     writeSpecRegistryConfig(cwd, registrySpecConfigToPersist);
   }
 
-  // Initialize template hashes for modification tracking
-  const hashedCount = initializeHashes(cwd, { trackedPaths: writtenPaths });
+  // Existing projects can reach this full flow through recovery or flags;
+  // preserve baselines for files the writer skipped here too.
+  const hashedCount = initializeHashes(cwd, {
+    trackedPaths: writtenPaths,
+    merge: !isFirstInit,
+  });
   if (useRemoteTemplate) {
     const specFilesToHash = new Map<string, string>();
     for (const relativePath of collectSpecPaths(cwd)) {

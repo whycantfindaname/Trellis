@@ -440,10 +440,10 @@ def cmd_create(args: argparse.Namespace) -> int:
     # Handle --parent: establish bidirectional link
     if args.parent:
         parent_dir = resolve_task_dir(args.parent, repo_root)
-        parent_json_path = parent_dir / FILE_TASK_JSON
-        if not parent_json_path.is_file():
+        if not parent_dir or not (parent_dir / FILE_TASK_JSON).is_file():
             print(colored(f"Warning: Parent task.json not found: {args.parent}", Colors.YELLOW), file=sys.stderr)
         else:
+            parent_json_path = parent_dir / FILE_TASK_JSON
             parent_data = read_json(parent_json_path)
             if parent_data:
                 # Add child to parent's children list
@@ -733,7 +733,12 @@ def _auto_commit_archive(
         return True
 
     commit_msg = f"chore(task): archive {task_name}"
-    rc, _, err = run_git(["commit", "-m", commit_msg], cwd=repo_root)
+    # A never-tracked source is absent from both HEAD and the index; Git
+    # rejects it as an unmatched commit pathspec after the directory moves.
+    commit_paths = [*paths, source_rel] if source_was_tracked else paths
+    rc, _, err = run_git(
+        ["commit", "-m", commit_msg, "--", *commit_paths], cwd=repo_root
+    )
     if rc == 0:
         print(f"[OK] Auto-committed: {commit_msg}", file=sys.stderr)
         return True
@@ -752,6 +757,13 @@ def cmd_add_subtask(args: argparse.Namespace) -> int:
 
     parent_dir = resolve_task_dir(args.parent_dir, repo_root)
     child_dir = resolve_task_dir(args.child_dir, repo_root)
+
+    if not parent_dir:
+        print(colored(f"Error: Parent task.json not found: {args.parent_dir}", Colors.RED), file=sys.stderr)
+        return 1
+    if not child_dir:
+        print(colored(f"Error: Child task.json not found: {args.child_dir}", Colors.RED), file=sys.stderr)
+        return 1
 
     parent_json_path = parent_dir / FILE_TASK_JSON
     child_json_path = child_dir / FILE_TASK_JSON
@@ -806,6 +818,13 @@ def cmd_remove_subtask(args: argparse.Namespace) -> int:
     parent_dir = resolve_task_dir(args.parent_dir, repo_root)
     child_dir = resolve_task_dir(args.child_dir, repo_root)
 
+    if not parent_dir:
+        print(colored(f"Error: Parent task.json not found: {args.parent_dir}", Colors.RED), file=sys.stderr)
+        return 1
+    if not child_dir:
+        print(colored(f"Error: Child task.json not found: {args.child_dir}", Colors.RED), file=sys.stderr)
+        return 1
+
     parent_json_path = parent_dir / FILE_TASK_JSON
     child_json_path = child_dir / FILE_TASK_JSON
 
@@ -857,6 +876,10 @@ def cmd_set_branch(args: argparse.Namespace) -> int:
         print("Usage: python3 task.py set-branch <task-dir> <branch-name>")
         return 1
 
+    if not target_dir:
+        print(colored(f"Error: Task not found: {args.dir}", Colors.RED))
+        return 1
+
     task_json = target_dir / FILE_TASK_JSON
     if not task_json.is_file():
         print(colored(f"Error: task.json not found at {target_dir}", Colors.RED))
@@ -891,6 +914,10 @@ def cmd_set_base_branch(args: argparse.Namespace) -> int:
         print("This sets the target branch for PR (the branch your feature will merge into).")
         return 1
 
+    if not target_dir:
+        print(colored(f"Error: Task not found: {args.dir}", Colors.RED))
+        return 1
+
     task_json = target_dir / FILE_TASK_JSON
     if not task_json.is_file():
         print(colored(f"Error: task.json not found at {target_dir}", Colors.RED))
@@ -923,6 +950,10 @@ def cmd_set_scope(args: argparse.Namespace) -> int:
         print("Usage: python3 task.py set-scope <task-dir> <scope>")
         return 1
 
+    if not target_dir:
+        print(colored(f"Error: Task not found: {args.dir}", Colors.RED))
+        return 1
+
     task_json = target_dir / FILE_TASK_JSON
     if not task_json.is_file():
         print(colored(f"Error: task.json not found at {target_dir}", Colors.RED))
@@ -953,6 +984,10 @@ def cmd_set_meta(args: argparse.Namespace) -> int:
     if not key:
         print(colored("Error: Missing arguments", Colors.RED))
         print("Usage: python3 task.py set-meta <task-dir> <key> <value>")
+        return 1
+
+    if not target_dir:
+        print(colored(f"Error: Task not found: {args.dir}", Colors.RED))
         return 1
 
     task_json = target_dir / FILE_TASK_JSON

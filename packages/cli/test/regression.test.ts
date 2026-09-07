@@ -5066,7 +5066,7 @@ print(json.dumps({
     ).toBe(true);
   });
 
-  it("[issue #469] finish removes the sole fallback session file", () => {
+  it("[session-isolation] finish preserves another session when its own identity misses", () => {
     setupTaskRepo();
     writeSessionContext(
       "codex_previous-thread",
@@ -5090,10 +5090,8 @@ print(json.dumps({
       },
     );
 
-    expect(output).toContain(
-      "Source: session-fallback:codex_previous-thread",
-    );
-    expect(fs.existsSync(fallbackPath)).toBe(false);
+    expect(output).not.toContain("session-fallback");
+    expect(fs.existsSync(fallbackPath)).toBe(true);
 
     const current = runTaskCurrent({ CODEX_THREAD_ID: "current-thread" });
     expect(current.status).toBe(1);
@@ -5216,6 +5214,18 @@ print(json.dumps({
       JSON.stringify(inputData),
     );
   }
+
+  it("[workflow-state] explicit session miss does not inject another session's task", () => {
+    setupTaskRepo();
+    writeSessionContext("session_other", ".trellis/tasks/issue-106");
+    writeWorkflowStateHook();
+    writeWorkflowMd("[workflow-state:in_progress]\nOTHER TASK CONTEXT\n[/workflow-state:in_progress]\n");
+    const parsed = JSON.parse(runInjectWorkflowState()) as {
+      hookSpecificOutput: { additionalContext: string };
+    };
+    expect(parsed.hookSpecificOutput.additionalContext).toContain("Status: no_task");
+    expect(parsed.hookSpecificOutput.additionalContext).not.toContain("OTHER TASK CONTEXT");
+  });
 
   it("[workflow-state] missing/empty workflow.md degrades to generic line (post-R5: no fallback dict)", () => {
     setupTaskRepo();
@@ -6446,7 +6456,7 @@ print(len(entries))
 
   it("[issue-codex-dispatch-mode] codex breadcrumb defaults to native auto dispatch when config absent", () => {
     setupTaskRepo();
-    writeSessionContext("session_workflow-a", ".trellis/tasks/issue-106");
+    writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
     const codexHookPath = writeCodexInjectHook();
     writeProjectFile(
       path.join(".trellis", "workflow.md"),
@@ -6471,7 +6481,7 @@ print(len(entries))
 
   it("[issue-codex-dispatch-mode] codex breadcrumb routes to plain status when codex.dispatch_mode=sub-agent", () => {
     setupTaskRepo();
-    writeSessionContext("session_workflow-a", ".trellis/tasks/issue-106");
+    writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
     const codexHookPath = writeCodexInjectHook();
     writeProjectFile(
       path.join(".trellis", "workflow.md"),
@@ -6497,7 +6507,7 @@ print(len(entries))
 
   it("[issue-codex-dispatch-mode] codex breadcrumb routes to inline tag when codex.dispatch_mode=inline", () => {
     setupTaskRepo();
-    writeSessionContext("session_workflow-a", ".trellis/tasks/issue-106");
+    writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
     const codexHookPath = writeCodexInjectHook();
     writeProjectFile(
       path.join(".trellis", "workflow.md"),
@@ -6524,7 +6534,7 @@ print(len(entries))
 
   it("[issue-codex-dispatch-mode] non-codex platform ignores codex.dispatch_mode=inline", () => {
     setupTaskRepo();
-    writeSessionContext("session_workflow-a", ".trellis/tasks/issue-106");
+    writeSessionContext("claude_workflow-a", ".trellis/tasks/issue-106");
     // Hook installed under .claude/ — _detect_platform returns "claude".
     const claudeHookPath = path.join(
       ".claude",
@@ -6728,7 +6738,7 @@ print(len(entries))
 
   it("[issue-codex-dispatch-mode] codex hook injects <codex-mode> banner reflecting dispatch_mode", () => {
     setupTaskRepo();
-    writeSessionContext("session_workflow-a", ".trellis/tasks/issue-106");
+    writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
     const codexHookPath = path.join(
       ".codex",
       "hooks",
@@ -6751,7 +6761,7 @@ print(len(entries))
       ),
     ) as { hookSpecificOutput: { additionalContext: string } };
     expect(defaultRun.hookSpecificOutput.additionalContext).toContain(
-      "<codex-mode>auto: implement/check work defaults to Trellis sub-agents; native Codex context injection is preferred and child-side loading is the fallback. The main session still coordinates, clarifies, updates specs, commits, and finishes.</codex-mode>",
+      "<codex-mode>auto: native Codex context injection is available for delegated work, with child-side loading as fallback. Follow project workflow and routing rules to choose main-session or sub-agent ownership.</codex-mode>",
     );
 
     // Legacy sub-agent alias → the auto-dispatch banner.
@@ -6763,8 +6773,19 @@ print(len(entries))
       ),
     ) as { hookSpecificOutput: { additionalContext: string } };
     expect(subAgentRun.hookSpecificOutput.additionalContext).toContain(
-      "<codex-mode>auto: implement/check work defaults to Trellis sub-agents; native Codex context injection is preferred and child-side loading is the fallback. The main session still coordinates, clarifies, updates specs, commits, and finishes.</codex-mode>",
+      "<codex-mode>auto: native Codex context injection is available for delegated work, with child-side loading as fallback. Follow project workflow and routing rules to choose main-session or sub-agent ownership.</codex-mode>",
     );
+    writeConfigYaml("codex:\n  dispatch_mode: inline\n");
+    const inlineRun = JSON.parse(runPython(codexHookPath,
+      JSON.stringify({ cwd: tmpDir, session_id: "workflow-a" }))) as {
+        hookSpecificOutput: { additionalContext: string };
+      };
+    const inlineContext = inlineRun.hookSpecificOutput.additionalContext;
+    expect(inlineContext).toContain("<codex-mode>inline:");
+    expect(inlineContext).toContain("may justify independent delegation");
+    expect(inlineContext).not.toContain("do not dispatch");
+    expect(inlineContext).toContain("MAIN SESSION inline edit.");
+
   });
 
   it("[issue-codex-dispatch-mode] non-codex hook does NOT inject <codex-mode> banner", () => {

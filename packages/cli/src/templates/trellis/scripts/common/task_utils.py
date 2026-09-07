@@ -195,8 +195,8 @@ def archive_task_complete(
 # Task Directory Resolution
 # =============================================================================
 
-def resolve_task_dir(target_dir: str, repo_root: Path) -> Path:
-    """Resolve task directory to absolute path.
+def resolve_task_dir(target_dir: str, repo_root: Path) -> Path | None:
+    """Resolve a task directory strictly inside ``.trellis/tasks``.
 
     Supports:
     - Absolute path: /path/to/task
@@ -208,31 +208,56 @@ def resolve_task_dir(target_dir: str, repo_root: Path) -> Path:
         repo_root: Repository root path.
 
     Returns:
-        Resolved absolute path.
+        Absolute path spelled through the repository's tasks directory, or
+        None when the candidate is outside that tree or is the tasks root.
     """
     if not target_dir:
-        return Path()
+        print("Error: task directory is required", file=sys.stderr)
+        return None
 
     normalized = target_dir.replace("\\", "/")
     while normalized.startswith("./"):
         normalized = normalized[2:]
 
-    # Absolute path
-    if Path(target_dir).is_absolute():
-        return Path(target_dir)
-
-    # Relative path (contains path separator or starts with .trellis)
-    if "/" in normalized or normalized.startswith(".trellis"):
-        return repo_root / Path(normalized)
-
-    # Task name - try to find in tasks directory
     tasks_dir = get_tasks_dir(repo_root)
-    found = find_task_by_name(target_dir, tasks_dir)
-    if found:
-        return found
 
-    # Fallback to treating as relative path
-    return repo_root / Path(normalized)
+    if Path(target_dir).is_absolute():
+        candidate = Path(target_dir)
+    elif "/" in normalized or normalized.startswith(".trellis"):
+        candidate = repo_root / Path(normalized)
+    else:
+        candidate = find_task_by_name(target_dir, tasks_dir)
+        if candidate is None:
+            print(
+                f"Error: could not resolve task '{target_dir}' under {tasks_dir}",
+                file=sys.stderr,
+            )
+            return None
+
+    try:
+        tasks_lexical = get_tasks_dir(repo_root.resolve())
+        tasks_resolved = tasks_lexical.resolve()
+        resolved = candidate.resolve()
+    except (OSError, RuntimeError) as exc:
+        print(f"Error: could not resolve task directory '{target_dir}': {exc}", file=sys.stderr)
+        return None
+
+    if resolved == tasks_resolved:
+        print(
+            f"Error: refusing to use '{target_dir}': {tasks_resolved} is the tasks "
+            "directory itself, not a task",
+            file=sys.stderr,
+        )
+        return None
+    try:
+        relative = resolved.relative_to(tasks_resolved)
+    except ValueError:
+        print(
+            f"Error: refusing to use '{target_dir}': {resolved} is outside {tasks_resolved}",
+            file=sys.stderr,
+        )
+        return None
+    return tasks_lexical / relative
 
 
 # =============================================================================

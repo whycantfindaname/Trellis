@@ -473,8 +473,8 @@ export default async ({ directory, platform: hostPlatform = process.platform, en
           //   2. `Active task: <path>` hint in the dispatch prompt
           //      (explicit per-dispatch override — beats single-session
           //      inference so multi-window users can disambiguate)
-          //   3. Single-session fallback — only when exactly 1 session
-          //      runtime file exists locally
+          //   3. Single-session fallback — only without a context key and
+          //      when exactly 1 session runtime file exists locally
           let taskDir = null
           let taskSource = null
 
@@ -503,7 +503,7 @@ export default async ({ directory, platform: hostPlatform = process.platform, en
             }
           }
 
-          if (!taskDir) {
+          if (!taskDir && !contextKey) {
             const fallback = ctx._resolveSingleSessionFallback()
             if (fallback?.taskPath) {
               const fallbackDir = ctx.resolveTaskDir(fallback.taskPath)

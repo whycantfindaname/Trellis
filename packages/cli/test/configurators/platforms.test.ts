@@ -200,8 +200,9 @@ describe("getConfiguredPlatforms", () => {
     expect(result.has("devin")).toBe(true);
   });
 
-  it("detects every platform from the files Trellis tracked for it", async () => {
-    for (const id of PLATFORM_IDS) {
+  it.each(PLATFORM_IDS)(
+    "detects %s from the files Trellis tracked for it",
+    async (id) => {
       const platformRoot = path.join(tmpDir, id);
       fs.mkdirSync(platformRoot, { recursive: true });
       const written = startRecordingWrites(platformRoot);
@@ -214,8 +215,8 @@ describe("getConfiguredPlatforms", () => {
       initializeHashes(platformRoot, { trackedPaths: written });
 
       expect([...getConfiguredPlatforms(platformRoot)]).toEqual([id]);
-    }
-  });
+    },
+  );
 
   it("ignores unrelated directories", () => {
     fs.mkdirSync(path.join(tmpDir, ".vscode"));

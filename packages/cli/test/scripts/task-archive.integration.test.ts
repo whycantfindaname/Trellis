@@ -202,6 +202,28 @@ describe.skipIf(!hasPython())(
       30_000, // python startup + 100-file ops can be slow
     );
 
+    it.each([true, false])("preserves unrelated staged files when archiving (tracked=%s)", (tracked) => {
+      git(tmp, "add", "--", ".trellis/scripts", ".trellis/config.yaml");
+      git(tmp, "commit", "-q", "-m", "initial");
+      makeTask(tmp, "task-a", "task A prd\n");
+      if (tracked) {
+        git(tmp, "add", "--", ".trellis/tasks/task-a");
+        git(tmp, "commit", "-q", "-m", "task");
+      }
+      const before = git(tmp, "rev-parse", "HEAD");
+      fs.writeFileSync(path.join(tmp, "README.md"), "unrelated staged work\n");
+      git(tmp, "add", "--", "README.md");
+
+      runArchive(tmp, "task-a");
+
+      expect(git(tmp, "rev-parse", "HEAD")).not.toBe(before);
+      const committed = git(tmp, "show", "HEAD", "--name-only", "--pretty=format:");
+      expect(committed).not.toContain("README.md");
+      expect(committed).toContain(".trellis/tasks/archive/");
+      expect(git(tmp, "diff", "--cached", "--name-only")).toBe("README.md");
+      expect(git(tmp, "status", "--porcelain", "--", ".trellis/tasks")).toBe("");
+    });
+
     it("refuses to archive a mistyped name that resolves to a real source dir", () => {
       makeTask(tmp, "real-task", "# real task\n");
       // A user source directory that is NOT a task.
@@ -211,9 +233,8 @@ describe.skipIf(!hasPython())(
       git(tmp, "add", "-A");
       git(tmp, "commit", "-q", "-m", "initial");
 
-      // Typo: `archive src` instead of a task name. resolve_task_dir falls
-      // back to repo_root/src; without the guard this moves the whole source
-      // dir into .trellis/tasks/archive/.
+      // Typo: `archive src` instead of a task name. Resolution must fail
+      // before archive can move the real source directory.
       const r = spawnSync(
         "python3",
         [".trellis/scripts/task.py", "archive", "src"],
@@ -221,7 +242,7 @@ describe.skipIf(!hasPython())(
       );
 
       expect(r.status).not.toBe(0);
-      expect(r.stderr).toContain("refusing to archive");
+      expect(r.stderr).toContain("could not resolve task 'src'");
       // src/ untouched, still at its original location with its file.
       expect(fs.existsSync(path.join(srcDir, "index.ts"))).toBe(true);
       // No archive dir was created holding a moved src.

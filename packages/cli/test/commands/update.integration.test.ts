@@ -58,7 +58,7 @@ import {
 } from "../../src/commands/update.js";
 import { VERSION } from "../../src/constants/version.js";
 import { DIR_NAMES, FILE_NAMES, PATHS } from "../../src/constants/paths.js";
-import { computeHash } from "../../src/utils/template-hash.js";
+import { computeHash, loadHashes } from "../../src/utils/template-hash.js";
 import { workflowMdTemplate } from "../../src/templates/trellis/index.js";
 import {
   COPILOT_INSTRUCTIONS_BLOCK_END,
@@ -679,6 +679,48 @@ describe("update() integration", () => {
     const newFile = targetFull + ".new";
     expect(fs.existsSync(newFile)).toBe(true);
     expect(fs.readFileSync(newFile, "utf-8")).toBe(templateContent);
+  });
+
+  it.each(["platform", "skip-existing", "empty-task-store"])("#7a adding a platform preserves customized Trellis files through update (%s)", async (mode) => {
+    await init({ yes: true, codex: true, user: "alice" });
+    const baseline = loadHashes(tmpDir);
+    const originals = new Map<string, string>();
+    for (const relativePath of [
+      ".trellis/workflow.md",
+      ".trellis/config.yaml",
+      MANAGED_FILE,
+    ]) {
+      const fullPath = path.join(tmpDir, relativePath);
+      const original = fs.readFileSync(fullPath, "utf-8");
+      originals.set(relativePath, original);
+      fs.writeFileSync(fullPath, original + "\n# Project customization\n");
+    }
+    const customPath = path.join(tmpDir, ".trellis", "project-notes.md");
+    fs.writeFileSync(customPath, "Project notes\n");
+
+    if (mode === "empty-task-store") {
+      // Reproduce recovery's full-init route in the disposable project.
+      fs.rmSync(path.join(tmpDir, PATHS.TASKS), { recursive: true });
+      fs.mkdirSync(path.join(tmpDir, PATHS.TASKS));
+    }
+    await init({ yes: true, claude: true, skipExisting: mode === "skip-existing" });
+    const afterAdd = loadHashes(tmpDir);
+    expect(afterAdd[".claude/hooks/session-start.py"]).toBeDefined();
+    expect(afterAdd[".trellis/project-notes.md"]).toBeUndefined();
+    for (const relativePath of originals.keys()) {
+      expect(afterAdd[relativePath]).toBe(baseline[relativePath]);
+    }
+
+    await update({ createNew: true });
+    for (const [relativePath, original] of originals) {
+      const fullPath = path.join(tmpDir, relativePath);
+      expect(fs.readFileSync(fullPath, "utf-8")).toBe(
+        original + "\n# Project customization\n",
+      );
+      expect(fs.readFileSync(fullPath + ".new", "utf-8")).toBe(original);
+      expect(loadHashes(tmpDir)[relativePath]).toBe(baseline[relativePath]);
+    }
+    expect(fs.readFileSync(customPath, "utf-8")).toBe("Project notes\n");
   });
 
   it("#8 updates version file after successful update", async () => {

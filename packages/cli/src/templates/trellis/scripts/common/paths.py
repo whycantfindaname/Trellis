@@ -261,7 +261,12 @@ def normalize_task_ref(task_ref: str) -> str:
 
 
 def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | None:
-    """Resolve a task ref to an absolute task directory path."""
+    """Resolve a task ref strictly inside ``.trellis/tasks``.
+
+    The real tasks directory is the containment base. This rejects traversal,
+    external absolute paths, the tasks root itself, and child symlink escapes,
+    while allowing the entire ``.trellis`` directory to be a symlink.
+    """
     if repo_root is None:
         repo_root = get_repo_root()
 
@@ -269,14 +274,32 @@ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | Non
     if not normalized:
         return None
 
+    try:
+        root = repo_root.resolve()
+        tasks_lexical = root / DIR_WORKFLOW / DIR_TASKS
+        tasks_resolved = tasks_lexical.resolve()
+    except (OSError, RuntimeError):
+        return None
+
     path_obj = Path(normalized)
     if path_obj.is_absolute():
-        return path_obj
+        candidate = path_obj
+    elif normalized.startswith(f"{DIR_WORKFLOW}/"):
+        candidate = root / path_obj
+    else:
+        candidate = tasks_lexical / path_obj
 
-    if normalized.startswith(f"{DIR_WORKFLOW}/"):
-        return repo_root / path_obj
-
-    return repo_root / DIR_WORKFLOW / DIR_TASKS / path_obj
+    try:
+        resolved = candidate.resolve()
+    except (OSError, RuntimeError):
+        return None
+    if resolved == tasks_resolved:
+        return None
+    try:
+        relative = resolved.relative_to(tasks_resolved)
+    except ValueError:
+        return None
+    return tasks_lexical / relative
 
 
 def get_current_task(

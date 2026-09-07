@@ -9,7 +9,6 @@ session key there is no active task.
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import re
 import sys
@@ -18,6 +17,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from .io import read_json as _io_read_json, write_json as _io_write_json
 
 DIR_WORKFLOW = ".trellis"
 DIR_TASKS = "tasks"
@@ -189,19 +190,42 @@ def normalize_task_ref(task_ref: str) -> str:
 
 
 def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
-    """Resolve a task ref to an absolute task directory."""
+    """Resolve a task ref strictly inside ``.trellis/tasks``.
+
+    The tasks directory's real path is the containment base so an entirely
+    symlinked ``.trellis`` remains supported while traversal and child symlink
+    escapes are rejected.
+    """
     normalized = normalize_task_ref(task_ref)
     if not normalized:
         return None
 
+    try:
+        root = repo_root.resolve()
+        tasks_lexical = root / DIR_WORKFLOW / DIR_TASKS
+        tasks_resolved = tasks_lexical.resolve()
+    except (OSError, RuntimeError):
+        return None
+
     path_obj = Path(normalized)
     if path_obj.is_absolute():
-        return path_obj
+        candidate = path_obj
+    elif normalized.startswith(f"{DIR_WORKFLOW}/"):
+        candidate = root / path_obj
+    else:
+        candidate = tasks_lexical / path_obj
 
-    if normalized.startswith(f"{DIR_WORKFLOW}/"):
-        return repo_root / path_obj
-
-    return repo_root / DIR_WORKFLOW / DIR_TASKS / path_obj
+    try:
+        resolved = candidate.resolve()
+    except (OSError, RuntimeError):
+        return None
+    if resolved == tasks_resolved:
+        return None
+    try:
+        relative = resolved.relative_to(tasks_resolved)
+    except ValueError:
+        return None
+    return tasks_lexical / relative
 
 
 def _runtime_sessions_dir(repo_root: Path) -> Path:
@@ -510,23 +534,16 @@ def resolve_context_key(
 
 
 def _read_json(path: Path) -> dict[str, Any] | None:
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError, OSError):
-        return None
+    data = _io_read_json(path)
     return data if isinstance(data, dict) else None
 
 
 def _write_json(path: Path, data: dict[str, Any]) -> bool:
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(
-            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-        return True
     except OSError:
         return False
+    return _io_write_json(path, data)
 
 
 def _canonical_task_ref(task_path: str, repo_root: Path) -> str | None:
@@ -537,9 +554,9 @@ def _canonical_task_ref(task_path: str, repo_root: Path) -> str | None:
     if full_path is None or not full_path.is_dir():
         return None
     try:
-        return full_path.relative_to(repo_root).as_posix()
+        return full_path.relative_to(repo_root.resolve()).as_posix()
     except ValueError:
-        return str(full_path)
+        return None
 
 
 def _active_from_ref(
@@ -569,8 +586,8 @@ def resolve_active_task(
 ) -> ActiveTask:
     """Resolve the active task from session runtime state only.
 
-    A stale session task is returned as stale. Missing context identity or a
-    missing/empty session context falls back to single-session inference: if
+    A stale session task is returned as stale. Only missing context identity
+    falls back to single-session inference: if
     exactly one session file exists in the runtime, return its task with
     source_type="session-fallback" — covers pull-based platform sub-agents
     (copilot, gemini, qoder) that don't inherit the parent's session id. ≥2
@@ -588,7 +605,7 @@ def resolve_active_task(
         if active:
             return active
 
-    if allow_single_session_fallback:
+    if context_key is None and allow_single_session_fallback:
         fallback = _resolve_single_session_fallback(repo_root)
         if fallback is not None:
             return fallback

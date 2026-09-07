@@ -373,7 +373,7 @@ export class TrellisContext {
    *
    * Resolution order (mirrors Python `active_task.resolve_active_task`):
    *   1. Lookup the runtime file for the input-derived context key.
-   *   2. If that misses and exactly one session runtime file exists locally,
+   *   2. If there is no context key and exactly one runtime file exists locally,
    *      use it (`_resolveSingleSessionFallback`). Refuses to guess when 0 or
    *      ≥2 files exist so multi-window isolation holds.
    */
@@ -392,7 +392,7 @@ export class TrellisContext {
       }
     }
 
-    const fallback = this._resolveSingleSessionFallback()
+    const fallback = contextKey ? null : this._resolveSingleSessionFallback()
     if (fallback) {
       return fallback
     }

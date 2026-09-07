@@ -313,31 +313,22 @@ def _resolve_codex_dispatch_mode(config: dict) -> str:
 
 
 def _codex_mode_banner(config: dict) -> str:
-    """Emit a `<codex-mode>` banner for the additionalContext payload.
+    """Describe context-loading defaults; project rules decide delegation.
 
-    Reads `codex.dispatch_mode` from .trellis/config.yaml; defaults to
-    `auto`, which dispatches Trellis sub-agents using native Codex context
-    injection with a child-side fallback. This does not rely on inherited
-    parent transcripts: `fork_turns` remains caller-controlled, and
-    fresh-history sub-agents still receive their explicit delegated task and
-    inherited session configuration. `inline` is an explicit opt-out; the
-    legacy `sub-agent` value is an alias for `auto`. Invalid explicit values
-    fall back to `inline` without per-turn warnings. The banner makes the
-    active mode explicit to Codex AI per turn, complementing the workflow-state
-    body which is per-status. Mode tells AI which dispatch protocol to follow;
-    workflow-state tells AI what step it's at.
+    ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use
+    ``inline``. Neither mode overrides the project's ownership decisions.
     """
     mode = _resolve_codex_dispatch_mode(config)
     if mode == "auto":
         meaning = (
-            "auto: implement/check work defaults to Trellis sub-agents; native Codex "
-            "context injection is preferred and child-side loading is the fallback. "
-            "The main session still coordinates, clarifies, updates specs, commits, and finishes."
+            "auto: native Codex context injection is available for delegated work, "
+            "with child-side loading as fallback. Follow project workflow and "
+            "routing rules to choose main-session or sub-agent ownership."
         )
     else:
         meaning = (
-            "inline: the main session implements/checks directly; "
-            "do not dispatch implement/check sub-agents."
+            "inline: the main session loads context and implements/checks directly "
+            "by default. Project workflow and routing rules may justify independent delegation."
         )
     return f"<codex-mode>{meaning}</codex-mode>"
 

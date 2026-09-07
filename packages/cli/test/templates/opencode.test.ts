@@ -724,14 +724,24 @@ describe("opencode TrellisContext single-session fallback", () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("returns the only session file when exactly one exists", () => {
+  it("returns the only session file when no identity is available", () => {
     writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
     const ctx = new TrellisContext(dir);
-    const active = ctx.getActiveTask({ sessionID: "missing-key" });
+    const active = ctx.getActiveTask();
 
     expect(active.taskPath).toBe(".trellis/tasks/demo-task");
     expect(active.source).toBe("session-fallback:opencode_sole");
     expect(active.stale).toBe(false);
+  });
+
+  it("does not borrow another session when its explicit identity has no task", () => {
+    writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
+    const ctx = new TrellisContext(dir);
+    expect(ctx.getActiveTask({ sessionID: "missing-key" })).toEqual({
+      taskPath: null,
+      source: "none",
+      stale: false,
+    });
   });
 
   it("refuses to guess when two or more session files exist", () => {
@@ -754,16 +764,13 @@ describe("opencode TrellisContext single-session fallback", () => {
   });
 
   it("prefers an exact context-key match over the fallback", () => {
-    writeSessionFile(dir, "opencode_session_exact", ".trellis/tasks/demo-task");
+    writeSessionFile(dir, "opencode_exact", ".trellis/tasks/demo-task");
     writeSessionFile(dir, "opencode_other", ".trellis/tasks/demo-task");
     const ctx = new TrellisContext(dir);
     const active = ctx.getActiveTask({ sessionID: "exact" });
 
-    // sessionID="exact" maps to "opencode_exact" via buildContextKey; we
-    // wrote "opencode_session_exact" so the exact lookup misses, but the
-    // presence of ≥2 files means fallback should also refuse — proving
-    // exact match is attempted first.
-    expect(active.taskPath).toBeNull();
+    expect(active.taskPath).toBe(".trellis/tasks/demo-task");
+    expect(active.source).toBe("session:opencode_exact");
   });
 });
 
@@ -784,7 +791,7 @@ describe("opencode inject-subagent-context (issue #264)", () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("mutates implement prompt using single-session fallback when sessionID misses", async () => {
+  it("mutates implement prompt using single-session fallback without sessionID", async () => {
     writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
     const output: TaskToolOutput = {
       args: {
@@ -794,7 +801,7 @@ describe("opencode inject-subagent-context (issue #264)", () => {
     };
 
     await hooks["tool.execute.before"](
-      { tool: "task", sessionID: "stranger" },
+      { tool: "task" },
       output,
     );
 
@@ -807,6 +814,18 @@ describe("opencode inject-subagent-context (issue #264)", () => {
     expect(
       output.args.prompt.startsWith("<!-- trellis-hook-injected -->"),
     ).toBe(true);
+  });
+
+  it("preserves the prompt when an explicit session has no task", async () => {
+    writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
+    const output: TaskToolOutput = {
+      args: { subagent_type: "trellis-implement", prompt: "implement this" },
+    };
+    await hooks["tool.execute.before"](
+      { tool: "task", sessionID: "stranger" },
+      output,
+    );
+    expect(output.args.prompt).toBe("implement this");
   });
 
   it("inlines JSONL-referenced spec content into the implement prompt", async () => {
@@ -829,7 +848,7 @@ describe("opencode inject-subagent-context (issue #264)", () => {
     };
 
     await hooks["tool.execute.before"](
-      { tool: "task", sessionID: "stranger" },
+      { tool: "task", sessionID: "sole" },
       output,
     );
 
@@ -1225,7 +1244,7 @@ describe("opencode context injection limits (issue #441)", () => {
       },
     };
     await hooks["tool.execute.before"](
-      { tool: "task", sessionID: "stranger" },
+      { tool: "task", sessionID: "sole" },
       output,
     );
     return output.args.prompt ?? "";
