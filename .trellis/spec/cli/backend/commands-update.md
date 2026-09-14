@@ -409,3 +409,7 @@ What you should test when extending update:
 | Block-merge change to `workflow.md` / `AGENTS.md` | At least one test asserting both "user prose preserved" and "managed block updated" |
 
 When a test reaches into `getAllMigrations()` or `getMigrationsForVersion`, it's exercising the boundary with `migrations/index.ts` — keep those assertions narrow (e.g., "this manifest's safe-file-delete fires") so they don't break every time the manifest list grows.
+
+### Dry-run manifest pruning
+
+The update preview may prune orphan entries in its in-memory plan but must pass `persist: !options.dryRun` to `pruneOrphanManifestKeys`. The persisted manifest is byte-identical after dry-run, including orphan keys.

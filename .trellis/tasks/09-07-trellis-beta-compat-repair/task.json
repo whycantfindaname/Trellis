@@ -12,7 +12,7 @@
   "assignee": "jasonliao",
   "createdAt": "2026-09-07",
   "completedAt": null,
-  "branch": null,
+  "branch": "codex/trellis-beta-compat-repair",
   "base_branch": "main",
   "worktree_path": null,
   "commit": null,

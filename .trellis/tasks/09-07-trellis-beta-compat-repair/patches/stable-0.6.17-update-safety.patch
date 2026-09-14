@@ -1,0 +1,263 @@
+diff --git a/packages/cli/src/commands/init.ts b/packages/cli/src/commands/init.ts
+index 47fcef37..d8850f75 100644
+--- a/packages/cli/src/commands/init.ts
++++ b/packages/cli/src/commands/init.ts
+@@ -1968,8 +1968,12 @@ export async function init(options: InitOptions): Promise<void> {
+     writeSpecRegistryConfig(cwd, registrySpecConfigToPersist);
+   }
+ 
+-  // Initialize template hashes for modification tracking
+-  const hashedCount = initializeHashes(cwd, { trackedPaths: writtenPaths });
++  // Existing projects can reach this full flow through recovery or flags;
++  // preserve baselines for files the writer skipped here too.
++  const hashedCount = initializeHashes(cwd, {
++    trackedPaths: writtenPaths,
++    merge: !isFirstInit,
++  });
+   if (useRemoteTemplate) {
+     const specFilesToHash = new Map<string, string>();
+     for (const relativePath of collectSpecPaths(cwd)) {
+diff --git a/packages/cli/src/commands/update.ts b/packages/cli/src/commands/update.ts
+index b874039d..9c574be2 100644
+--- a/packages/cli/src/commands/update.ts
++++ b/packages/cli/src/commands/update.ts
+@@ -2212,6 +2212,7 @@ export async function update(options: UpdateOptions): Promise<void> {
+       cwd,
+       [...configuredPlatforms],
+       hashes,
++      { persist: !options.dryRun },
+     );
+     if (prune.pruned.length > 0) {
+       console.log(
+diff --git a/packages/cli/src/utils/template-hash.ts b/packages/cli/src/utils/template-hash.ts
+index baf89980..4dca23ed 100644
+--- a/packages/cli/src/utils/template-hash.ts
++++ b/packages/cli/src/utils/template-hash.ts
+@@ -323,7 +323,8 @@ export interface InitializeHashesOptions {
+   /**
+    * POSIX-style relative paths trellis actually wrote during the init run
+    * (captured via `startRecordingWrites` in `file-writer.ts`). Only these
+-   * paths are hashed for the platform/root-level coverage; anything else
++   * paths are hashed for platform/root-level coverage and for all coverage
++   * in merge mode; anything else
+    * under `.codex/` / `.claude/` / etc. is left alone, even if it exists
+    * on disk. Setting this to `undefined` or an empty set means "no
+    * platform/root coverage this run" — historical hashes from earlier
+@@ -348,10 +349,9 @@ export interface InitializeHashesOptions {
+  * where a blind directory walk of `.codex/` / `.claude/` swept up
+  * user-owned runtime data (chat history, session JSONLs).
+  *
+- * `.trellis/` is still walked recursively (with `EXCLUDE_FROM_HASH`) because
+- * uninstall removes `.trellis/` wholesale via `rm -rf` regardless of manifest
+- * content — accuracy there doesn't affect data-loss, only `trellis update`
+- * 3-way-merge fidelity (preserved by the existing walk).
++ * Fresh init walks `.trellis/` recursively with `EXCLUDE_FROM_HASH`. Re-init
++ * only hashes recorded writes, preserving the earlier template baselines of
++ * skipped custom files so a subsequent update still detects modifications.
+  *
+  * @returns Number of files hashed in the final manifest.
+  */
+@@ -362,12 +362,11 @@ export function initializeHashes(
+   const { trackedPaths, merge = false } = options;
+   const hashes: TemplateHashes = merge ? loadHashes(cwd) : {};
+ 
+-  // Platform + root files: hash only paths actually written this run.
++  // Hash recorded writes; fresh init handles .trellis/ with the walk below.
+   if (trackedPaths) {
+     for (const relativePath of trackedPaths) {
+-      // `.trellis/` paths are handled by the walk below — don't double-track.
+       if (relativePath.startsWith(".trellis/") || relativePath === ".trellis") {
+-        continue;
++        if (!merge || shouldExcludeFromHash(relativePath)) continue;
+       }
+       const fullPath = path.join(cwd, ...relativePath.split("/"));
+       if (!fs.existsSync(fullPath)) continue;
+@@ -380,11 +379,8 @@ export function initializeHashes(
+     }
+   }
+ 
+-  // .trellis/ workflow tree: still walked recursively. Accuracy here is for
+-  // `trellis update`'s 3-way merge of workflow.md / config.yaml / scripts;
+-  // uninstall removes .trellis/ wholesale so it does not matter for the
+-  // data-loss bug this contract addresses.
+-  const files = collectFiles(cwd, ".trellis");
++  // Re-init must never promote skipped custom bytes to template baselines.
++  const files = merge ? [] : collectFiles(cwd, ".trellis");
+   for (const relativePath of files) {
+     const fullPath = path.join(cwd, relativePath);
+     try {
+@@ -399,7 +395,7 @@ export function initializeHashes(
+   // haven't been updated yet), keep tracking root-level files that exist on
+   // disk. This preserves the legacy behavior for tests / scripts that don't
+   // go through the new recording flow.
+-  if (!trackedPaths) {
++  if (!merge && !trackedPaths) {
+     for (const relativePath of [FILE_NAMES.AGENTS]) {
+       if (shouldExcludeFromHash(relativePath)) continue;
+       const fullPath = path.join(cwd, relativePath);
+diff --git a/packages/cli/test/commands/update.integration.test.ts b/packages/cli/test/commands/update.integration.test.ts
+index f4faed8f..fef21660 100644
+--- a/packages/cli/test/commands/update.integration.test.ts
++++ b/packages/cli/test/commands/update.integration.test.ts
+@@ -58,7 +58,7 @@ import {
+ } from "../../src/commands/update.js";
+ import { VERSION } from "../../src/constants/version.js";
+ import { DIR_NAMES, FILE_NAMES, PATHS } from "../../src/constants/paths.js";
+-import { computeHash } from "../../src/utils/template-hash.js";
++import { computeHash, loadHashes } from "../../src/utils/template-hash.js";
+ import { workflowMdTemplate } from "../../src/templates/trellis/index.js";
+ import {
+   COPILOT_INSTRUCTIONS_BLOCK_END,
+@@ -497,6 +497,17 @@ describe("update() integration", () => {
+     expect(entries.filter((e) => e.startsWith(".backup-")).length).toBe(0);
+   });
+ 
++  it("dry run preserves orphan manifest entries byte for byte", async () => {
++    await setupProject();
++    const hashFile = projectFile(".trellis/.template-hashes.json");
++    const hashes = readHashesV2(hashFile);
++    hashes[".claude/hooks/retired-local-hook.py"] = "retired-baseline";
++    writeHashesV2(hashFile, hashes);
++    const before = fs.readFileSync(hashFile);
++    await update({ dryRun: true });
++    expect(fs.readFileSync(hashFile)).toEqual(before);
++  });
++
+   it("#3 user-deleted file (with stored hash) is not re-added on update", async () => {
+     await setupProject();
+ 
+@@ -744,6 +755,48 @@ describe("update() integration", () => {
+     expect(fs.readFileSync(newFile, "utf-8")).toBe(templateContent);
+   });
+ 
++  it.each(["platform", "skip-existing", "empty-task-store"])("#7a adding a platform preserves customized Trellis files through update (%s)", async (mode) => {
++    await init({ yes: true, codex: true, user: "alice" });
++    const baseline = loadHashes(tmpDir);
++    const originals = new Map<string, string>();
++    for (const relativePath of [
++      ".trellis/workflow.md",
++      ".trellis/config.yaml",
++      MANAGED_FILE,
++    ]) {
++      const fullPath = path.join(tmpDir, relativePath);
++      const original = fs.readFileSync(fullPath, "utf-8");
++      originals.set(relativePath, original);
++      fs.writeFileSync(fullPath, original + "\n# Project customization\n");
++    }
++    const customPath = path.join(tmpDir, ".trellis", "project-notes.md");
++    fs.writeFileSync(customPath, "Project notes\n");
++
++    if (mode === "empty-task-store") {
++      // Reproduce recovery's full-init route in the disposable project.
++      fs.rmSync(path.join(tmpDir, PATHS.TASKS), { recursive: true });
++      fs.mkdirSync(path.join(tmpDir, PATHS.TASKS));
++    }
++    await init({ yes: true, claude: true, skipExisting: mode === "skip-existing" });
++    const afterAdd = loadHashes(tmpDir);
++    expect(afterAdd[".claude/hooks/session-start.py"]).toBeDefined();
++    expect(afterAdd[".trellis/project-notes.md"]).toBeUndefined();
++    for (const relativePath of originals.keys()) {
++      expect(afterAdd[relativePath]).toBe(baseline[relativePath]);
++    }
++
++    await update({ createNew: true });
++    for (const [relativePath, original] of originals) {
++      const fullPath = path.join(tmpDir, relativePath);
++      expect(fs.readFileSync(fullPath, "utf-8")).toBe(
++        original + "\n# Project customization\n",
++      );
++      expect(fs.readFileSync(fullPath + ".new", "utf-8")).toBe(original);
++      expect(loadHashes(tmpDir)[relativePath]).toBe(baseline[relativePath]);
++    }
++    expect(fs.readFileSync(customPath, "utf-8")).toBe("Project notes\n");
++  });
++
+   it("#8 updates version file after successful update", async () => {
+     await setupProject();
+ 
+diff --git a/packages/cli/test/utils/template-hash.test.ts b/packages/cli/test/utils/template-hash.test.ts
+index 36803aea..b3108364 100644
+--- a/packages/cli/test/utils/template-hash.test.ts
++++ b/packages/cli/test/utils/template-hash.test.ts
+@@ -327,7 +327,9 @@ describe("matchesOriginalTemplate", () => {
+   });
+ 
+   it("returns false when file does not exist", () => {
+-    expect(matchesOriginalTemplate(tmpDir, "missing.txt", "content")).toBe(false);
++    expect(matchesOriginalTemplate(tmpDir, "missing.txt", "content")).toBe(
++      false,
++    );
+   });
+ 
+   it("returns true when file matches original content exactly", () => {
+@@ -403,7 +405,7 @@ describe("initializeHashes", () => {
+   });
+ 
+   it("hashes files in .trellis/ and tracked platform paths", () => {
+-    // .trellis/ is always walked recursively. Platform paths (.claude/, etc.)
++    // Fresh init walks .trellis/ recursively. Platform paths (.claude/, etc.)
+     // are hashed only when explicitly listed in `trackedPaths` — the source-
+     // of-truth set captured by `startRecordingWrites` during init.
+     fs.mkdirSync(path.join(tmpDir, ".trellis", "scripts"), { recursive: true });
+@@ -457,6 +459,61 @@ describe("initializeHashes", () => {
+     expect(hashes).not.toHaveProperty("AGENTS.md");
+   });
+ 
++  it("merge preserves skipped baselines and only tracks current writes", () => {
++    fs.mkdirSync(path.join(tmpDir, ".trellis", "scripts"), { recursive: true });
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "stock");
++    fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "stock agents");
++    initializeHashes(tmpDir);
++    const baseline = loadHashes(tmpDir);
++
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "custom");
++    fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "custom agents");
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "custom.md"), "untracked");
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "scripts", "new.py"), "new");
++    fs.mkdirSync(path.join(tmpDir, ".trellis", "tasks"), { recursive: true });
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "tasks", "task.json"), "{}");
++
++    initializeHashes(tmpDir, {
++      merge: true,
++      trackedPaths: new Set([
++        ".trellis/scripts/new.py",
++        ".trellis/tasks/task.json",
++      ]),
++    });
++    expect(loadHashes(tmpDir)).toEqual({
++      ...baseline,
++      ".trellis/scripts/new.py": computeHash("new"),
++    });
++
++    fs.writeFileSync(
++      path.join(tmpDir, ".trellis", "scripts", "new.py"),
++      "updated",
++    );
++    initializeHashes(tmpDir, {
++      merge: true,
++      trackedPaths: new Set([".trellis/scripts/new.py"]),
++    });
++    expect(loadHashes(tmpDir)[".trellis/scripts/new.py"]).toBe(
++      computeHash("updated"),
++    );
++  });
++
++  it.each([undefined, new Set<string>()])(
++    "merge without recorded writes preserves existing baselines (%s)",
++    (trackedPaths) => {
++      fs.mkdirSync(path.join(tmpDir, ".trellis"), { recursive: true });
++      fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "stock");
++      fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "stock agents");
++      initializeHashes(tmpDir);
++      const baseline = loadHashes(tmpDir);
++      fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "custom");
++      fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "custom agents");
++
++      initializeHashes(tmpDir, { merge: true, trackedPaths });
++      expect(loadHashes(tmpDir)).toEqual(baseline);
++    },
++  );
++
+   it("excludes workspace and tasks directories", () => {
+     fs.mkdirSync(path.join(tmpDir, ".trellis", "workspace"), { recursive: true });
+     fs.writeFileSync(path.join(tmpDir, ".trellis", "workspace", "data.md"), "user data");

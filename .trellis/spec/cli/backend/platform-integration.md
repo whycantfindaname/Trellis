@@ -400,26 +400,31 @@ extension, and sub-agent consumers must call the shared resolver path:
 | Existing Python callers         | `common.paths.get_current_task()` / `get_current_task_abs()` / `get_current_task_source()`            |
 | OpenCode plugin                 | JS resolver in `lib/trellis-context.js`, mirroring `active_task.py`                                   |
 | Pi extension                    | Extension-local resolver using `ctx.sessionManager.getSessionId()` and Bash `tool_call` env injection |
+| Optional DSH companion          | Managed `DSH_TRELLIS_CONTEXT_ID` from the current shell execution's native DSH session                |
 
 Do not add direct `.trellis/.current-task` reads in hooks, statusline scripts,
 sub-agent context injection, or platform plugins. Direct reads reintroduce
 multi-window task pollution.
 
 Context-key precedence, as implemented in `active_task.py:resolve_context_key`
-(`:468-509`):
+(`:478-540`):
 
-1. `TRELLIS_CONTEXT_ID` environment override for subprocesses.
-2. From the hook payload: `session_id`, `sessionId`, or `sessionID`.
-3. From the hook payload: `conversation_id` / `conversationId` / `conversationID`.
-4. From the hook payload: `transcript_path` / `transcriptPath` / `transcript`
+1. Managed `DSH_TRELLIS_CONTEXT_ID`, when the optional `dsh-trellis` plugin
+   contributes it for the current DSH shell execution.
+2. The canonical DSH env-table identity when both `DSH_SHELL=1` and a non-empty
+   `DSH_SESSION_ID` prove the process is inside a DSH managed shell.
+3. `TRELLIS_CONTEXT_ID` environment override for subprocesses.
+4. From the hook payload: `session_id`, `sessionId`, or `sessionID`.
+5. From the hook payload: `conversation_id` / `conversationId` / `conversationID`.
+6. From the hook payload: `transcript_path` / `transcriptPath` / `transcript`
    when non-empty.
-5. A platform-native session environment variable — but only for the handful of
+7. A platform-native session environment variable — but only for the handful of
    names that have actually been verified to exist, and only for the platform
    the resolver detected (`_iter_env_keys` filters by platform name, so ZCode's
    entry cannot fire in a Claude session). Session names are tried first, then
    conversation names, then transcript names (`active_task.py:294-322`).
-6. A short-lived shell ticket, checked **last** and **not** gated on platform
-   name (`active_task.py:505-508`) — see "Shell-ticket bridge" below. Last on
+8. A short-lived shell ticket, checked **last** and **not** gated on platform
+   name (`active_task.py:537-540`) — see "Shell-ticket bridge" below. Last on
    purpose: a platform that genuinely exports identity into the shell outranks
    a ticket written on its behalf.
 
@@ -432,6 +437,23 @@ session env var may be named here without the same grade of evidence.
 
 Cursor IDE may send `transcript_path: null`; this must not prevent session
 scoping when `session_id` or `conversation_id` is present.
+
+DeepSeek Harness is the verified shell-env exception. It exposes
+`DSH_SESSION_ID`, but an inner DSH process also inherits ordinary variables such
+as an outer Claude/Codex session's `TRELLIS_CONTEXT_ID`; the generic override
+would silently claim the inner task before the native table is consulted. DSH
+discards ambient `DSH_*` values before rebuilding its managed namespace, so the
+pair `DSH_SHELL=1` plus a non-empty `DSH_SESSION_ID` is trusted evidence for the
+current DSH shell and its native table identity may outrank the generic override
+without changing other platforms' semantics. The optional `dsh-trellis` plugin
+additionally registers a managed
+`DSH_TRELLIS_CONTEXT_ID = dsh_<session-id>` through DSH's `shellEnv` registry;
+that forwarded identity remains first because a child may differ from the
+shell's own session. Plugin-owned subprocess commands must also set
+`TRELLIS_CONTEXT_ID` explicitly to the same DSH context key. Regression coverage
+must pin the plugin-present and plugin-absent nested cases, assert that only the
+`dsh_*` runtime pointer is written, and prove that `DSH_SESSION_ID` without the
+`DSH_SHELL=1` sentinel does not displace an explicit generic override.
 
 OpenCode has **no** entry in any env table. Its plugin holds the session
 identity and injects it, so the plugin must prefix Bash tool commands in
@@ -1396,20 +1418,14 @@ Lightweight tasks may be PRD-only. Complex tasks must have `prd.md`, `design.md`
 
 ### Lifecycle
 
-1. **Create** — `task.py create` writes `task.json` with `status = planning`, creates the default `prd.md`, and seeds `implement.jsonl` / `check.jsonl` when a sub-agent-capable platform is detected.
+1. **Create** — `task.py create` writes `task.json` with `status = planning`, creates the default `prd.md`, and creates empty `implement.jsonl` / `check.jsonl` when a sub-agent-capable platform is detected. Curation instructions are printed to the console, never written into the files.
 2. **Plan** — AI updates `prd.md`. If the task is complex, AI also writes `design.md` and `implement.md`; if sub-agent/spec context is needed, AI curates jsonl entries.
 3. **Review / start** — the user reviews the planning artifacts. `task.py start` is valid when the task's artifact gate is satisfied.
 4. **Consume** — hook, prelude, Pi extension, and OpenCode plugin read context in the same order: jsonl entries, `prd.md`, `design.md` if present, `implement.md` if present.
 
 ### Signatures
 
-**Seed row schema** (one line, written by `_write_seed_jsonl` in `task_store.py`):
-
-```json
-{
-  "_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line when done."
-}
-```
+**Placeholder row schema** (`{"_example": "..."}`) — written by Trellis versions before this contract change. `task.py validate` rejects it, matching PR preflight, which treats it as unresolved scaffolding. Remediation: delete the line, or replace it with a curated row.
 
 **Curated row schema** (written by AI):
 
@@ -1426,8 +1442,8 @@ Optional `type: "directory"` is supported for directory entries. Consumers ignor
 | Task creation             | `task_store.py`                                 | Always creates default `prd.md`; never auto-creates `design.md` or `implement.md`. |
 | Lightweight planning gate | workflow-state / SessionStart / continue        | PRD-only is valid when the task is clearly small.                                  |
 | Complex planning gate     | workflow-state / SessionStart / continue        | Requires `prd.md`, `design.md`, and `implement.md` before `task.py start`.         |
-| Seed detection            | Every jsonl consumer                            | Row without a `file` key is treated as non-entry and skipped.                      |
-| Empty-file tolerance      | hook / prelude / plugin readers                 | Missing or seed-only jsonl is tolerated; task artifacts still load.                |
+| Non-entry detection       | Every jsonl consumer                            | Row without a `file` key is treated as non-entry and skipped.                      |
+| Empty-file tolerance      | hook / prelude / plugin readers                 | Missing or empty jsonl is tolerated; task artifacts still load.                    |
 | Context order             | hook / prelude / Pi extension / OpenCode plugin | jsonl entries → `prd.md` → `design.md` if present → `implement.md` if present.     |
 | Archived self-references  | `task_context.py` validation                    | Preserve JSONL bytes. For an archived task, remap only exact `.trellis/tasks/<same-task-name>/...` references into that archive copy. Other paths retain repo-root resolution. |
 
@@ -1435,14 +1451,15 @@ Optional `type: "directory"` is supported for directory entries. Consumers ignor
 
 | Condition                                              | Behavior                                                                                              | Exit / Surface          |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------- |
-| `implement.jsonl` has only seed row                    | `cmd_validate` reports 0 errors; `cmd_list_context` prints "(no curated entries yet — only seed row)" | Exit 0                  |
+| `implement.jsonl` is empty (freshly created)           | `cmd_validate` reports 0 errors; `cmd_list_context` prints "(no curated entries yet)"                 | Exit 0                  |
+| `implement.jsonl` holds a legacy `{"_example": …}` row | `cmd_validate` prints "Placeholder \`_example\` row …" with file, line, and remediation                | Exit 1                  |
 | `implement.jsonl` entry points at non-existent file    | `cmd_validate` prints "File not found: …" per row                                                     | Exit 1                  |
 | Archived self-reference exists in the archive copy     | Resolve inside `.trellis/tasks/archive/<year-month>/<same-task-name>/`; do not rewrite the manifest        | Exit 0                  |
 | Archived self-reference is absent from the archive copy | Report it missing even if an active task with the same name has recreated the path                         | Exit 1                  |
 | Archived self-reference traverses or follows a symlink outside the archive | Reject it as missing; never fall back to the historical active-task path                    | Exit 1                  |
 | Lightweight task has only `prd.md`                     | Valid planning state; SessionStart / continue can ask for start review                                | No error                |
 | Complex task is missing `design.md` or `implement.md`  | Stay in planning; ask user to complete missing planning artifacts                                     | Hook / command guidance |
-| Sub-agent platform detected, but jsonl seed is missing | Context readers fall back to task artifacts and warn where applicable                                 | No create failure       |
+| Sub-agent platform detected, but jsonl is missing      | Context readers fall back to task artifacts and warn where applicable                                 | No create failure       |
 
 ### Good / Base / Bad Cases
 
@@ -1489,11 +1506,11 @@ leave every unrelated path on normal repository-root resolution.
 
 ### Tests Required
 
-- **Create behavior**: `task.py create` creates default `prd.md` and seeds jsonl only on sub-agent-capable platforms.
-- **Consumer tolerance**: `inject-subagent-context.py` skips seed rows and still injects task artifacts.
-- **Validate seed**: `task.py validate` treats seed-only jsonl as 0 errors.
+- **Create behavior**: `task.py create` creates default `prd.md` and empty jsonl only on sub-agent-capable platforms, and prints the curation instructions to the console.
+- **Consumer tolerance**: `inject-subagent-context.py` skips rows without a `file` key and still injects task artifacts.
+- **Validate placeholder**: `task.py validate` passes for empty jsonl and fails with a remediation message for a legacy `{"_example": …}` row, in both active and archived tasks.
 - **Validate archive binding**: cover archived self files and directories, unrelated paths, a missing archive copy with a recreated active task, traversal, symlink escape, and unchanged active-task behavior.
-- **List-context seed**: `task.py list-context` prints "no curated entries yet" for seed-only jsonl.
+- **List-context empty**: `task.py list-context` prints "(no curated entries yet)" for an uncurated jsonl.
 - **Artifact gates**: workflow-state, SessionStart, and continue distinguish PRD-only lightweight tasks from complex tasks that still need `design.md` / `implement.md`.
 
 ## Context Injection Limits Contract (`context_injection`)
@@ -1605,7 +1622,7 @@ Use parent/child task trees when a request contains multiple deliverables that c
 ### Signatures
 
 ```bash
-python3 ./.trellis/scripts/task.py create "<title>" --slug <name> --parent <parent-dir>
+python3 ./.trellis/scripts/task.py create "<title>" --description "<one-line summary>" --slug <name> --parent <parent-dir>
 python3 ./.trellis/scripts/task.py add-subtask <parent-dir> <child-dir>
 python3 ./.trellis/scripts/task.py remove-subtask <parent-dir> <child-dir>
 ```

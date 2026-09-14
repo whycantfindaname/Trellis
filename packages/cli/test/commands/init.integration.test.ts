@@ -652,6 +652,17 @@ describe("init() integration", () => {
       ),
     ).toBe(true);
 
+    // Custom sub-agent definitions → .kimi-code/agents/
+    for (const name of [
+      "trellis-implement",
+      "trellis-check",
+      "trellis-research",
+    ]) {
+      expect(
+        fs.existsSync(path.join(tmpDir, ".kimi-code", "agents", `${name}.md`)),
+      ).toBe(true);
+    }
+
     // Kimi has no project-level hooks/settings surface.
     expect(fs.existsSync(path.join(tmpDir, ".kimi-code", "hooks"))).toBe(false);
     expect(
@@ -678,6 +689,73 @@ describe("init() integration", () => {
     }
     const expectedKimiPaths = [...kimiTemplates.keys()];
     expect(trackedPaths).toEqual(expect.arrayContaining(expectedKimiPaths));
+  });
+
+  it("#3m-dsh dsh platform creates shared skills and .dsh skills", async () => {
+    await init({ yes: true, dsh: true });
+
+    // Shared workflow + bundled skills → .agents/skills/
+    expect(
+      fs.existsSync(
+        path.join(tmpDir, ".agents", "skills", "trellis-check", "SKILL.md"),
+      ),
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(tmpDir, ".agents", "skills", "trellis-meta", "SKILL.md"),
+      ),
+    ).toBe(true);
+
+    // dsh-private skills: commands-as-skills + collision-free role prompts
+    expect(
+      fs.existsSync(
+        path.join(tmpDir, ".dsh", "skills", "trellis-start", "SKILL.md"),
+      ),
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(tmpDir, ".dsh", "skills", "trellis-finish-work", "SKILL.md"),
+      ),
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(
+          tmpDir,
+          ".dsh",
+          "skills",
+          "trellis-agent-implement",
+          "SKILL.md",
+        ),
+      ),
+    ).toBe(true);
+    expect(fs.existsSync(path.join(tmpDir, ".dsh", "DSH.md"))).toBe(true);
+
+    // dsh has no project-level hooks/settings surface.
+    expect(fs.existsSync(path.join(tmpDir, ".dsh", "hooks"))).toBe(false);
+    expect(fs.existsSync(path.join(tmpDir, ".dsh", "settings.json"))).toBe(
+      false,
+    );
+    expect(fs.existsSync(path.join(tmpDir, ".claude"))).toBe(false);
+    expect(fs.existsSync(path.join(tmpDir, ".cursor"))).toBe(false);
+
+    const hashFile = path.join(
+      tmpDir,
+      DIR_NAMES.WORKFLOW,
+      ".template-hashes.json",
+    );
+    const hashesFile = JSON.parse(fs.readFileSync(hashFile, "utf-8")) as {
+      __version?: number;
+      hashes?: Record<string, string>;
+    };
+    const hashes = hashesFile.hashes ?? {};
+    const trackedPaths = Object.keys(hashes).map((p) => p.replace(/\\/g, "/"));
+    const dshTemplates = collectPlatformTemplates("dsh");
+    expect(dshTemplates).toBeInstanceOf(Map);
+    if (!dshTemplates) {
+      throw new Error("Expected dsh templates to be collectable");
+    }
+    const expectedDshPaths = [...dshTemplates.keys()];
+    expect(trackedPaths).toEqual(expect.arrayContaining(expectedDshPaths));
   });
 
   it("#3l trae platform writes hooks, commands, agents, and tracked templates", async () => {
@@ -793,6 +871,35 @@ describe("init() integration", () => {
         path.join(tmpDir, ".zcode", "agents", "trellis-research.md"),
       ),
     ).toBe(true);
+  });
+
+  it("[issue-zcode-plugin-hint] zcode init prints a concise bilingual plugin hint", async () => {
+    const originalVitest = process.env.VITEST;
+    const originalQuiet = process.env.TRELLIS_QUIET;
+    const originalWrite = process.stderr.write.bind(process.stderr);
+    const stderr: string[] = [];
+    process.stderr.write = ((chunk: string) => {
+      stderr.push(String(chunk));
+      return true;
+    }) as typeof process.stderr.write;
+    delete process.env.VITEST;
+    delete process.env.TRELLIS_QUIET;
+
+    try {
+      await init({ yes: true, zcode: true });
+    } finally {
+      process.stderr.write = originalWrite;
+      if (originalVitest === undefined) delete process.env.VITEST;
+      else process.env.VITEST = originalVitest;
+      if (originalQuiet === undefined) delete process.env.TRELLIS_QUIET;
+      else process.env.TRELLIS_QUIET = originalQuiet;
+    }
+
+    expect(stderr.join("")).toBe(
+      "ℹ️  ZCode: if project Hooks are disabled, install trellis-bridge, then start a new session.\n" +
+        "   ZCode：若项目 Hooks 被禁用，请安装 trellis-bridge，然后新建会话。\n" +
+        "   请手动在 ZCode 插件市场中添加 https://github.com/CNHLAIA/ZCode-Trellis-Plugin.git，并手动安装 ZCode 补丁插件 trellis-bridge\n",
+    );
   });
 
   it("#3n opencode platform emits start slash command", async () => {

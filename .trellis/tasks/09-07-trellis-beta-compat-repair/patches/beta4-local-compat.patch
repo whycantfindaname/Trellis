@@ -1,0 +1,1124 @@
+diff --git a/.claude/hooks/inject-workflow-state.py b/.claude/hooks/inject-workflow-state.py
+index c58953e5..e55e5684 100755
+--- a/.claude/hooks/inject-workflow-state.py
++++ b/.claude/hooks/inject-workflow-state.py
+@@ -333,31 +333,22 @@ def _resolve_codex_dispatch_mode(config: dict) -> str:
+ 
+ 
+ def _codex_mode_banner(config: dict) -> str:
+-    """Emit a `<codex-mode>` banner for the additionalContext payload.
+-
+-    Reads `codex.dispatch_mode` from .trellis/config.yaml; defaults to
+-    `auto`, which dispatches Trellis sub-agents using native Codex context
+-    injection with a child-side fallback. This does not rely on inherited
+-    parent transcripts: `fork_turns` remains caller-controlled, and
+-    fresh-history sub-agents still receive their explicit delegated task and
+-    inherited session configuration. `inline` is an explicit opt-out; the
+-    legacy `sub-agent` value is an alias for `auto`. Invalid explicit values
+-    fall back to `inline` without per-turn warnings. The banner makes the
+-    active mode explicit to Codex AI per turn, complementing the workflow-state
+-    body which is per-status. Mode tells AI which dispatch protocol to follow;
+-    workflow-state tells AI what step it's at.
++    """Describe context-loading defaults; project rules decide delegation.
++
++    ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use
++    ``inline``. Neither mode overrides the project's ownership decisions.
+     """
+     mode = _resolve_codex_dispatch_mode(config)
+     if mode == "auto":
+         meaning = (
+-            "auto: implement/check work defaults to Trellis sub-agents; native Codex "
+-            "context injection is preferred and child-side loading is the fallback. "
+-            "The main session still coordinates, clarifies, updates specs, commits, and finishes."
++            "auto: native Codex context injection is available for delegated work, "
++            "with child-side loading as fallback. Follow project workflow and "
++            "routing rules to choose main-session or sub-agent ownership."
+         )
+     else:
+         meaning = (
+-            "inline: the main session implements/checks directly; "
+-            "do not dispatch implement/check sub-agents."
++            "inline: the main session loads context and implements/checks directly "
++            "by default. Project workflow and routing rules may justify independent delegation."
+         )
+     return f"<codex-mode>{meaning}</codex-mode>"
+ 
+diff --git a/.codex/hooks/inject-workflow-state.py b/.codex/hooks/inject-workflow-state.py
+index c58953e5..e55e5684 100755
+--- a/.codex/hooks/inject-workflow-state.py
++++ b/.codex/hooks/inject-workflow-state.py
+@@ -333,31 +333,22 @@ def _resolve_codex_dispatch_mode(config: dict) -> str:
+ 
+ 
+ def _codex_mode_banner(config: dict) -> str:
+-    """Emit a `<codex-mode>` banner for the additionalContext payload.
+-
+-    Reads `codex.dispatch_mode` from .trellis/config.yaml; defaults to
+-    `auto`, which dispatches Trellis sub-agents using native Codex context
+-    injection with a child-side fallback. This does not rely on inherited
+-    parent transcripts: `fork_turns` remains caller-controlled, and
+-    fresh-history sub-agents still receive their explicit delegated task and
+-    inherited session configuration. `inline` is an explicit opt-out; the
+-    legacy `sub-agent` value is an alias for `auto`. Invalid explicit values
+-    fall back to `inline` without per-turn warnings. The banner makes the
+-    active mode explicit to Codex AI per turn, complementing the workflow-state
+-    body which is per-status. Mode tells AI which dispatch protocol to follow;
+-    workflow-state tells AI what step it's at.
++    """Describe context-loading defaults; project rules decide delegation.
++
++    ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use
++    ``inline``. Neither mode overrides the project's ownership decisions.
+     """
+     mode = _resolve_codex_dispatch_mode(config)
+     if mode == "auto":
+         meaning = (
+-            "auto: implement/check work defaults to Trellis sub-agents; native Codex "
+-            "context injection is preferred and child-side loading is the fallback. "
+-            "The main session still coordinates, clarifies, updates specs, commits, and finishes."
++            "auto: native Codex context injection is available for delegated work, "
++            "with child-side loading as fallback. Follow project workflow and "
++            "routing rules to choose main-session or sub-agent ownership."
+         )
+     else:
+         meaning = (
+-            "inline: the main session implements/checks directly; "
+-            "do not dispatch implement/check sub-agents."
++            "inline: the main session loads context and implements/checks directly "
++            "by default. Project workflow and routing rules may justify independent delegation."
+         )
+     return f"<codex-mode>{meaning}</codex-mode>"
+ 
+diff --git a/.trellis/scripts/common/active_task.py b/.trellis/scripts/common/active_task.py
+index 7280ec29..2c2b929f 100644
+--- a/.trellis/scripts/common/active_task.py
++++ b/.trellis/scripts/common/active_task.py
+@@ -200,11 +200,11 @@ def normalize_task_ref(task_ref: str) -> str:
+ 
+ 
+ def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
+-    """Resolve a task ref to an absolute task directory inside the repo.
++    """Resolve a task ref strictly inside ``.trellis/tasks``.
+ 
+-    Mirrors `paths.resolve_task_ref` (same containment check). Duplicated
+-    rather than imported because this module is loaded standalone — hooks add
+-    it to `sys.path` directly — so it stays zero-relative-import on purpose.
++    The tasks directory's real path is the containment base so an entirely
++    symlinked ``.trellis`` remains supported while traversal and child symlink
++    escapes are rejected.
+     """
+     normalized = normalize_task_ref(task_ref)
+     if not normalized:
+@@ -212,7 +212,9 @@ def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
+ 
+     try:
+         root = repo_root.resolve()
+-    except OSError:
++        tasks_lexical = root / DIR_WORKFLOW / DIR_TASKS
++        tasks_resolved = tasks_lexical.resolve()
++    except (OSError, RuntimeError):
+         return None
+ 
+     path_obj = Path(normalized)
+@@ -221,33 +223,19 @@ def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
+     elif normalized.startswith(f"{DIR_WORKFLOW}/"):
+         candidate = root / path_obj
+     else:
+-        candidate = root / DIR_WORKFLOW / DIR_TASKS / path_obj
++        candidate = tasks_lexical / path_obj
+ 
+-    # Both sides are resolved because repo_root itself may sit behind a
+-    # symlink (/tmp on macOS does), and resolve() is what collapses `..`
+-    # instead of leaving it for a lexical relative_to() to wave through.
+     try:
+         resolved = candidate.resolve()
+-        workflow_real = (root / DIR_WORKFLOW).resolve()
+-    except OSError:
++    except (OSError, RuntimeError):
++        return None
++    if resolved == tasks_resolved:
+         return None
+-
+-    try:
+-        resolved.relative_to(root)
+-        return resolved
+-    except ValueError:
+-        pass
+-
+-    # `.trellis` may itself be a symlink into a store outside the repo (#567).
+-    # The workflow dir's own real location is then a second legitimate
+-    # containment base; a ref that escapes BOTH bases is still refused. Map
+-    # back to the in-repo (lexical) form so callers store a repo-relative ref.
+     try:
+-        rel = resolved.relative_to(workflow_real)
++        relative = resolved.relative_to(tasks_resolved)
+     except ValueError:
+         return None
+-
+-    return root / DIR_WORKFLOW / rel
++    return tasks_lexical / relative
+ 
+ 
+ def _runtime_sessions_dir(repo_root: Path) -> Path:
+diff --git a/.trellis/scripts/common/paths.py b/.trellis/scripts/common/paths.py
+index 4e68a7c2..afeeee4e 100644
+--- a/.trellis/scripts/common/paths.py
++++ b/.trellis/scripts/common/paths.py
+@@ -306,24 +306,11 @@ def normalize_task_ref(task_ref: str) -> str:
+ 
+ 
+ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | None:
+-    """Resolve a task ref to an absolute task directory path inside the repo.
+-
+-    Returns None when the ref resolves outside `repo_root`. Every reader of the
+-    active task — `task.py`, the shared hooks, the platform extensions — comes
+-    through here, so containment is enforced at this one point rather than at
+-    each call site.
+-
+-    It matters because a ref is not always something the user typed. It round
+-    trips through the session pointer under `.trellis/.runtime/sessions/`, and
+-    `..` segments used to survive that trip intact: `_canonical_task_ref`
+-    compares lexically, and a lexical `relative_to` accepts
+-    `<root>/.trellis/tasks/../../../elsewhere` because the string does start
+-    with the root. The ref was then stored verbatim and replayed on every later
+-    turn, so `task.py start .trellis/tasks/../../../elsewhere` both rewrote that
+-    directory's `task.json` and fed its files to the model.
+-
+-    Resolving here also normalises the path, so callers get a ref without `..`
+-    to store.
++    """Resolve a task ref strictly inside ``.trellis/tasks``.
++
++    The real tasks directory is the containment base. This rejects traversal,
++    external absolute paths, the tasks root itself, and child symlink escapes,
++    while allowing the entire ``.trellis`` directory to be a symlink.
+     """
+     if repo_root is None:
+         repo_root = get_repo_root()
+@@ -334,7 +321,9 @@ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | Non
+ 
+     try:
+         root = repo_root.resolve()
+-    except OSError:
++        tasks_lexical = root / DIR_WORKFLOW / DIR_TASKS
++        tasks_resolved = tasks_lexical.resolve()
++    except (OSError, RuntimeError):
+         return None
+ 
+     path_obj = Path(normalized)
+@@ -343,36 +332,19 @@ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | Non
+     elif normalized.startswith(f"{DIR_WORKFLOW}/"):
+         candidate = root / path_obj
+     else:
+-        candidate = root / DIR_WORKFLOW / DIR_TASKS / path_obj
++        candidate = tasks_lexical / path_obj
+ 
+-    # resolve() collapses `..` and follows symlinks, so a task directory that
+-    # links outside the repo is refused too. Both sides are resolved because
+-    # repo_root itself may sit behind a symlink (/tmp on macOS does).
+     try:
+         resolved = candidate.resolve()
+-        workflow_real = (root / DIR_WORKFLOW).resolve()
+-    except OSError:
++    except (OSError, RuntimeError):
++        return None
++    if resolved == tasks_resolved:
+         return None
+-
+-    try:
+-        resolved.relative_to(root)
+-        return resolved
+-    except ValueError:
+-        pass
+-
+-    # `.trellis` may itself be a symlink into a store outside the repo (#567).
+-    # The workflow dir's own real location is then a second legitimate
+-    # containment base: a ref through that link never left the workflow tree.
+-    # A ref that escapes BOTH bases (traversal, absolute path elsewhere, a
+-    # task dir symlinked out of the tree) is still refused.
+     try:
+-        rel = resolved.relative_to(workflow_real)
++        relative = resolved.relative_to(tasks_resolved)
+     except ValueError:
+         return None
+-
+-    # Map back to the in-repo (lexical) form so callers store the same
+-    # repo-relative ref as in the non-symlinked layout.
+-    return root / DIR_WORKFLOW / rel
++    return tasks_lexical / relative
+ 
+ 
+ def get_current_task(
+diff --git a/.trellis/scripts/common/task_store.py b/.trellis/scripts/common/task_store.py
+index 92de6426..8dafcee1 100755
+--- a/.trellis/scripts/common/task_store.py
++++ b/.trellis/scripts/common/task_store.py
+@@ -1582,8 +1582,9 @@ def _auto_commit_archive(
+     # unrelated entries the developer had staged before archiving into the
+     # chore commit (#579). `source_rel` is included so the source-side
+     # deletions staged above land in the same commit.
++    commit_paths = [*paths, source_rel] if source_was_tracked else paths
+     rc, _, err = run_git_retry_index_lock(
+-        ["commit", "-m", commit_msg, "--", *paths, source_rel], cwd=repo_root
++        ["commit", "-m", commit_msg, "--", *commit_paths], cwd=repo_root
+     )
+     if rc == 0:
+         print(f"[OK] Auto-committed: {commit_msg}", file=sys.stderr)
+diff --git a/.trellis/spec/cli/backend/commands-update.md b/.trellis/spec/cli/backend/commands-update.md
+index 215fa5dd..9e8b27e0 100644
+--- a/.trellis/spec/cli/backend/commands-update.md
++++ b/.trellis/spec/cli/backend/commands-update.md
+@@ -409,3 +409,7 @@ What you should test when extending update:
+ | Block-merge change to `workflow.md` / `AGENTS.md` | At least one test asserting both "user prose preserved" and "managed block updated" |
+ 
+ When a test reaches into `getAllMigrations()` or `getMigrationsForVersion`, it's exercising the boundary with `migrations/index.ts` — keep those assertions narrow (e.g., "this manifest's safe-file-delete fires") so they don't break every time the manifest list grows.
++
++### Dry-run manifest pruning
++
++The update preview may prune orphan entries in its in-memory plan but must pass `persist: !options.dryRun` to `pruneOrphanManifestKeys`. The persisted manifest is byte-identical after dry-run, including orphan keys.
+diff --git a/.trellis/spec/cli/backend/migrations.md b/.trellis/spec/cli/backend/migrations.md
+index 962b9e93..e59b21d3 100644
+--- a/.trellis/spec/cli/backend/migrations.md
++++ b/.trellis/spec/cli/backend/migrations.md
+@@ -225,9 +225,11 @@ And **does NOT record** when:
+ 
+ Every configurator that wants its writes tracked must funnel through `writeFile()` — direct `fs.writeFileSync` bypasses the recorder.
+ 
+-#### `.trellis/` walk exemption
++#### `.trellis/` initial seeding and re-init ownership
+ 
+-`.trellis/` files are still hashed via recursive walk (existing `collectFiles` behavior + `EXCLUDE_FROM_HASH` filters). Rationale: `trellis uninstall` step 3 does `fs.rmSync('.trellis/', { recursive: true, force: true })` regardless of manifest content, so the walk's blast radius is contained. Over-hashing inside `.trellis/` only affects `trellis update` 3-way-merge accuracy, not uninstall safety.
++Fresh initialization hashes `.trellis/` by walking it recursively and applying the `EXCLUDE_FROM_HASH` filters. Re-init (`merge: true`) hashes only the paths written and recorded during the current initialization, including eligible `.trellis/` paths. It preserves every other existing baseline and leaves unrecorded custom files untracked. If merge mode records no writes, the manifest remains unchanged.
++
++Rehashing a skipped custom workflow, configuration, or runtime file would make its modified bytes the official baseline. A later `trellis update --create-new` could then overwrite that customization automatically. Every initialization of an existing `.trellis/` tree uses merge mode, including the full-flow, `--skip-existing`, and empty-task-store recovery paths. Adding a platform must preserve both the custom bytes and the earlier template baseline. Integration regressions cover initialization, customization, all three re-init paths, and update in that order.
+ 
+ #### Self-heal contract: `pruneOrphanManifestKeys`
+ 
+diff --git a/.trellis/spec/cli/backend/script-conventions.md b/.trellis/spec/cli/backend/script-conventions.md
+index 67fb275f..9529586b 100644
+--- a/.trellis/spec/cli/backend/script-conventions.md
++++ b/.trellis/spec/cli/backend/script-conventions.md
+@@ -2858,3 +2858,7 @@ Contracts added by task `07-22-script-qol-batch` (#394, #402, meta access):
+   half-created directory. `task.py set-meta <dir> <key> <value>` sets/overwrites
+   one key on an existing task via the same `resolve_task_dir()` path validation
+   as other subcommands. Values are plain strings (no nesting/coercion).
++
++## Local beta.4 compatibility preservation
++
++Both resolve_task_ref entry points restrict references to the real tasks tree, including when .trellis is symlinked; the tasks root itself is not a task. Archive auto-commit includes the original source path only when it was tracked, preventing unmatched pathspec failures for locally created tasks while preserving unrelated staged files. Session resolution follows beta.4: no implicit single-session fallback.
+diff --git a/packages/cli/src/commands/init.ts b/packages/cli/src/commands/init.ts
+index 47fcef37..d8850f75 100644
+--- a/packages/cli/src/commands/init.ts
++++ b/packages/cli/src/commands/init.ts
+@@ -1968,8 +1968,12 @@ export async function init(options: InitOptions): Promise<void> {
+     writeSpecRegistryConfig(cwd, registrySpecConfigToPersist);
+   }
+ 
+-  // Initialize template hashes for modification tracking
+-  const hashedCount = initializeHashes(cwd, { trackedPaths: writtenPaths });
++  // Existing projects can reach this full flow through recovery or flags;
++  // preserve baselines for files the writer skipped here too.
++  const hashedCount = initializeHashes(cwd, {
++    trackedPaths: writtenPaths,
++    merge: !isFirstInit,
++  });
+   if (useRemoteTemplate) {
+     const specFilesToHash = new Map<string, string>();
+     for (const relativePath of collectSpecPaths(cwd)) {
+diff --git a/packages/cli/src/commands/update.ts b/packages/cli/src/commands/update.ts
+index b874039d..9c574be2 100644
+--- a/packages/cli/src/commands/update.ts
++++ b/packages/cli/src/commands/update.ts
+@@ -2212,6 +2212,7 @@ export async function update(options: UpdateOptions): Promise<void> {
+       cwd,
+       [...configuredPlatforms],
+       hashes,
++      { persist: !options.dryRun },
+     );
+     if (prune.pruned.length > 0) {
+       console.log(
+diff --git a/packages/cli/src/templates/opencode/lib/trellis-context.js b/packages/cli/src/templates/opencode/lib/trellis-context.js
+index ec58b204..78361675 100644
+--- a/packages/cli/src/templates/opencode/lib/trellis-context.js
++++ b/packages/cli/src/templates/opencode/lib/trellis-context.js
+@@ -373,7 +373,7 @@ export class TrellisContext {
+    *
+    * Resolution order (mirrors Python `active_task.resolve_active_task`):
+    *   1. Lookup the runtime file for the input-derived context key.
+-   *   2. If that misses and exactly one session runtime file exists locally,
++   *   2. If there is no context key and exactly one runtime file exists locally,
+    *      use it (`_resolveSingleSessionFallback`). Refuses to guess when 0 or
+    *      ≥2 files exist so multi-window isolation holds.
+    */
+@@ -392,7 +392,7 @@ export class TrellisContext {
+       }
+     }
+ 
+-    const fallback = this._resolveSingleSessionFallback()
++    const fallback = contextKey ? null : this._resolveSingleSessionFallback()
+     if (fallback) {
+       return fallback
+     }
+diff --git a/packages/cli/src/templates/opencode/plugins/inject-subagent-context.js b/packages/cli/src/templates/opencode/plugins/inject-subagent-context.js
+index 073a0b82..a51989bd 100644
+--- a/packages/cli/src/templates/opencode/plugins/inject-subagent-context.js
++++ b/packages/cli/src/templates/opencode/plugins/inject-subagent-context.js
+@@ -473,8 +473,8 @@ export default async ({ directory, platform: hostPlatform = process.platform, en
+           //   2. `Active task: <path>` hint in the dispatch prompt
+           //      (explicit per-dispatch override — beats single-session
+           //      inference so multi-window users can disambiguate)
+-          //   3. Single-session fallback — only when exactly 1 session
+-          //      runtime file exists locally
++          //   3. Single-session fallback — only without a context key and
++          //      when exactly 1 session runtime file exists locally
+           let taskDir = null
+           let taskSource = null
+ 
+@@ -503,7 +503,7 @@ export default async ({ directory, platform: hostPlatform = process.platform, en
+             }
+           }
+ 
+-          if (!taskDir) {
++          if (!taskDir && !contextKey) {
+             const fallback = ctx._resolveSingleSessionFallback()
+             if (fallback?.taskPath) {
+               const fallbackDir = ctx.resolveTaskDir(fallback.taskPath)
+diff --git a/packages/cli/src/templates/shared-hooks/inject-workflow-state.py b/packages/cli/src/templates/shared-hooks/inject-workflow-state.py
+index c58953e5..e55e5684 100644
+--- a/packages/cli/src/templates/shared-hooks/inject-workflow-state.py
++++ b/packages/cli/src/templates/shared-hooks/inject-workflow-state.py
+@@ -333,31 +333,22 @@ def _resolve_codex_dispatch_mode(config: dict) -> str:
+ 
+ 
+ def _codex_mode_banner(config: dict) -> str:
+-    """Emit a `<codex-mode>` banner for the additionalContext payload.
+-
+-    Reads `codex.dispatch_mode` from .trellis/config.yaml; defaults to
+-    `auto`, which dispatches Trellis sub-agents using native Codex context
+-    injection with a child-side fallback. This does not rely on inherited
+-    parent transcripts: `fork_turns` remains caller-controlled, and
+-    fresh-history sub-agents still receive their explicit delegated task and
+-    inherited session configuration. `inline` is an explicit opt-out; the
+-    legacy `sub-agent` value is an alias for `auto`. Invalid explicit values
+-    fall back to `inline` without per-turn warnings. The banner makes the
+-    active mode explicit to Codex AI per turn, complementing the workflow-state
+-    body which is per-status. Mode tells AI which dispatch protocol to follow;
+-    workflow-state tells AI what step it's at.
++    """Describe context-loading defaults; project rules decide delegation.
++
++    ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use
++    ``inline``. Neither mode overrides the project's ownership decisions.
+     """
+     mode = _resolve_codex_dispatch_mode(config)
+     if mode == "auto":
+         meaning = (
+-            "auto: implement/check work defaults to Trellis sub-agents; native Codex "
+-            "context injection is preferred and child-side loading is the fallback. "
+-            "The main session still coordinates, clarifies, updates specs, commits, and finishes."
++            "auto: native Codex context injection is available for delegated work, "
++            "with child-side loading as fallback. Follow project workflow and "
++            "routing rules to choose main-session or sub-agent ownership."
+         )
+     else:
+         meaning = (
+-            "inline: the main session implements/checks directly; "
+-            "do not dispatch implement/check sub-agents."
++            "inline: the main session loads context and implements/checks directly "
++            "by default. Project workflow and routing rules may justify independent delegation."
+         )
+     return f"<codex-mode>{meaning}</codex-mode>"
+ 
+diff --git a/packages/cli/src/templates/trellis/scripts/common/active_task.py b/packages/cli/src/templates/trellis/scripts/common/active_task.py
+index 7280ec29..2c2b929f 100644
+--- a/packages/cli/src/templates/trellis/scripts/common/active_task.py
++++ b/packages/cli/src/templates/trellis/scripts/common/active_task.py
+@@ -200,11 +200,11 @@ def normalize_task_ref(task_ref: str) -> str:
+ 
+ 
+ def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
+-    """Resolve a task ref to an absolute task directory inside the repo.
++    """Resolve a task ref strictly inside ``.trellis/tasks``.
+ 
+-    Mirrors `paths.resolve_task_ref` (same containment check). Duplicated
+-    rather than imported because this module is loaded standalone — hooks add
+-    it to `sys.path` directly — so it stays zero-relative-import on purpose.
++    The tasks directory's real path is the containment base so an entirely
++    symlinked ``.trellis`` remains supported while traversal and child symlink
++    escapes are rejected.
+     """
+     normalized = normalize_task_ref(task_ref)
+     if not normalized:
+@@ -212,7 +212,9 @@ def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
+ 
+     try:
+         root = repo_root.resolve()
+-    except OSError:
++        tasks_lexical = root / DIR_WORKFLOW / DIR_TASKS
++        tasks_resolved = tasks_lexical.resolve()
++    except (OSError, RuntimeError):
+         return None
+ 
+     path_obj = Path(normalized)
+@@ -221,33 +223,19 @@ def resolve_task_ref(task_ref: str, repo_root: Path) -> Path | None:
+     elif normalized.startswith(f"{DIR_WORKFLOW}/"):
+         candidate = root / path_obj
+     else:
+-        candidate = root / DIR_WORKFLOW / DIR_TASKS / path_obj
++        candidate = tasks_lexical / path_obj
+ 
+-    # Both sides are resolved because repo_root itself may sit behind a
+-    # symlink (/tmp on macOS does), and resolve() is what collapses `..`
+-    # instead of leaving it for a lexical relative_to() to wave through.
+     try:
+         resolved = candidate.resolve()
+-        workflow_real = (root / DIR_WORKFLOW).resolve()
+-    except OSError:
++    except (OSError, RuntimeError):
++        return None
++    if resolved == tasks_resolved:
+         return None
+-
+-    try:
+-        resolved.relative_to(root)
+-        return resolved
+-    except ValueError:
+-        pass
+-
+-    # `.trellis` may itself be a symlink into a store outside the repo (#567).
+-    # The workflow dir's own real location is then a second legitimate
+-    # containment base; a ref that escapes BOTH bases is still refused. Map
+-    # back to the in-repo (lexical) form so callers store a repo-relative ref.
+     try:
+-        rel = resolved.relative_to(workflow_real)
++        relative = resolved.relative_to(tasks_resolved)
+     except ValueError:
+         return None
+-
+-    return root / DIR_WORKFLOW / rel
++    return tasks_lexical / relative
+ 
+ 
+ def _runtime_sessions_dir(repo_root: Path) -> Path:
+diff --git a/packages/cli/src/templates/trellis/scripts/common/paths.py b/packages/cli/src/templates/trellis/scripts/common/paths.py
+index 4e68a7c2..afeeee4e 100644
+--- a/packages/cli/src/templates/trellis/scripts/common/paths.py
++++ b/packages/cli/src/templates/trellis/scripts/common/paths.py
+@@ -306,24 +306,11 @@ def normalize_task_ref(task_ref: str) -> str:
+ 
+ 
+ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | None:
+-    """Resolve a task ref to an absolute task directory path inside the repo.
+-
+-    Returns None when the ref resolves outside `repo_root`. Every reader of the
+-    active task — `task.py`, the shared hooks, the platform extensions — comes
+-    through here, so containment is enforced at this one point rather than at
+-    each call site.
+-
+-    It matters because a ref is not always something the user typed. It round
+-    trips through the session pointer under `.trellis/.runtime/sessions/`, and
+-    `..` segments used to survive that trip intact: `_canonical_task_ref`
+-    compares lexically, and a lexical `relative_to` accepts
+-    `<root>/.trellis/tasks/../../../elsewhere` because the string does start
+-    with the root. The ref was then stored verbatim and replayed on every later
+-    turn, so `task.py start .trellis/tasks/../../../elsewhere` both rewrote that
+-    directory's `task.json` and fed its files to the model.
+-
+-    Resolving here also normalises the path, so callers get a ref without `..`
+-    to store.
++    """Resolve a task ref strictly inside ``.trellis/tasks``.
++
++    The real tasks directory is the containment base. This rejects traversal,
++    external absolute paths, the tasks root itself, and child symlink escapes,
++    while allowing the entire ``.trellis`` directory to be a symlink.
+     """
+     if repo_root is None:
+         repo_root = get_repo_root()
+@@ -334,7 +321,9 @@ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | Non
+ 
+     try:
+         root = repo_root.resolve()
+-    except OSError:
++        tasks_lexical = root / DIR_WORKFLOW / DIR_TASKS
++        tasks_resolved = tasks_lexical.resolve()
++    except (OSError, RuntimeError):
+         return None
+ 
+     path_obj = Path(normalized)
+@@ -343,36 +332,19 @@ def resolve_task_ref(task_ref: str, repo_root: Path | None = None) -> Path | Non
+     elif normalized.startswith(f"{DIR_WORKFLOW}/"):
+         candidate = root / path_obj
+     else:
+-        candidate = root / DIR_WORKFLOW / DIR_TASKS / path_obj
++        candidate = tasks_lexical / path_obj
+ 
+-    # resolve() collapses `..` and follows symlinks, so a task directory that
+-    # links outside the repo is refused too. Both sides are resolved because
+-    # repo_root itself may sit behind a symlink (/tmp on macOS does).
+     try:
+         resolved = candidate.resolve()
+-        workflow_real = (root / DIR_WORKFLOW).resolve()
+-    except OSError:
++    except (OSError, RuntimeError):
++        return None
++    if resolved == tasks_resolved:
+         return None
+-
+-    try:
+-        resolved.relative_to(root)
+-        return resolved
+-    except ValueError:
+-        pass
+-
+-    # `.trellis` may itself be a symlink into a store outside the repo (#567).
+-    # The workflow dir's own real location is then a second legitimate
+-    # containment base: a ref through that link never left the workflow tree.
+-    # A ref that escapes BOTH bases (traversal, absolute path elsewhere, a
+-    # task dir symlinked out of the tree) is still refused.
+     try:
+-        rel = resolved.relative_to(workflow_real)
++        relative = resolved.relative_to(tasks_resolved)
+     except ValueError:
+         return None
+-
+-    # Map back to the in-repo (lexical) form so callers store the same
+-    # repo-relative ref as in the non-symlinked layout.
+-    return root / DIR_WORKFLOW / rel
++    return tasks_lexical / relative
+ 
+ 
+ def get_current_task(
+diff --git a/packages/cli/src/templates/trellis/scripts/common/task_store.py b/packages/cli/src/templates/trellis/scripts/common/task_store.py
+index 92de6426..8dafcee1 100644
+--- a/packages/cli/src/templates/trellis/scripts/common/task_store.py
++++ b/packages/cli/src/templates/trellis/scripts/common/task_store.py
+@@ -1582,8 +1582,9 @@ def _auto_commit_archive(
+     # unrelated entries the developer had staged before archiving into the
+     # chore commit (#579). `source_rel` is included so the source-side
+     # deletions staged above land in the same commit.
++    commit_paths = [*paths, source_rel] if source_was_tracked else paths
+     rc, _, err = run_git_retry_index_lock(
+-        ["commit", "-m", commit_msg, "--", *paths, source_rel], cwd=repo_root
++        ["commit", "-m", commit_msg, "--", *commit_paths], cwd=repo_root
+     )
+     if rc == 0:
+         print(f"[OK] Auto-committed: {commit_msg}", file=sys.stderr)
+diff --git a/packages/cli/src/utils/template-hash.ts b/packages/cli/src/utils/template-hash.ts
+index baf89980..4dca23ed 100644
+--- a/packages/cli/src/utils/template-hash.ts
++++ b/packages/cli/src/utils/template-hash.ts
+@@ -323,7 +323,8 @@ export interface InitializeHashesOptions {
+   /**
+    * POSIX-style relative paths trellis actually wrote during the init run
+    * (captured via `startRecordingWrites` in `file-writer.ts`). Only these
+-   * paths are hashed for the platform/root-level coverage; anything else
++   * paths are hashed for platform/root-level coverage and for all coverage
++   * in merge mode; anything else
+    * under `.codex/` / `.claude/` / etc. is left alone, even if it exists
+    * on disk. Setting this to `undefined` or an empty set means "no
+    * platform/root coverage this run" — historical hashes from earlier
+@@ -348,10 +349,9 @@ export interface InitializeHashesOptions {
+  * where a blind directory walk of `.codex/` / `.claude/` swept up
+  * user-owned runtime data (chat history, session JSONLs).
+  *
+- * `.trellis/` is still walked recursively (with `EXCLUDE_FROM_HASH`) because
+- * uninstall removes `.trellis/` wholesale via `rm -rf` regardless of manifest
+- * content — accuracy there doesn't affect data-loss, only `trellis update`
+- * 3-way-merge fidelity (preserved by the existing walk).
++ * Fresh init walks `.trellis/` recursively with `EXCLUDE_FROM_HASH`. Re-init
++ * only hashes recorded writes, preserving the earlier template baselines of
++ * skipped custom files so a subsequent update still detects modifications.
+  *
+  * @returns Number of files hashed in the final manifest.
+  */
+@@ -362,12 +362,11 @@ export function initializeHashes(
+   const { trackedPaths, merge = false } = options;
+   const hashes: TemplateHashes = merge ? loadHashes(cwd) : {};
+ 
+-  // Platform + root files: hash only paths actually written this run.
++  // Hash recorded writes; fresh init handles .trellis/ with the walk below.
+   if (trackedPaths) {
+     for (const relativePath of trackedPaths) {
+-      // `.trellis/` paths are handled by the walk below — don't double-track.
+       if (relativePath.startsWith(".trellis/") || relativePath === ".trellis") {
+-        continue;
++        if (!merge || shouldExcludeFromHash(relativePath)) continue;
+       }
+       const fullPath = path.join(cwd, ...relativePath.split("/"));
+       if (!fs.existsSync(fullPath)) continue;
+@@ -380,11 +379,8 @@ export function initializeHashes(
+     }
+   }
+ 
+-  // .trellis/ workflow tree: still walked recursively. Accuracy here is for
+-  // `trellis update`'s 3-way merge of workflow.md / config.yaml / scripts;
+-  // uninstall removes .trellis/ wholesale so it does not matter for the
+-  // data-loss bug this contract addresses.
+-  const files = collectFiles(cwd, ".trellis");
++  // Re-init must never promote skipped custom bytes to template baselines.
++  const files = merge ? [] : collectFiles(cwd, ".trellis");
+   for (const relativePath of files) {
+     const fullPath = path.join(cwd, relativePath);
+     try {
+@@ -399,7 +395,7 @@ export function initializeHashes(
+   // haven't been updated yet), keep tracking root-level files that exist on
+   // disk. This preserves the legacy behavior for tests / scripts that don't
+   // go through the new recording flow.
+-  if (!trackedPaths) {
++  if (!merge && !trackedPaths) {
+     for (const relativePath of [FILE_NAMES.AGENTS]) {
+       if (shouldExcludeFromHash(relativePath)) continue;
+       const fullPath = path.join(cwd, relativePath);
+diff --git a/packages/cli/test/commands/update.integration.test.ts b/packages/cli/test/commands/update.integration.test.ts
+index f4faed8f..fef21660 100644
+--- a/packages/cli/test/commands/update.integration.test.ts
++++ b/packages/cli/test/commands/update.integration.test.ts
+@@ -58,7 +58,7 @@ import {
+ } from "../../src/commands/update.js";
+ import { VERSION } from "../../src/constants/version.js";
+ import { DIR_NAMES, FILE_NAMES, PATHS } from "../../src/constants/paths.js";
+-import { computeHash } from "../../src/utils/template-hash.js";
++import { computeHash, loadHashes } from "../../src/utils/template-hash.js";
+ import { workflowMdTemplate } from "../../src/templates/trellis/index.js";
+ import {
+   COPILOT_INSTRUCTIONS_BLOCK_END,
+@@ -497,6 +497,17 @@ describe("update() integration", () => {
+     expect(entries.filter((e) => e.startsWith(".backup-")).length).toBe(0);
+   });
+ 
++  it("dry run preserves orphan manifest entries byte for byte", async () => {
++    await setupProject();
++    const hashFile = projectFile(".trellis/.template-hashes.json");
++    const hashes = readHashesV2(hashFile);
++    hashes[".claude/hooks/retired-local-hook.py"] = "retired-baseline";
++    writeHashesV2(hashFile, hashes);
++    const before = fs.readFileSync(hashFile);
++    await update({ dryRun: true });
++    expect(fs.readFileSync(hashFile)).toEqual(before);
++  });
++
+   it("#3 user-deleted file (with stored hash) is not re-added on update", async () => {
+     await setupProject();
+ 
+@@ -744,6 +755,48 @@ describe("update() integration", () => {
+     expect(fs.readFileSync(newFile, "utf-8")).toBe(templateContent);
+   });
+ 
++  it.each(["platform", "skip-existing", "empty-task-store"])("#7a adding a platform preserves customized Trellis files through update (%s)", async (mode) => {
++    await init({ yes: true, codex: true, user: "alice" });
++    const baseline = loadHashes(tmpDir);
++    const originals = new Map<string, string>();
++    for (const relativePath of [
++      ".trellis/workflow.md",
++      ".trellis/config.yaml",
++      MANAGED_FILE,
++    ]) {
++      const fullPath = path.join(tmpDir, relativePath);
++      const original = fs.readFileSync(fullPath, "utf-8");
++      originals.set(relativePath, original);
++      fs.writeFileSync(fullPath, original + "\n# Project customization\n");
++    }
++    const customPath = path.join(tmpDir, ".trellis", "project-notes.md");
++    fs.writeFileSync(customPath, "Project notes\n");
++
++    if (mode === "empty-task-store") {
++      // Reproduce recovery's full-init route in the disposable project.
++      fs.rmSync(path.join(tmpDir, PATHS.TASKS), { recursive: true });
++      fs.mkdirSync(path.join(tmpDir, PATHS.TASKS));
++    }
++    await init({ yes: true, claude: true, skipExisting: mode === "skip-existing" });
++    const afterAdd = loadHashes(tmpDir);
++    expect(afterAdd[".claude/hooks/session-start.py"]).toBeDefined();
++    expect(afterAdd[".trellis/project-notes.md"]).toBeUndefined();
++    for (const relativePath of originals.keys()) {
++      expect(afterAdd[relativePath]).toBe(baseline[relativePath]);
++    }
++
++    await update({ createNew: true });
++    for (const [relativePath, original] of originals) {
++      const fullPath = path.join(tmpDir, relativePath);
++      expect(fs.readFileSync(fullPath, "utf-8")).toBe(
++        original + "\n# Project customization\n",
++      );
++      expect(fs.readFileSync(fullPath + ".new", "utf-8")).toBe(original);
++      expect(loadHashes(tmpDir)[relativePath]).toBe(baseline[relativePath]);
++    }
++    expect(fs.readFileSync(customPath, "utf-8")).toBe("Project notes\n");
++  });
++
+   it("#8 updates version file after successful update", async () => {
+     await setupProject();
+ 
+diff --git a/packages/cli/test/configurators/platforms.test.ts b/packages/cli/test/configurators/platforms.test.ts
+index 0e1ac0d8..f349b624 100644
+--- a/packages/cli/test/configurators/platforms.test.ts
++++ b/packages/cli/test/configurators/platforms.test.ts
+@@ -200,8 +200,9 @@ describe("getConfiguredPlatforms", () => {
+     expect(result.has("devin")).toBe(true);
+   });
+ 
+-  it("detects every platform from the files Trellis tracked for it", async () => {
+-    for (const id of PLATFORM_IDS) {
++  it.each(PLATFORM_IDS)(
++    "detects %s from the files Trellis tracked for it",
++    async (id) => {
+       const platformRoot = path.join(tmpDir, id);
+       fs.mkdirSync(platformRoot, { recursive: true });
+       const written = startRecordingWrites(platformRoot);
+@@ -214,8 +215,8 @@ describe("getConfiguredPlatforms", () => {
+       initializeHashes(platformRoot, { trackedPaths: written });
+ 
+       expect([...getConfiguredPlatforms(platformRoot)]).toEqual([id]);
+-    }
+-  });
++    },
++  );
+ 
+   it("ignores unrelated directories", () => {
+     fs.mkdirSync(path.join(tmpDir, ".vscode"));
+diff --git a/packages/cli/test/scripts/task-archive.integration.test.ts b/packages/cli/test/scripts/task-archive.integration.test.ts
+index 16e3b179..23e119db 100644
+--- a/packages/cli/test/scripts/task-archive.integration.test.ts
++++ b/packages/cli/test/scripts/task-archive.integration.test.ts
+@@ -233,6 +233,28 @@ describe.skipIf(!hasPython())(
+       30_000, // python startup + 100-file ops can be slow
+     );
+ 
++    it.each([true, false])("preserves unrelated staged files when archiving (tracked=%s)", (tracked) => {
++      git(tmp, "add", "--", ".trellis/scripts", ".trellis/config.yaml");
++      git(tmp, "commit", "-q", "-m", "initial");
++      makeTask(tmp, "task-a", "task A prd\n");
++      if (tracked) {
++        git(tmp, "add", "--", ".trellis/tasks/task-a");
++        git(tmp, "commit", "-q", "-m", "task");
++      }
++      const before = git(tmp, "rev-parse", "HEAD");
++      fs.writeFileSync(path.join(tmp, "README.md"), "unrelated staged work\n");
++      git(tmp, "add", "--", "README.md");
++
++      runArchive(tmp, "task-a");
++
++      expect(git(tmp, "rev-parse", "HEAD")).not.toBe(before);
++      const committed = git(tmp, "show", "HEAD", "--name-only", "--pretty=format:");
++      expect(committed).not.toContain("README.md");
++      expect(committed).toContain(".trellis/tasks/archive/");
++      expect(git(tmp, "diff", "--cached", "--name-only")).toBe("README.md");
++      expect(git(tmp, "status", "--porcelain", "--", ".trellis/tasks")).toBe("");
++    });
++
+     it("refuses to archive a mistyped name that resolves to a real source dir", () => {
+       makeTask(tmp, "real-task", "# real task\n");
+       // A user source directory that is NOT a task.
+@@ -242,9 +264,8 @@ describe.skipIf(!hasPython())(
+       git(tmp, "add", "-A");
+       git(tmp, "commit", "-q", "-m", "initial");
+ 
+-      // Typo: `archive src` instead of a task name. resolve_task_dir falls
+-      // back to repo_root/src; without the guard this moves the whole source
+-      // dir into .trellis/tasks/archive/.
++      // Typo: `archive src` instead of a task name. Resolution must fail
++      // before archive can move the real source directory.
+       const r = spawnSync(
+         "python3",
+         [".trellis/scripts/task.py", "archive", "src"],
+@@ -252,7 +273,7 @@ describe.skipIf(!hasPython())(
+       );
+ 
+       expect(r.status).not.toBe(0);
+-      expect(r.stderr).toContain("refusing to archive");
++      expect(r.stderr).toContain("could not resolve task 'src'");
+       // src/ untouched, still at its original location with its file.
+       expect(fs.existsSync(path.join(srcDir, "index.ts"))).toBe(true);
+       // No archive dir was created holding a moved src.
+diff --git a/packages/cli/test/scripts/task-path-containment.integration.test.ts b/packages/cli/test/scripts/task-path-containment.integration.test.ts
+new file mode 100644
+index 00000000..002670d6
+--- /dev/null
++++ b/packages/cli/test/scripts/task-path-containment.integration.test.ts
+@@ -0,0 +1,95 @@
++import { afterEach, beforeEach, describe, expect, it } from "vitest";
++import { spawnSync } from "node:child_process";
++import fs from "node:fs";
++import os from "node:os";
++import path from "node:path";
++
++const scripts = path.resolve(__dirname, "../../src/templates/trellis/scripts");
++
++describe("task CLI path containment", () => {
++  let temporary: string;
++  let repo: string;
++  let victim: string;
++
++  function run(args: string[]) {
++    return spawnSync("python3", [".trellis/scripts/task.py", ...args], {
++      cwd: repo,
++      encoding: "utf-8",
++      env: {
++        ...process.env,
++        TRELLIS_CONTEXT_ID: "compat-path-session",
++        PYTHONDONTWRITEBYTECODE: "1",
++      },
++    });
++  }
++
++  beforeEach(() => {
++    temporary = fs.mkdtempSync(path.join(os.tmpdir(), "trellis-task-path-"));
++    repo = path.join(temporary, "repo");
++    victim = path.join(temporary, "victim");
++    fs.mkdirSync(path.join(repo, ".trellis", "tasks", "inside"), { recursive: true });
++    fs.cpSync(scripts, path.join(repo, ".trellis", "scripts"), { recursive: true });
++    fs.writeFileSync(path.join(repo, ".trellis", ".developer"), "name=test\n");
++    fs.writeFileSync(path.join(repo, ".trellis", "config.yaml"), "session_auto_commit: false\n");
++    fs.writeFileSync(path.join(repo, "README.md"), "Repository context\n");
++    fs.writeFileSync(
++      path.join(repo, ".trellis", "tasks", "inside", "task.json"),
++      JSON.stringify({ id: "inside", title: "Inside", status: "planning" }),
++    );
++    fs.mkdirSync(victim);
++    fs.writeFileSync(path.join(victim, "task.json"), '{"status":"outside","children":[]}\n');
++  });
++
++  afterEach(() => {
++    fs.rmSync(temporary, { recursive: true, force: true });
++  });
++
++  it.each(["absolute", "parent", "nested-parent", "task-root"] as const)("rejects %s paths before command writers can touch them", (kind) => {
++    const before = fs.readFileSync(path.join(victim, "task.json"), "utf-8");
++    const ref = { absolute: victim, parent: "../victim", "nested-parent": ".trellis/tasks/../../../victim", "task-root": ".trellis/tasks" }[kind];
++      const commands = [
++        ["start", ref],
++        ["set-branch", ref, "feature"],
++        ["set-base-branch", ref, "main"],
++        ["set-scope", ref, "test"],
++        ["set-meta", ref, "key", "value"],
++        ["add-context", ref, "check", "README.md", "scope"],
++        ["validate", ref],
++        ["list-context", ref],
++        ["add-subtask", ref, "inside"],
++        ["remove-subtask", "inside", ref],
++        ["archive", ref, "--no-commit"],
++      ];
++      for (const args of commands) {
++        const result = run(args);
++        expect(result.status, args.join(" ")).toBe(1);
++        expect(result.stderr).not.toContain("Traceback");
++        expect(fs.readFileSync(path.join(victim, "task.json"), "utf-8")).toBe(before);
++        expect(fs.readdirSync(victim)).toEqual(["task.json"]);
++      }
++  }, 30_000);
++
++  it("does not use a repository directory as an unknown task name fallback", () => {
++    fs.mkdirSync(path.join(repo, "source"));
++    fs.writeFileSync(path.join(repo, "source", "task.json"), '{"status":"source"}\n');
++    expect(run(["start", "source"]).status).toBe(1);
++    expect(fs.readFileSync(path.join(repo, "source", "task.json"), "utf-8")).toBe('{"status":"source"}\n');
++  });
++
++  it.skipIf(process.platform === "win32")("rejects a child symlink escape and accepts a symlinked Trellis tree", () => {
++    fs.symlinkSync(victim, path.join(repo, ".trellis", "tasks", "escaped"), "dir");
++    expect(run(["start", ".trellis/tasks/escaped"]).status).toBe(1);
++
++    const store = path.join(temporary, "trellis-store");
++    fs.renameSync(path.join(repo, ".trellis"), store);
++    fs.symlinkSync(store, path.join(repo, ".trellis"), "dir");
++    for (const ref of ["inside", ".trellis\\tasks\\inside", path.join(store, "tasks", "inside")]) {
++      const result = run(["start", ref]);
++      expect(result.status, result.stderr).toBe(0);
++      const session = JSON.parse(fs.readFileSync(
++        path.join(store, ".runtime", "sessions", "compat-path-session.json"), "utf-8",
++      )) as { current_task: string };
++      expect(session.current_task).toBe(".trellis/tasks/inside");
++    }
++  });
++});
+diff --git a/packages/cli/test/templates/opencode.test.ts b/packages/cli/test/templates/opencode.test.ts
+index ec8a273a..65531fc4 100644
+--- a/packages/cli/test/templates/opencode.test.ts
++++ b/packages/cli/test/templates/opencode.test.ts
+@@ -956,16 +956,26 @@ describe("opencode TrellisContext single-session fallback", () => {
+     rmSync(dir, { recursive: true, force: true });
+   });
+ 
+-  it("returns the only session file when exactly one exists", () => {
++  it("returns the only session file when no identity is available", () => {
+     writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
+     const ctx = new TrellisContext(dir);
+-    const active = ctx.getActiveTask({ sessionID: "missing-key" });
++    const active = ctx.getActiveTask();
+ 
+     expect(active.taskPath).toBe(".trellis/tasks/demo-task");
+     expect(active.source).toBe("session-fallback:opencode_sole");
+     expect(active.stale).toBe(false);
+   });
+ 
++  it("does not borrow another session when its explicit identity has no task", () => {
++    writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
++    const ctx = new TrellisContext(dir);
++    expect(ctx.getActiveTask({ sessionID: "missing-key" })).toEqual({
++      taskPath: null,
++      source: "none",
++      stale: false,
++    });
++  });
++
+   it("refuses to guess when two or more session files exist", () => {
+     writeSessionFile(dir, "opencode_a", ".trellis/tasks/demo-task");
+     writeSessionFile(dir, "opencode_b", ".trellis/tasks/demo-task");
+@@ -986,16 +996,13 @@ describe("opencode TrellisContext single-session fallback", () => {
+   });
+ 
+   it("prefers an exact context-key match over the fallback", () => {
+-    writeSessionFile(dir, "opencode_session_exact", ".trellis/tasks/demo-task");
++    writeSessionFile(dir, "opencode_exact", ".trellis/tasks/demo-task");
+     writeSessionFile(dir, "opencode_other", ".trellis/tasks/demo-task");
+     const ctx = new TrellisContext(dir);
+     const active = ctx.getActiveTask({ sessionID: "exact" });
+ 
+-    // sessionID="exact" maps to "opencode_exact" via buildContextKey; we
+-    // wrote "opencode_session_exact" so the exact lookup misses, but the
+-    // presence of ≥2 files means fallback should also refuse — proving
+-    // exact match is attempted first.
+-    expect(active.taskPath).toBeNull();
++    expect(active.taskPath).toBe(".trellis/tasks/demo-task");
++    expect(active.source).toBe("session:opencode_exact");
+   });
+ });
+ 
+@@ -1016,7 +1023,7 @@ describe("opencode inject-subagent-context (issue #264)", () => {
+     rmSync(dir, { recursive: true, force: true });
+   });
+ 
+-  it("mutates implement prompt using single-session fallback when sessionID misses", async () => {
++  it("mutates implement prompt using single-session fallback without sessionID", async () => {
+     writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
+     const output: TaskToolOutput = {
+       args: {
+@@ -1026,7 +1033,7 @@ describe("opencode inject-subagent-context (issue #264)", () => {
+     };
+ 
+     await hooks["tool.execute.before"](
+-      { tool: "task", sessionID: "stranger" },
++      { tool: "task" },
+       output,
+     );
+ 
+@@ -1041,6 +1048,18 @@ describe("opencode inject-subagent-context (issue #264)", () => {
+     ).toBe(true);
+   });
+ 
++  it("preserves the prompt when an explicit session has no task", async () => {
++    writeSessionFile(dir, "opencode_sole", ".trellis/tasks/demo-task");
++    const output: TaskToolOutput = {
++      args: { subagent_type: "trellis-implement", prompt: "implement this" },
++    };
++    await hooks["tool.execute.before"](
++      { tool: "task", sessionID: "stranger" },
++      output,
++    );
++    expect(output.args.prompt).toBe("implement this");
++  });
++
+   it("inlines JSONL-referenced spec content into the implement prompt", async () => {
+     // Cover AC #1: "JSONL-referenced context" — the seed-only jsonl path
+     // is exercised above; this one verifies a curated entry is inlined.
+@@ -1061,7 +1080,7 @@ describe("opencode inject-subagent-context (issue #264)", () => {
+     };
+ 
+     await hooks["tool.execute.before"](
+-      { tool: "task", sessionID: "stranger" },
++      { tool: "task", sessionID: "sole" },
+       output,
+     );
+ 
+@@ -1588,7 +1607,7 @@ describe("opencode context injection limits (issue #441)", () => {
+       },
+     };
+     await hooks["tool.execute.before"](
+-      { tool: "task", sessionID: "stranger" },
++      { tool: "task", sessionID: "sole" },
+       output,
+     );
+     return output.args.prompt ?? "";
+diff --git a/packages/cli/test/utils/template-hash.test.ts b/packages/cli/test/utils/template-hash.test.ts
+index 36803aea..b3108364 100644
+--- a/packages/cli/test/utils/template-hash.test.ts
++++ b/packages/cli/test/utils/template-hash.test.ts
+@@ -327,7 +327,9 @@ describe("matchesOriginalTemplate", () => {
+   });
+ 
+   it("returns false when file does not exist", () => {
+-    expect(matchesOriginalTemplate(tmpDir, "missing.txt", "content")).toBe(false);
++    expect(matchesOriginalTemplate(tmpDir, "missing.txt", "content")).toBe(
++      false,
++    );
+   });
+ 
+   it("returns true when file matches original content exactly", () => {
+@@ -403,7 +405,7 @@ describe("initializeHashes", () => {
+   });
+ 
+   it("hashes files in .trellis/ and tracked platform paths", () => {
+-    // .trellis/ is always walked recursively. Platform paths (.claude/, etc.)
++    // Fresh init walks .trellis/ recursively. Platform paths (.claude/, etc.)
+     // are hashed only when explicitly listed in `trackedPaths` — the source-
+     // of-truth set captured by `startRecordingWrites` during init.
+     fs.mkdirSync(path.join(tmpDir, ".trellis", "scripts"), { recursive: true });
+@@ -457,6 +459,61 @@ describe("initializeHashes", () => {
+     expect(hashes).not.toHaveProperty("AGENTS.md");
+   });
+ 
++  it("merge preserves skipped baselines and only tracks current writes", () => {
++    fs.mkdirSync(path.join(tmpDir, ".trellis", "scripts"), { recursive: true });
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "stock");
++    fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "stock agents");
++    initializeHashes(tmpDir);
++    const baseline = loadHashes(tmpDir);
++
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "custom");
++    fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "custom agents");
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "custom.md"), "untracked");
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "scripts", "new.py"), "new");
++    fs.mkdirSync(path.join(tmpDir, ".trellis", "tasks"), { recursive: true });
++    fs.writeFileSync(path.join(tmpDir, ".trellis", "tasks", "task.json"), "{}");
++
++    initializeHashes(tmpDir, {
++      merge: true,
++      trackedPaths: new Set([
++        ".trellis/scripts/new.py",
++        ".trellis/tasks/task.json",
++      ]),
++    });
++    expect(loadHashes(tmpDir)).toEqual({
++      ...baseline,
++      ".trellis/scripts/new.py": computeHash("new"),
++    });
++
++    fs.writeFileSync(
++      path.join(tmpDir, ".trellis", "scripts", "new.py"),
++      "updated",
++    );
++    initializeHashes(tmpDir, {
++      merge: true,
++      trackedPaths: new Set([".trellis/scripts/new.py"]),
++    });
++    expect(loadHashes(tmpDir)[".trellis/scripts/new.py"]).toBe(
++      computeHash("updated"),
++    );
++  });
++
++  it.each([undefined, new Set<string>()])(
++    "merge without recorded writes preserves existing baselines (%s)",
++    (trackedPaths) => {
++      fs.mkdirSync(path.join(tmpDir, ".trellis"), { recursive: true });
++      fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "stock");
++      fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "stock agents");
++      initializeHashes(tmpDir);
++      const baseline = loadHashes(tmpDir);
++      fs.writeFileSync(path.join(tmpDir, ".trellis", "workflow.md"), "custom");
++      fs.writeFileSync(path.join(tmpDir, "AGENTS.md"), "custom agents");
++
++      initializeHashes(tmpDir, { merge: true, trackedPaths });
++      expect(loadHashes(tmpDir)).toEqual(baseline);
++    },
++  );
++
+   it("excludes workspace and tasks directories", () => {
+     fs.mkdirSync(path.join(tmpDir, ".trellis", "workspace"), { recursive: true });
+     fs.writeFileSync(path.join(tmpDir, ".trellis", "workspace", "data.md"), "user data");

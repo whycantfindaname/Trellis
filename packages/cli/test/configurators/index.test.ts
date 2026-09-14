@@ -77,6 +77,7 @@ describe("isManagedPath", () => {
     expect(isManagedPath(".github/hooks/trellis.json")).toBe(true);
     expect(isManagedPath(".pi/extensions/trellis/index.ts")).toBe(true);
     expect(isManagedPath(".pi/prompts/trellis-continue.md")).toBe(true);
+    expect(isManagedPath(".dsh/skills/trellis-start/SKILL.md")).toBe(true);
   });
 
   // Positive: exact match (startsWith(d + "/") = false, === d = true)
@@ -91,6 +92,7 @@ describe("isManagedPath", () => {
     expect(isManagedPath(".devin/workflows")).toBe(true);
     expect(isManagedPath(".github/prompts")).toBe(true);
     expect(isManagedPath(".github/hooks")).toBe(true);
+    expect(isManagedPath(".dsh")).toBe(true);
     expect(isManagedPath(".trellis")).toBe(true);
   });
 
@@ -114,6 +116,7 @@ describe("isManagedPath", () => {
     expect(isManagedPath(".github/prompts-backup")).toBe(false);
     expect(isManagedPath(".github/copilot-backup")).toBe(false);
     expect(isManagedPath(".github/hooks-backup")).toBe(false);
+    expect(isManagedPath(".dsh-backup")).toBe(false);
   });
 
   // Boundary: empty string
@@ -492,6 +495,10 @@ describe("collectPlatformTemplates", () => {
     expect(
       result?.has(".kimi-code/skills/trellis-research/SKILL.md"),
     ).toBe(true);
+    // Custom sub-agent definitions
+    expect(result?.has(".kimi-code/agents/trellis-implement.md")).toBe(true);
+    expect(result?.has(".kimi-code/agents/trellis-check.md")).toBe(true);
+    expect(result?.has(".kimi-code/agents/trellis-research.md")).toBe(true);
     // No project-level hooks/settings for Kimi
     expect(
       [...(result?.keys() ?? [])].some((key) =>
@@ -499,5 +506,34 @@ describe("collectPlatformTemplates", () => {
       ),
     ).toBe(false);
     expect(result?.has(".kimi-code/settings.json")).toBe(false);
+  });
+
+  it("dsh collectTemplates includes shared skills and .dsh skills", () => {
+    const result = collectPlatformTemplates("dsh");
+    expect(result).toBeInstanceOf(Map);
+    // Shared neutral skills
+    expect(result?.has(".agents/skills/trellis-check/SKILL.md")).toBe(true);
+    expect(result?.has(".agents/skills/trellis-before-dev/SKILL.md")).toBe(
+      true,
+    );
+    expect(result?.has(".agents/skills/trellis-meta/SKILL.md")).toBe(true);
+    // dsh-private entry points + collision-free role prompts
+    expect(result?.has(".dsh/skills/trellis-start/SKILL.md")).toBe(true);
+    expect(result?.has(".dsh/skills/trellis-continue/SKILL.md")).toBe(true);
+    expect(result?.has(".dsh/skills/trellis-finish-work/SKILL.md")).toBe(true);
+    expect(result?.has(".dsh/skills/trellis-agent-implement/SKILL.md")).toBe(
+      true,
+    );
+    expect(result?.has(".dsh/skills/trellis-agent-check/SKILL.md")).toBe(true);
+    expect(result?.has(".dsh/skills/trellis-agent-research/SKILL.md")).toBe(
+      true,
+    );
+    expect(result?.has(".dsh/DSH.md")).toBe(true);
+    // No project-level hooks/settings for dsh
+    expect(
+      [...(result?.keys() ?? [])].some((key) => key.startsWith(".dsh/hooks")),
+    ).toBe(false);
+    expect(result?.has(".dsh/settings.json")).toBe(false);
+    expect(result?.has(".dsh/config.toml")).toBe(false);
   });
 });
