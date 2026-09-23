@@ -1569,8 +1569,14 @@ def _auto_commit_archive(
         )
         return not source_was_tracked
 
+    # `source_rel` may only appear in a pathspec while git still knows that
+    # path. `git commit -- <pathspec>` rejects the whole argument list with
+    # "did not match any file(s) known to git" as soon as one entry matches
+    # nothing, and a task that was never committed before archiving has no
+    # source-side deletions staged either (see the `--ignore-unmatch` above).
+    commit_paths = [*paths, source_rel] if source_was_tracked else list(paths)
     rc, _, _ = run_git(
-        ["diff", "--cached", "--quiet", "--", *paths, source_rel],
+        ["diff", "--cached", "--quiet", "--", *commit_paths],
         cwd=repo_root,
     )
     if rc == 0:
