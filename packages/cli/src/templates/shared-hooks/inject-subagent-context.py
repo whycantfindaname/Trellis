@@ -808,8 +808,31 @@ To get structured package info, run: `python3 ./{DIR_WORKFLOW}/scripts/get_conte
     return "\n\n".join(context_parts)
 
 
-def build_research_prompt(original_prompt: str, context: str) -> str:
-    """Build complete prompt for Research"""
+def build_research_prompt(
+    original_prompt: str, context: str, task_dir: str | None = None
+) -> str:
+    """Build complete prompt for Research.
+
+    With an active task, findings are persisted under ``<task_dir>/research/``
+    as the trellis-research agent definition requires; without one, the
+    agent reports in its reply and writes nothing.
+    """
+    if task_dir:
+        research_dir = f"{task_dir.rstrip('/')}/research"
+        write_rule = (
+            f"**Allowed writes**: files under `{research_dir}/` only "
+            "(one markdown file per topic; create the directory if needed)"
+        )
+        forbidden_write = f"- Modify any file outside `{research_dir}/`"
+        report_rule = (
+            f"Write each topic to `{research_dir}/<topic-slug>.md`, then reply "
+            "with the list of files written and a short summary. Each file "
+            "includes:"
+        )
+    else:
+        write_rule = "**Allowed writes**: none (no active task)"
+        forbidden_write = "- Modify any files"
+        report_rule = "Provide structured search results including:"
     return f"""# Research Agent Task
 
 You are the Research Agent in the Multi-Agent Pipeline (search researcher).
@@ -853,15 +876,17 @@ You are a documenter, not a reviewer.
 
 **Only allowed**: Describe what exists, where it is, how it works
 
+{write_rule}
+
 **Forbidden** (unless explicitly asked):
 - Suggest improvements
 - Criticize implementation
 - Recommend refactoring
-- Modify any files
+{forbidden_write}
 
 ## Report Format
 
-Provide structured search results including:
+{report_rule}
 - List of files found (with paths)
 - Code pattern analysis (if applicable)
 - Related spec documents
@@ -1211,7 +1236,22 @@ def main():
     elif subagent_type == AGENT_RESEARCH:
         # Research can work without task directory
         context = get_research_context(repo_root, task_dir)
-        new_prompt = build_research_prompt(original_prompt, context)
+        research_task_dir = task_dir
+        if research_task_dir:
+            try:
+                root_real = os.path.realpath(repo_root)
+                workflow_real = os.path.realpath(os.path.join(repo_root, ".trellis"))
+                candidate = os.path.realpath(os.path.join(repo_root, research_task_dir))
+                if not (
+                    _real_path_contained(root_real, candidate)
+                    or _real_path_contained(workflow_real, candidate)
+                ) or not os.path.isdir(candidate):
+                    research_task_dir = None
+            except OSError:
+                research_task_dir = None
+        new_prompt = build_research_prompt(
+            original_prompt, context, research_task_dir
+        )
     else:
         sys.exit(0)
 
