@@ -148,6 +148,54 @@ describe.skipIf(!hasPython())(
       expect(status).toMatch(/M\s+\.trellis\/tasks\/task-b\/prd\.md/);
     });
 
+    it("does not sweep edits to earlier archived tasks into the archive commit (#630)", () => {
+      makeTask(tmp, "task-a", "task A prd\n");
+      makeTask(tmp, "task-b", "task B prd\n");
+      git(tmp, "add", "-A");
+      git(tmp, "commit", "-q", "-m", "initial");
+      runArchive(tmp, "task-a");
+
+      const archivedA = fs
+        .readdirSync(path.join(tmp, ".trellis", "tasks", "archive"))
+        .map((month) =>
+          path.join(tmp, ".trellis", "tasks", "archive", month, "task-a"),
+        )
+        .find((dir) => fs.existsSync(dir));
+      expect(archivedA).toBeDefined();
+      fs.appendFileSync(path.join(archivedA!, "prd.md"), "unrelated note\n");
+
+      runArchive(tmp, "task-b");
+
+      const lastFiles = git(tmp, "show", "HEAD", "--name-only", "--pretty=format:")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      expect(lastFiles.filter((f) => f.includes("/task-a/"))).toEqual([]);
+      expect(lastFiles.some((f) => f.includes("/task-b/"))).toBe(true);
+      expect(git(tmp, "diff", "--cached", "--name-only")).toBe("");
+      expect(git(tmp, "diff", "--name-only")).toMatch(
+        /^\.trellis\/tasks\/archive\/[^/]+\/task-a\/prd\.md$/m,
+      );
+    });
+
+    it("commits the archive of a task dir that was never tracked (#622)", () => {
+      fs.writeFileSync(path.join(tmp, "README.md"), "readme\n");
+      git(tmp, "add", "-A");
+      git(tmp, "commit", "-q", "-m", "initial");
+      makeTask(tmp, "task-untracked", "untracked prd\n");
+
+      runArchive(tmp, "task-untracked");
+
+      const lastFiles = git(tmp, "show", "HEAD", "--name-only", "--pretty=format:")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      expect(lastFiles.some((f) => f.includes("/archive/") && f.includes("/task-untracked/"))).toBe(true);
+      expect(
+        git(tmp, "status", "--porcelain", "--", ".trellis/tasks"),
+      ).toBe("");
+    });
+
     it("does not sweep pre-staged unrelated files into the archive commit (#579)", () => {
       makeTask(tmp, "task-a", "task A prd\n");
       git(tmp, "add", "-A");

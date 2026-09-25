@@ -347,6 +347,8 @@ describe("trellis template constants", () => {
 
   it("gitignoreTemplate contains ignore patterns", () => {
     expect(gitignoreTemplate).toContain(".developer");
+    // linear_sync.py documents hooks.local.json as gitignored (#633)
+    expect(gitignoreTemplate).toMatch(/^hooks\.local\.json$/m);
     expect(gitignoreTemplate).toContain("__pycache__");
   });
 });

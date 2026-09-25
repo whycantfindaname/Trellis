@@ -154,3 +154,75 @@ describe.skipIf(!hasPython())("task.py list tree view (#402)", () => {
     expect(child?.parent).toBe("07-01-parent-task");
   });
 });
+
+describe.skipIf(!hasPython())("task.py list filters and remove-subtask", () => {
+  let tmp: string;
+
+  beforeEach(() => {
+    tmp = fs.mkdtempSync(path.join(os.tmpdir(), "trellis-task-filter-test-"));
+    setupRepo(tmp);
+  });
+
+  afterEach(() => {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  });
+
+  it("--status still shows a matching child of a non-matching parent (#631)", () => {
+    makeTask(tmp, "09-01-parent", {
+      status: "planning",
+      children: ["09-02-child"],
+    });
+    makeTask(tmp, "09-02-child", {
+      status: "in_progress",
+      parent: "09-01-parent",
+    });
+
+    const r = runTask(tmp, "list", "--status", "in_progress");
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain("09-02-child/");
+    expect(r.stdout).not.toContain("09-01-parent/");
+  });
+
+  it("remove-subtask refuses a child linked to a different parent (#632)", () => {
+    makeTask(tmp, "09-01-parent", { children: ["09-02-child"] });
+    makeTask(tmp, "09-02-child", { parent: "09-01-parent" });
+    makeTask(tmp, "09-03-other");
+
+    const r = runTask(
+      tmp,
+      "remove-subtask",
+      ".trellis/tasks/09-03-other",
+      ".trellis/tasks/09-02-child",
+    );
+    expect(r.status).not.toBe(0);
+    const read = (name: string) =>
+      JSON.parse(
+        fs.readFileSync(
+          path.join(tmp, ".trellis", "tasks", name, "task.json"),
+          "utf-8",
+        ),
+      ) as { parent: string | null; children: string[] };
+    expect(read("09-02-child").parent).toBe("09-01-parent");
+    expect(read("09-01-parent").children).toEqual(["09-02-child"]);
+  });
+
+  it("remove-subtask repairs a half-written link held only by the parent", () => {
+    makeTask(tmp, "09-01-parent", { children: ["09-02-child"] });
+    makeTask(tmp, "09-02-child", { parent: null });
+
+    const r = runTask(
+      tmp,
+      "remove-subtask",
+      ".trellis/tasks/09-01-parent",
+      ".trellis/tasks/09-02-child",
+    );
+    expect(r.status).toBe(0);
+    const parent = JSON.parse(
+      fs.readFileSync(
+        path.join(tmp, ".trellis", "tasks", "09-01-parent", "task.json"),
+        "utf-8",
+      ),
+    ) as { children: string[] };
+    expect(parent.children).toEqual([]);
+  });
+});
