@@ -179,7 +179,7 @@ describe("codex two-channel sub-agent context (native SubagentStart)", () => {
     "trellis-check",
     "trellis-research",
   ] as const) {
-    it(`${name}.toml uses a marker-gated active-task fallback without legacy collaboration disables`, () => {
+    it(`${name}.toml uses a marker-gated fallback and role-specific collaboration permissions`, () => {
       const tomlPath = path.join(
         repoRoot,
         "packages/cli/src/templates/codex/agents",
@@ -199,7 +199,13 @@ describe("codex two-channel sub-agent context (native SubagentStart)", () => {
       expect(content).toMatch(/marker is absent/i);
       expect(content).toContain("<!-- trellis-hook-injected -->");
       expect(content).toContain("Active task: <path>");
-      expect(content).not.toContain("[features]");
+      if (name === "trellis-research") {
+        expect(content).toMatch(/^\[features\]\s*\nmulti_agent_v2 = false/m);
+        expect(content).toMatch(/^\[agents\]\s*\nenabled = false/m);
+      } else {
+        expect(content).not.toContain("[features]");
+        expect(content).not.toMatch(/^enabled = false/m);
+      }
       expect(content).not.toContain("multi_agent = false");
       expect(content).not.toContain("[features.multi_agent_v2]");
     });
