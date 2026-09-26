@@ -2,7 +2,8 @@
  * Runtime behavior of shared hook scripts that static template checks miss:
  *
  * - #590: hosts that write the payload but keep stdin open must not hang
- *   session-start / subagent-context / shell-session hooks until EOF.
+ *   session-start / subagent-context / shell-session hooks until EOF, and
+ *   the payload they did write must still be parsed.
  * - #634: the research dispatch prompt must permit writes to the active
  *   task's research/ directory, matching the trellis-research agent.
  */
@@ -67,6 +68,48 @@ describe.skipIf(!hasPython())("shared hooks runtime", () => {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
   }, 15_000);
+
+  it.each([
+    "session-start.py",
+    "inject-subagent-context.py",
+    "inject-shell-session-context.py",
+    "inject-workflow-state.py",
+  ])(
+    "%s keeps a payload written in chunks to a stdin left open (#590)",
+    async (script) => {
+      const code = `
+import importlib.util, json, sys
+spec = importlib.util.spec_from_file_location("hook", sys.argv[1])
+hook = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(hook)
+print(json.dumps(hook._load_hook_input()))
+`;
+      const payload = JSON.stringify({ cwd: "/x", prompt: "p".repeat(200_000) });
+      const stdout = await new Promise<string>((resolve) => {
+        const child = spawn(
+          "python3",
+          ["-c", code, path.join(SHARED_HOOKS, script)],
+          { stdio: ["pipe", "pipe", "ignore"] },
+        );
+        let out = "";
+        child.stdout.on("data", (d: Buffer) => (out += d.toString()));
+        const half = Math.floor(payload.length / 2);
+        child.stdin.write(payload.slice(0, half));
+        // Second half after a pause shorter than the idle timeout; the pipe
+        // is never closed, as with hosts that do not send EOF.
+        setTimeout(() => child.stdin.write(payload.slice(half)), 100);
+        const killer = setTimeout(() => child.kill("SIGKILL"), 10_000);
+        child.on("exit", () => {
+          clearTimeout(killer);
+          resolve(out);
+        });
+      });
+      const parsed = JSON.parse(stdout) as { cwd?: string; prompt?: string };
+      expect(parsed.cwd).toBe("/x");
+      expect(parsed.prompt?.length).toBe(200_000);
+    },
+    15_000,
+  );
 
   it("research prompt allows writes only under the task research dir (#634)", () => {
     const code = `

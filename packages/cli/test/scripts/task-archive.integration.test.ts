@@ -161,8 +161,10 @@ describe.skipIf(!hasPython())(
           path.join(tmp, ".trellis", "tasks", "archive", month, "task-a"),
         )
         .find((dir) => fs.existsSync(dir));
-      expect(archivedA).toBeDefined();
-      fs.appendFileSync(path.join(archivedA!, "prd.md"), "unrelated note\n");
+      if (archivedA === undefined) {
+        throw new Error("task-a was not archived");
+      }
+      fs.appendFileSync(path.join(archivedA, "prd.md"), "unrelated note\n");
 
       runArchive(tmp, "task-b");
 
