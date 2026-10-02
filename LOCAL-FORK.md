@@ -5,7 +5,7 @@
 
 ## 1. 仓库现状
 
-本仓库是上游 Trellis(推测为 `mindfold-ai/Trellis`,submodule 地址 `mindfold-ai/docs`、`mindfold-ai/marketplace` 同属该组织,尚未核实)的 fork。
+本仓库是上游 Trellis(`mindfold-ai/Trellis`,见 `packages/cli/package.json` 的 `repository` 字段)的 fork,submodule `mindfold-ai/docs`、`mindfold-ai/marketplace` 同属该组织。
 fork 时带入了上游的全部开发分支,已清理,现在远程只保留 3 个分支:
 
 | 分支 | 作用 | 规则 |
@@ -54,7 +54,7 @@ git update-index --cacheinfo 160000,<beta线的sha>,marketplace
 一次性准备(在本地):
 
 ```
-git remote add upstream https://github.com/mindfold-ai/Trellis   # 地址请先确认
+git remote add upstream https://github.com/mindfold-ai/Trellis
 ```
 
 每次上游有更新:
