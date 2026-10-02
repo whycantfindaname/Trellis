@@ -14,7 +14,7 @@ fork 时带入了上游的全部开发分支,已清理,现在远程只保留 3 �
 | `feat/v0.7-beta` | 上游 beta 线的镜像(当前即 tag `v0.7.0-beta.4`,`be9e19b`) | 只快进,不放自己的提交 |
 | `local/beta` | **日常使用分支**:beta 线 + 本地补丁 | 保持最新,上游更新时合并进来 |
 
-`jason/beta4-local-fixes` 是 `local/beta` 的旧名字,内容一致,确认不再使用后可删除。
+`local/beta` 同时是 GitHub 默认分支。旧分支名 `jason/beta4-local-fixes` 已删除。
 
 tag 全部保留(约 149 个,含 `v0.6.*`、`v0.7.0-beta.0` 到 `beta.4`),不影响分支列表。
 
