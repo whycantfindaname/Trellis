@@ -80,9 +80,13 @@ Both regexes MUST use the `\1` backreference variant — `[workflow-state:([A-Za
 5. It resolves the workflow file (per-task resolution order below: the
    active task's `.trellis/workflows/<id>.md` when selected, else
    `.trellis/workflow.md`) and parses every `[workflow-state:STATUS]` block.
-6. Codex may map `planning` / `in_progress` to `planning-inline` /
-   `in_progress-inline` based on `codex.dispatch_mode`; all other platforms
-   use the plain status.
+6. Codex maps `planning` / `in_progress` to their `-auto` or `-inline`
+   variants based on `codex.dispatch_mode`. Default/explicit `auto` and its
+   legacy `sub-agent` alias select adaptive ownership guidance. Explicit
+   `inline` and invalid configuration retain the existing `-inline` suffix
+   for every status, including custom tags. Other auto statuses and non-Codex
+   platforms keep the plain status. Custom workflows
+   without the selected variant retain the existing plain-status fallback.
 7. It looks up the current status in the parsed map. If found → emits the
    block body in `<workflow-state>...</workflow-state>`. If not found →
    emits the generic line `Refer to workflow.md for current step.`
@@ -114,6 +118,62 @@ Both regexes MUST use the `\1` backreference variant — `[workflow-state:([A-Za
    hardcode `UserPromptSubmit` at any new emission site.
 
 ---
+
+## Codex adaptive ownership
+
+### Scope / Trigger
+
+Codex planning and execution guidance must preserve main-session continuity
+while keeping useful delegation available.
+
+### Signatures
+
+`resolve_breadcrumb_key(status, platform, config) -> str` selects the hook tag;
+`get_context.py --mode phase --step <X.Y> --platform codex` selects phase detail.
+
+### Contracts
+
+The `-auto` breadcrumbs and phase detail must agree: continuous, tightly coupled
+work stays in the main session; delegation needs concrete independent parallel
+work, useful context isolation, specialized capability, or independent review.
+Planning completion, task complexity, a phase boundary, or a role definition
+does not itself trigger dispatch. Explicit user inline requests take precedence.
+
+The virtual platform label `codex-sub-agent` remains for existing workflow
+compatibility; it names the auto-capable route, not mandatory delegation.
+Native workflow routing, research, implementation and check blocks for that
+label provide both main-session and conditional delegation paths. JSONL curation
+remains required task context in auto mode and does not imply a child must run.
+Main-session work uses before-dev/check skills; delegated work keeps existing
+Active task, native injection, fallback, scope and recursion contracts.
+
+### Validation and error matrix
+
+- Default / `auto` / `sub-agent`: active phases use `-auto`.
+- Explicit `inline` / invalid configuration: every status keeps `-inline`.
+- Other auto statuses / non-Codex: plain status.
+- Missing variant in a custom workflow: existing plain-status fallback.
+
+### Good / Base / Bad cases
+
+- Good: a bounded independent review can use a child.
+- Base: a coupled single-scope fix remains in the main session.
+- Bad: finishing a plan alone dispatches the entire next serial phase.
+
+### Tests required
+
+Tests execute generated hooks and phase readers across default/auto/alias/inline,
+invalid configuration and non-Codex cases, including planning and execution.
+They also preserve user-defined inline tags, including `no_task-inline`, while
+keeping the plain-status fallback. They prove emitted guidance and preserved
+context support, not a model's
+real-world delegation quality. Existing custom workflow content is user-owned;
+its plain-status fallback does not automatically acquire the new native policy.
+
+### Wrong vs correct
+
+Wrong: interpret the `codex-sub-agent` label as a mandatory spawn. Correct:
+render its adaptive native guidance and select ownership by actual benefit.
 
 ## Per-task workflow resolution
 

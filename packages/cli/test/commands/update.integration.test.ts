@@ -1627,9 +1627,13 @@ describe("update() integration", () => {
       "[Gemini, Qoder, Copilot, Reasonix, Trae, Grok, Kimi Code, DeepSeek Harness]",
     );
     expect(updated).toContain(
-      "[/Claude Code, Cursor, OpenCode, codex-sub-agent, CodeBuddy, Droid, Pi, ZCode, Snow, Oh My Pi]",
+      "[/Claude Code, Cursor, OpenCode, CodeBuddy, Droid, Pi, ZCode, Snow, Oh My Pi]",
     );
     expect(updated).toContain("[codex-inline, Kilo, Antigravity, Devin");
+    expect(updated).toContain("[workflow-state:planning-auto]");
+    expect(updated).toContain("[workflow-state:in_progress-auto]");
+    expect(updated).toContain("[codex-sub-agent]");
+    expect(updated).toContain("Apply the auto ownership criteria before assigning implementation");
     expect(updated).not.toContain("[Codex]");
     expect(updated).not.toContain("[Kilo, Antigravity, Windsurf]");
     expect(updated).not.toContain("legacy body");

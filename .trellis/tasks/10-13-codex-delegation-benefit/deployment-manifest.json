@@ -1,0 +1,1292 @@
+{
+  "collected_at": "2026-10-14T03:09:16.183506+00:00",
+  "source_head": "6908246978e79678b28bfa48796280062ad7e6a1",
+  "source_patch": "10-13-codex-delegation-benefit, uncommitted",
+  "changed_checkouts_and_installation": [
+    {
+      "path": "D:\\Users\\S9063923\\Code\\daily-research-digest",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-0\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-0\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-0\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-0\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-0\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-0\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "390ef1fc81d4451708755f2627fd3b4f5e602c5c"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\cp794",
+      "files": {
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-1\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-1\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-1\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-1\\.trellis\\workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-1\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-1\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "",
+      "head_at_inventory": "0ac8ee8ae407b3ee597dd2f29221c88cca7dd21a"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\5-knowledge\\smartsearch",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-3\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-3\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-3\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-3\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-3\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-3\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "e6f57f73c9244cb68fabe9b96b2f5f6b7b6fac94"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\7-coding\\ccstatusline",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-5\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-5\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-5\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-5\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-5\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-5\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "ff6a40a5786b082adbb441fb23bf96a2d38a7254"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-macos",
+      "files": {
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-7\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-7\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-7\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-7\\.trellis\\workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-7\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-7\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "macos",
+      "head_at_inventory": "9ae663ef96f54682edc17245bda2ebb608aa3693"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-main",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-8\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-8\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-8\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-8\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-8\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-8\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "0b880dd8d77ad368ee9bf330ea75efbfc3f7af59"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-oppo_linux",
+      "files": {
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-9\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-9\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-9\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-9\\.trellis\\workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-9\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-9\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_linux",
+      "head_at_inventory": "e7cd3e4f0446709b18752771a3d604882fe7f2bc"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-oppo_windows",
+      "files": {
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-10\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-10\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-10\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-10\\.trellis\\workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-10\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-10\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_windows",
+      "head_at_inventory": "49118cde25e817ea89427736ce80d878b81fbb14"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\CLIProxyAPI",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-11\\.trellis\\workflow.md"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-11\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-11\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-11\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-11\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "eb554af77c8f38d8ffb50a8f38dbd6b4e8652618"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\CPA-Manager-Plus",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-12\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-12\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-12\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-12\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-12\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-12\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "fce4eb468960a7b6bf0515cca6a8a1a019896de4"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\grok2api",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-13\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-13\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-13\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-13\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-13\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-13\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "4f7f2201c7e8fd7fedfe8437e89fc3cfae06b1c1"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-macos",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-14\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-14\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-14\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-14\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-14\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-14\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "macos",
+      "head_at_inventory": "65a4eadfbb59a28fbd306b95a3edee2911014e75"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-main",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-15\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-15\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-15\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-15\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-15\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-15\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "8c8c5dd36cab2f0cd051bf209efd4fc76f44da6c"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-oppo_linux",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-16\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-16\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-16\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-16\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-16\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-16\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_linux",
+      "head_at_inventory": "2cf85dac01d21f2c0f995ff43c06fc3925e7044b"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-oppo_windows",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-17\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-17\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-17\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-17\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-17\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-17\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_windows",
+      "head_at_inventory": "e80ab27039b2521c41fab4ba34245966d7d4f701"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\jason-liao-language-system",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-18\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-18\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-18\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-18\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-18\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-18\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "87ddbf19a23e5bca4ee08138b7730c330ade5af0"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Tools\\vscode-claude-image-paste-ws",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-19\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-19\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-19\\.trellis\\scripts\\common\\config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-19\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-19\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive\\repo-19\\.claude\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "45f8159abefdfbad3568a9c7ca324bf1c0240c31"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\5-knowledge\\trellis-marketplace-preview-rc",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-0\\.trellis\\workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-0\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-0\\.trellis\\scripts\\common\\workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-0\\.codex\\hooks\\inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "codex/preview-prototype-migration",
+      "head_at_inventory": "aed5b26cf97d977151181c0f5359c5d7f2fa4448"
+    },
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\7-coding\\Trellis",
+      "files": {
+        ".trellis/workflow.md": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-1\\.trellis\\workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-1\\.codex\\hooks\\inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-1\\.claude\\hooks\\inject-workflow-state.py"
+        ],
+        ".trellis/config.yaml": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-1\\.trellis\\config.yaml"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "D:\\Users\\S9063923\\.local\\state\\jason-agent-infra\\cleanup-backups\\20261014-trellis-adaptive-custom\\repo-1\\.trellis\\scripts\\common\\workflow_phase.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "f2e5b2b0c39100af9a741eadba683ab5aab231ef"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/Q-Anchor",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-0/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-0/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-0/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-0/.trellis/workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-0/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-0/.claude/hooks/inject-workflow-state.py"
+        ],
+        ".trellis/workflows/selective-worktree-handoff.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-4/.trellis/workflows/selective-worktree-handoff.md"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "d511dc4724cfbcad89594e73e62ee660c6777415"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/daily-research-digest",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-1/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-1/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-1/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-1/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-1/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-1/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "390ef1fc81d4451708755f2627fd3b4f5e602c5c"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/reality_iqa",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-3/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-3/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-3/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-3/.trellis/workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-3/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-3/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "4f1b8c098283b89ce2dc11f9a5fbe3f408c384af"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/5-knowledge/smartsearch",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-5/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-5/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-5/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-5/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-5/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-5/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "28b1d75cb4d16e823a7bcecfe9b255d2b7bb82b5"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/5-knowledge/trellis-marketplace",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-6/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-6/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-6/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-6/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-6/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-6/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "20c6d5d705bf054cc8c6079560ca9cc5bf118617"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/7-coding/ccstatusline",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-7/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-7/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-7/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-7/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-7/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-7/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "5ce26084f0d49cee0dca0ad2b8166d5a4be05d03"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/7-coding/ccstatusline-qoder",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-8/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-8/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-8/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-8/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-8/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-8/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "qoder-statusline",
+      "head_at_inventory": "fa40f27208bfa77f39a72aa5a282bd1704c77400"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-macos",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-9/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-9/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-9/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-9/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-9/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-9/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "macos",
+      "head_at_inventory": "8e9fa1164f02de2b33946785766be07be7361a09"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-main",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-10/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-10/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-10/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-10/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-10/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-10/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "5bc314f6d394972f1cfa49391108ad7991f993e0"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-oppo_linux",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-11/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-11/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-11/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-11/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-11/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-11/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_linux",
+      "head_at_inventory": "3ac0a3a7df085f17e2048b6bcb8c1f2dcbe8000c"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-oppo_windows",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-12/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-12/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-12/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-12/.trellis/workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-12/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-12/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_windows",
+      "head_at_inventory": "9c56b791c71af721734e5a1b6fedf84642ff2983"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/CLIProxyAPI",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-13/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-13/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-13/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-13/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-13/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-13/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "b5d9f398c5627c6654929060057f533b65a34e59"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/CPA-Manager-Plus",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-14/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-14/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-14/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-14/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-14/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-14/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "c1c5a5ecac3f97c760476895c7ab45082637e763"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/Trellis",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-15/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-15/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-15/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-15/.trellis/workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-15/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-15/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "688a0b5efdc23fa65d78a51887854c4dde973bda"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/agent-loop-runtime",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-16/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-16/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-16/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-16/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-16/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-16/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "15c70075410d814b3f3631ecb38dd5bf163c50b6"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/agent-storage-governance",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-17/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-17/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-17/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-17/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-17/.claude/hooks/inject-workflow-state.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-17/.trellis/workflow.md",
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-2/.trellis/workflow.md"
+        ],
+        ".trellis/workflows/selective-worktree-handoff.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-5/.trellis/workflows/selective-worktree-handoff.md"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "ca7488eb44a38939d45a6a6646309984f204f41b"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/grok2api",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-18/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-18/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-18/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-18/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-18/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-18/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "c69e4ace8d2c982721d1a5fffacd3dd8127745ea"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-macos",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-19/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-19/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-19/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-19/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-19/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-19/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "macos",
+      "head_at_inventory": "1881aa62c049ade67441418c8a2b75975ffa196f"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-main",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-20/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-20/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-20/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-20/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-20/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-20/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "45e2f178761d0ca5b9e1349b5d234b7738cb37f8"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-oppo_linux",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-21/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-21/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-21/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-21/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-21/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-21/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_linux",
+      "head_at_inventory": "0a75a0a691f81dde13c455043415cfb9f915a0bb"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-oppo_windows",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-22/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-22/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-22/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-22/.trellis/workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-22/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-22/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "oppo_windows",
+      "head_at_inventory": "ce88f2caf46ad280b418e3cb90a007f3e60f2de7"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-benchmarks",
+      "files": {
+        ".trellis/config.yaml": [
+          "before/repo-23/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-23/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-23/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-23/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-23/.claude/hooks/inject-workflow-state.py"
+        ],
+        ".trellis/workflow.md": [
+          "before/repo-23/.trellis/workflow.md",
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-3/.trellis/workflow.md"
+        ]
+      },
+      "branch_at_inventory": "codex/personal-benchmarks",
+      "head_at_inventory": "c4bdd2a9f18a2948c2f112498fd51db94bebdcaa"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-language-system",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-24/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-24/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-24/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-24/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-24/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-24/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "a6f4b9af04fde5917aa739e138c4a36f474ab415"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/vscode-claude-image-paste-ws",
+      "files": {
+        ".trellis/workflow.md": [
+          "before/repo-25/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "before/repo-25/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "before/repo-25/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "before/repo-25/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "before/repo-25/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "before/repo-25/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "lwj_dev",
+      "head_at_inventory": "077d2f80af0e7ec4e77be8695549335983ce8fdb"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/grounding-iqa-agent",
+      "files": {
+        ".trellis/scripts/common/config.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-0/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-0/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-0/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".trellis/workflow.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-0/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-0/.trellis/config.yaml"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "06902cc377f163ab6b98281836ab67cca48b81cc"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/slime",
+      "files": {
+        ".trellis/scripts/common/config.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-1/.trellis/scripts/common/config.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-1/.claude/hooks/inject-workflow-state.py"
+        ],
+        ".trellis/workflow.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-1/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-1/.trellis/config.yaml"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-custom/repo-1/.codex/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "main",
+      "head_at_inventory": "41014d1f29e201137fdffce737bb8bac65bc5219"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/Q-Anchor/.claude/worktrees/peaceful-bohr-ce9b01",
+      "files": {
+        ".trellis/config.yaml": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-1/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-1/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-1/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".trellis/workflow.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-1/.trellis/workflow.md"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-1/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-1/.claude/hooks/inject-workflow-state.py"
+        ],
+        ".trellis/workflows/selective-worktree-handoff.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra-custom/repo-1/.trellis/workflows/selective-worktree-handoff.md"
+        ]
+      },
+      "branch_at_inventory": "claude/peaceful-bohr-ce9b01",
+      "head_at_inventory": "d511dc4724cfbcad89594e73e62ee660c6777415"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/Trellis/.codex/worktrees/trellis-beta-compat-repair",
+      "files": {
+        ".trellis/workflow.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-2/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-2/.trellis/config.yaml"
+        ],
+        ".trellis/scripts/common/config.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-2/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/scripts/common/workflow_phase.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-2/.trellis/scripts/common/workflow_phase.py"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-2/.codex/hooks/inject-workflow-state.py"
+        ],
+        ".claude/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra/repo-2/.claude/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "codex/trellis-beta-compat-repair",
+      "head_at_inventory": "84c82d333dcfe85899a1182482c1bf19835e2a48"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Code/grounding-iqa-agent/.codex/worktrees/marketplace-research-progress-reorg",
+      "files": {
+        ".trellis/scripts/common/config.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra-custom/repo-0/.trellis/scripts/common/config.py"
+        ],
+        ".trellis/workflow.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra-custom/repo-0/.trellis/workflow.md"
+        ],
+        ".trellis/config.yaml": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra-custom/repo-0/.trellis/config.yaml"
+        ],
+        ".codex/hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-extra-custom/repo-0/.codex/hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": "codex/marketplace-research-progress-reorg",
+      "head_at_inventory": "5580e271505b5a4ef2fd0f35d086432323714440"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/.nvm/versions/node/v24.16.0/lib/node_modules/@mindfoldhq/trellis",
+      "files": {
+        "dist/templates/trellis/workflow.md": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-cli/repo-0/dist/templates/trellis/workflow.md"
+        ],
+        "dist/templates/trellis/config.yaml": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-cli/repo-0/dist/templates/trellis/config.yaml"
+        ],
+        "dist/templates/trellis/scripts/common/config.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-cli/repo-0/dist/templates/trellis/scripts/common/config.py"
+        ],
+        "dist/templates/trellis/scripts/common/workflow_phase.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-cli/repo-0/dist/templates/trellis/scripts/common/workflow_phase.py"
+        ],
+        "dist/templates/shared-hooks/inject-workflow-state.py": [
+          "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-cli/repo-0/dist/templates/shared-hooks/inject-workflow-state.py"
+        ]
+      },
+      "branch_at_inventory": null,
+      "head_at_inventory": null
+    }
+  ],
+  "native_validation": {
+    "windows": {
+      "collected_at": "2026-10-14T03:04:35.631670+00:00",
+      "passed": 19,
+      "total": 19,
+      "native_rules": [
+        {
+          "path": "D:\\Users\\S9063923\\.codex\\AGENTS.md",
+          "resolved": "D:\\Users\\S9063923\\.codex\\AGENTS.md",
+          "benefit_rule_present": true
+        },
+        {
+          "path": "D:\\Users\\S9063923\\.codex\\SUBAGENT_ROUTING.md",
+          "resolved": "D:\\Users\\S9063923\\.codex\\SUBAGENT_ROUTING.md",
+          "benefit_rule_present": true
+        }
+      ]
+    },
+    "4L40S": {
+      "collected_at": "2026-10-14T03:04:14.773007+00:00",
+      "passed": 30,
+      "total": 30,
+      "native_rules": [
+        {
+          "path": "/home/oppoer/.codex/AGENTS.md",
+          "resolved": "/home/oppoer/.codex/AGENTS.md",
+          "benefit_rule_present": true
+        },
+        {
+          "path": "/home/oppoer/.codex/SUBAGENT_ROUTING.md",
+          "resolved": "/home/oppoer/.codex/SUBAGENT_ROUTING.md",
+          "benefit_rule_present": true
+        }
+      ]
+    },
+    "8A100-1": {
+      "collected_at": "2026-10-14T03:04:18.103489+00:00",
+      "passed": 30,
+      "total": 30,
+      "native_rules": [
+        {
+          "path": "/home/oppoer/.codex/AGENTS.md",
+          "resolved": "/home/oppoer/.codex/AGENTS.md",
+          "benefit_rule_present": true
+        },
+        {
+          "path": "/home/oppoer/.codex/SUBAGENT_ROUTING.md",
+          "resolved": "/home/oppoer/.codex/SUBAGENT_ROUTING.md",
+          "benefit_rule_present": true
+        }
+      ]
+    },
+    "4A100": {
+      "collected_at": "2026-10-14T03:04:20.125813+00:00",
+      "passed": 30,
+      "total": 30,
+      "native_rules": [
+        {
+          "path": "/home/oppoer/.codex/AGENTS.md",
+          "resolved": "/home/oppoer/.codex/AGENTS.md",
+          "benefit_rule_present": true
+        },
+        {
+          "path": "/home/oppoer/.codex/SUBAGENT_ROUTING.md",
+          "resolved": "/home/oppoer/.codex/SUBAGENT_ROUTING.md",
+          "benefit_rule_present": true
+        }
+      ]
+    }
+  },
+  "blocked": {
+    "8A100": "SSH remote-dev.starfire.wanyol.com:12181 refused connection; shared files deployed, native validation unproven.",
+    "windows_cli": "No trellis executable on PATH and no package in the current npm global prefix; no installation attempted."
+  },
+  "committed": false,
+  "published": false
+}

@@ -615,7 +615,15 @@ The native hook path calls this resolver with `platform="codex"`,
   fallback if that read fails, and accept the marker as complete only when no
   saved-output notice is present. Marker absence without a saved-output notice
   also uses the pull fallback.
-- Native dispatch (`codex.dispatch_mode: auto`) does not set a model on the
+- `codex.dispatch_mode: auto` chooses main-session or delegated ownership by
+  actual benefit. Continuous, tightly coupled work stays in the main session;
+  bounded independent work, useful context isolation, specialized capability,
+  or independent review can justify delegation. Finishing planning or entering
+  a new phase does not require dispatch. Explicit inline requests take precedence.
+  Main-session execution loads the before-dev/check skills and relevant task
+  context. Both skills and agent definitions must remain available in generated
+  projects. See workflow-state-contract.md for breadcrumb and phase routing.
+- When auto selects native dispatch, it does not set a model on the
   spawned sub-agent by default — Codex's own precedence (spawn value ->
   `[agents]` default -> parent) means the child **inherits the main
   session's model** unless the generated `.codex/agents/trellis-*.toml`

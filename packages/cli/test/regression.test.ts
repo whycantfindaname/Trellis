@@ -7927,8 +7927,7 @@ print(len(entries))
       path.join(".trellis", "workflow.md"),
       templateWorkflowMd(),
     );
-    // Codex defaults to inline since 0.5.9; opt into sub-agent dispatch
-    // explicitly so the legacy spawn-trellis-implement block surfaces.
+    // The legacy alias retains auto's adaptive ownership route.
     writeConfigYaml("codex:\n  dispatch_mode: sub-agent\n");
 
     const contextScript = path.join(
@@ -7994,14 +7993,14 @@ print(len(entries))
       { cwd: tmpDir, encoding: "utf-8" },
     );
 
-    expect(output).toContain("The platform hook/plugin auto-handles");
+    expect(output).toContain("Apply the auto ownership criteria");
     expect(output).toContain(
       "For Codex, `SubagentStart` supplies native context injection",
     );
     expect(output).not.toContain(
       "The pull-based sub-agent definition auto-handles",
     );
-    expect(output).not.toContain("Load the `trellis-before-dev` skill");
+    expect(output).toContain("Load the `trellis-before-dev` skill");
   });
 
   it("[pi] step 2.1 describes extension-backed sub-agent context path", () => {
@@ -8249,7 +8248,59 @@ print(len(entries))
     writeProjectFile(path.join(".trellis", "config.yaml"), content);
   }
 
-  it("[issue-codex-dispatch-mode] codex breadcrumb defaults to native auto dispatch when config absent", () => {
+  it.each([undefined, "auto", "sub-agent"])(
+    "[codex-adaptive-auto] generated hooks keep planning and execution adaptive for %s",
+    (mode) => {
+      setupTaskRepo();
+      writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
+      const codexHookPath = writeCodexInjectHook();
+      writeProjectFile(path.join(".trellis", "workflow.md"), templateWorkflowMd());
+      if (mode !== undefined) {
+        writeConfigYaml(`codex:\n  dispatch_mode: ${mode}\n`);
+      }
+      const taskPath = path.join(tmpDir, ".trellis/tasks/issue-106/task.json");
+      const task = JSON.parse(fs.readFileSync(taskPath, "utf-8")) as Record<string, unknown>;
+      for (const status of ["planning", "in_progress"]) {
+        fs.writeFileSync(taskPath, JSON.stringify({ ...task, status }));
+        const parsed = JSON.parse(
+          runPython(codexHookPath, JSON.stringify({ cwd: tmpDir, session_id: "workflow-a" })),
+        ) as { hookSpecificOutput: { additionalContext: string } };
+        const ctx = parsed.hookSpecificOutput.additionalContext;
+        expect(ctx).toContain("Continuous, tightly coupled work stays in the main session");
+        expect(ctx).toContain("Delegate only for concrete independent parallel work");
+        expect(ctx).not.toContain("Main-session default: dispatch");
+        if (status === "planning") {
+          expect(ctx).toContain("ask for review before `task.py start`");
+          expect(ctx).toContain("Their presence does not require delegation");
+        } else {
+          expect(ctx).toContain("`trellis-before-dev` -> edit -> `trellis-check` skill");
+          expect(ctx).toContain("Active task:");
+          expect(ctx).toContain("Sub-agent self-exemption");
+          expect(ctx).toContain("commit decision (Phase 3.4)");
+        }
+      }
+    },
+  );
+
+  it.each(["1.2", "2.1", "2.2"])(
+    "[codex-adaptive-auto] generated phase reader exposes ownership choice in step %s",
+    (step) => {
+      writeTrellisScripts();
+      writeProjectFile(path.join(".trellis", ".developer"), "name=test\n");
+      writeProjectFile(path.join(".trellis", "workflow.md"), templateWorkflowMd());
+      const script = path.join(tmpDir, ".trellis/scripts/get_context.py");
+      const output = execSync(
+        `${pythonCmd} ${JSON.stringify(script)} --mode phase --step ${step} --platform codex`,
+        { cwd: tmpDir, encoding: "utf-8", env: sessionEnv() },
+      );
+      expect(output).toContain("auto ownership criteria");
+      expect(output).toContain("main session");
+      expect(output).toContain("Active task:");
+      expect(output).not.toMatch(/Spawn the (implement|check|research) sub-agent/);
+    },
+  );
+
+  it("[issue-codex-dispatch-mode] auto retains the plain-status fallback for legacy custom workflows", () => {
     setupTaskRepo();
     writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
     const codexHookPath = writeCodexInjectHook();
@@ -8274,7 +8325,7 @@ print(len(entries))
     expect(ctx).not.toContain("MAIN SESSION edits code");
   });
 
-  it("[issue-codex-dispatch-mode] codex breadcrumb routes to plain status when codex.dispatch_mode=sub-agent", () => {
+  it("[issue-codex-dispatch-mode] legacy sub-agent alias retains the plain-status fallback", () => {
     setupTaskRepo();
     writeSessionContext("codex_workflow-a", ".trellis/tasks/issue-106");
     const codexHookPath = writeCodexInjectHook();
@@ -8390,8 +8441,8 @@ print(len(entries))
     expect(output).not.toMatch(/Active task: <task path>/);
   });
 
-  it("[issue-codex-dispatch-mode] resolve_breadcrumb_key picks status-inline only for codex+inline", () => {
-    // Cover all four cases via the actual hook helper (imported from the
+  it("[issue-codex-dispatch-mode] resolve_breadcrumb_key selects adaptive auto and preserves custom inline tags", () => {
+    // Cover mode and custom-tag cases via the actual hook helper (imported from the
     // installed shared-hooks template). This locks the helper's contract
     // rather than retesting an inline copy.
     writeTrellisScripts();
@@ -8415,6 +8466,13 @@ print(len(entries))
         "  'codex_inline': mod.resolve_breadcrumb_key('in_progress', 'codex', {'codex': {'dispatch_mode': 'inline'}}),",
         "  'codex_subagent': mod.resolve_breadcrumb_key('in_progress', 'codex', {'codex': {'dispatch_mode': 'sub-agent'}}),",
         "  'codex_missing': mod.resolve_breadcrumb_key('in_progress', 'codex', {}),",
+        "  'codex_auto': mod.resolve_breadcrumb_key('planning', 'codex', {'codex': {'dispatch_mode': 'auto'}}),",
+        "  'codex_invalid': mod.resolve_breadcrumb_key('in_progress', 'codex', {'codex': {'dispatch_mode': 'invalid'}}),",
+        "  'codex_malformed': mod.resolve_breadcrumb_key('in_progress', 'codex', {'codex': True}),",
+        "  'codex_error': mod.resolve_breadcrumb_key('task_error', 'codex', {}),",
+        "  'codex_no_task_inline': mod.resolve_breadcrumb_key('no_task', 'codex', {'codex': {'dispatch_mode': 'inline'}}),",
+        "  'codex_custom_inline': mod.resolve_breadcrumb_key('paused_by_team', 'codex', {'codex': {'dispatch_mode': 'inline'}}),",
+        "  'custom_body': mod.build_breadcrumb(None, 'no_task', {'no_task-inline': 'custom inline body', 'no_task': 'plain body'}, breadcrumb_key=mod.resolve_breadcrumb_key('no_task', 'codex', {'codex': {'dispatch_mode': 'inline'}})),",
         "  'claude_inline': mod.resolve_breadcrumb_key('in_progress', 'claude', {'codex': {'dispatch_mode': 'inline'}}),",
         "}",
         "print(json.dumps(result))",
@@ -8431,10 +8489,15 @@ print(len(entries))
         .pop() ?? "{}",
     ) as Record<string, string>;
     expect(result.codex_inline).toBe("in_progress-inline");
-    expect(result.codex_subagent).toBe("in_progress");
-    // Default for Codex is native auto dispatch; only explicit inline swaps
-    // to the main-session breadcrumb.
-    expect(result.codex_missing).toBe("in_progress");
+    expect(result.codex_subagent).toBe("in_progress-auto");
+    expect(result.codex_missing).toBe("in_progress-auto");
+    expect(result.codex_auto).toBe("planning-auto");
+    expect(result.codex_invalid).toBe("in_progress-inline");
+    expect(result.codex_malformed).toBe("in_progress-inline");
+    expect(result.codex_error).toBe("task_error");
+    expect(result.codex_no_task_inline).toBe("no_task-inline");
+    expect(result.codex_custom_inline).toBe("paused_by_team-inline");
+    expect(result.custom_body).toContain("custom inline body");
     expect(result.claude_inline).toBe("in_progress");
   });
 
@@ -8578,7 +8641,7 @@ print(len(entries))
       ),
     ) as { hookSpecificOutput: { additionalContext: string } };
     expect(defaultRun.hookSpecificOutput.additionalContext).toContain(
-      "<codex-mode>auto: native Codex context injection is available for delegated work, with child-side loading as fallback. Follow project workflow and routing rules to choose main-session or sub-agent ownership.</codex-mode>",
+      "<codex-mode>auto: native Codex context injection is available for delegated work, with child-side loading as fallback. Follow project workflow and routing rules to choose main-session or sub-agent ownership. Keep continuous, tightly coupled work in the main session; delegate only for concrete parallel, isolation, specialized capability, or review benefit.</codex-mode>",
     );
 
     // Legacy sub-agent alias → the auto-dispatch banner.
@@ -8590,7 +8653,7 @@ print(len(entries))
       ),
     ) as { hookSpecificOutput: { additionalContext: string } };
     expect(subAgentRun.hookSpecificOutput.additionalContext).toContain(
-      "<codex-mode>auto: native Codex context injection is available for delegated work, with child-side loading as fallback. Follow project workflow and routing rules to choose main-session or sub-agent ownership.</codex-mode>",
+      "<codex-mode>auto: native Codex context injection is available for delegated work, with child-side loading as fallback. Follow project workflow and routing rules to choose main-session or sub-agent ownership. Keep continuous, tightly coupled work in the main session; delegate only for concrete parallel, isolation, specialized capability, or review benefit.</codex-mode>",
     );
   });
 

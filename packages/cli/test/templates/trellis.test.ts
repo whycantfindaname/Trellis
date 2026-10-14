@@ -179,7 +179,7 @@ describe("trellis template constants", () => {
     const implement = stepSection("2.1");
     const hookAutoBlock = platformBlock(
       implement,
-      "[Claude Code, Cursor, OpenCode, codex-sub-agent, CodeBuddy, Droid, Pi, ZCode, Snow, Oh My Pi]",
+      "[Claude Code, Cursor, OpenCode, CodeBuddy, Droid, Pi, ZCode, Snow, Oh My Pi]",
     );
     const pullBasedMarker =
       "[Gemini, Qoder, Copilot, Reasonix, Trae, Grok, Kimi Code, DeepSeek Harness]";
@@ -253,8 +253,11 @@ describe("trellis template constants", () => {
     expect(workflowMdTemplate).toContain(
       "on Claude Code: use the Task/Agent tool, never the Skill tool",
     );
-    expect(hookAutoBlock).toContain("codex-sub-agent");
-    expect(hookAutoBlock).toContain("SubagentStart");
+    const codexAutoBlock = platformBlock(implement, "[codex-sub-agent]");
+    expect(codexAutoBlock).toContain("auto ownership criteria");
+    expect(codexAutoBlock).toContain("trellis-before-dev");
+    expect(codexAutoBlock).toContain("SubagentStart");
+    expect(codexAutoBlock).not.toContain("Spawn the implement sub-agent");
   });
 
   it("[codex-native-subagents] template mode helpers default to auto and fail invalid values closed to inline", () => {
@@ -331,7 +334,8 @@ describe("trellis template constants", () => {
   it("workflow.md planning breadcrumbs mention parent child split guidance", () => {
     const planning = workflowStateBreadcrumb("planning");
     const planningInline = workflowStateBreadcrumb("planning-inline");
-    for (const block of [planning, planningInline]) {
+    const planningAuto = workflowStateBreadcrumb("planning-auto");
+    for (const block of [planning, planningInline, planningAuto]) {
       expect(block).toContain("Multi-deliverable scope");
       expect(block).toContain("parent task plus independently verifiable child tasks");
       expect(block).toContain("not implied by tree position");

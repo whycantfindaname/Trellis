@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/cli/backend/workflow-state-contract.md", "reason": "Breadcrumb and phase routing contracts"}
+{"file": ".trellis/spec/cli/backend/platform-integration.md", "reason": "Codex generated instructions and native context injection"}
+{"file": ".trellis/spec/cli/backend/quality-guidelines.md", "reason": "Required CLI quality gates"}
+{"file": ".trellis/spec/cli/unit-test/conventions.md", "reason": "Meaningful regression and integration coverage"}
+{"file": ".trellis/tasks/10-13-codex-delegation-benefit/research/evidence.md", "reason": "Primary evidence and user intent"}
