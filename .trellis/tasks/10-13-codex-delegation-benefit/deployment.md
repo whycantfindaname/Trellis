@@ -33,7 +33,7 @@ Canonical source/marketplace messages and exact paths remain in `verification.md
 | Checkout (Windows paths use `/`) | Branch at inventory | Exact changed paths |
 | --- | --- | --- |
 | D:/Users/S9063923/Code/daily-research-digest | main | `.trellis/workflow.md`<br>`.trellis/config.yaml`<br>`.trellis/scripts/common/config.py`<br>`.trellis/scripts/common/workflow_phase.py`<br>`.codex/hooks/inject-workflow-state.py`<br>`.claude/hooks/inject-workflow-state.py` |
-| D:/Users/S9063923/cp794 | installed CLI | `.trellis/config.yaml`<br>`.trellis/scripts/common/config.py`<br>`.trellis/scripts/common/workflow_phase.py`<br>`.trellis/workflow.md`<br>`.codex/hooks/inject-workflow-state.py`<br>`.claude/hooks/inject-workflow-state.py` |
+| D:/Users/S9063923/cp794 | detached Git checkout | `.trellis/config.yaml`<br>`.trellis/scripts/common/config.py`<br>`.trellis/scripts/common/workflow_phase.py`<br>`.trellis/workflow.md`<br>`.codex/hooks/inject-workflow-state.py`<br>`.claude/hooks/inject-workflow-state.py` |
 | D:/Users/S9063923/Skills/5-knowledge/smartsearch | lwj_dev | `.trellis/workflow.md`<br>`.trellis/config.yaml`<br>`.trellis/scripts/common/config.py`<br>`.trellis/scripts/common/workflow_phase.py`<br>`.codex/hooks/inject-workflow-state.py`<br>`.claude/hooks/inject-workflow-state.py` |
 | D:/Users/S9063923/Skills/7-coding/ccstatusline | lwj_dev | `.trellis/workflow.md`<br>`.trellis/config.yaml`<br>`.trellis/scripts/common/config.py`<br>`.trellis/scripts/common/workflow_phase.py`<br>`.codex/hooks/inject-workflow-state.py`<br>`.claude/hooks/inject-workflow-state.py` |
 | D:/Users/S9063923/Skills/jason-liao-skills-macos | macos | `.trellis/config.yaml`<br>`.trellis/scripts/common/config.py`<br>`.trellis/scripts/common/workflow_phase.py`<br>`.trellis/workflow.md`<br>`.codex/hooks/inject-workflow-state.py`<br>`.claude/hooks/inject-workflow-state.py` |
@@ -91,3 +91,19 @@ Before files are retained through 2026-11-14 under Windows `cleanup-backups/2026
 Excluded: retired llm-wiki-agent; cache/archive/fixture/recovery copies; three registered Windows worktrees beneath recovery/. macOS-named checkouts were updated as repository files on their current host; this does not constitute native macOS adoption.
 
 No services/app-servers/benchmarks were restarted or stopped. Old trace-chain retirement, other cleanup commits, and cross-platform integration remain separate pending work. 8A100 native validation can resume by running `audit-deployed-repositories.py` from the Linux receipt directory after its SSH endpoint is restored. The receipt runner changes no tasks, models or services.
+
+## 2026-10-14 approved commit execution
+
+The user approved the exact additional scope in `additional-commit-scope.md`.
+Source/marketplace batches, 19 Windows and 28 Linux deployment commits, all eight
+source template mirrors, and the compatibility checkout's six projected files
+are committed locally. Commit SHAs and exact paths are in `commit-receipt.json`;
+no push was performed. The compatibility pre-commit completed and created its
+commit; mirror regression also passed 34 focused checks. Slime's preexisting
+untracked files remain outside the commits.
+
+The Windows owner-manager source gate and preview passed for commit
+`42ca0a5f1d251f0af1391badf148d1659463972e`. Its reviewed plan would register the
+hourly RepositoryUpdates task as enabled; the existing scheduler task is disabled.
+Native apply/register is therefore pending explicit approval to enable that task.
+The unrelated 8A100 native audit remains blocked until its SSH endpoint is available.

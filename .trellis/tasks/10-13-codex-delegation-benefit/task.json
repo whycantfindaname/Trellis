@@ -15,12 +15,12 @@
   "branch": "local/beta",
   "base_branch": "main",
   "worktree_path": "/home/notebook/code/personal/S9063923/Tools/Trellis/.claude/worktrees/beta4-local-fixes",
-  "commit": null,
+  "commit": "2ab93b55ef51240a2f8c5053463773eed8111365",
   "pr_url": null,
   "subtasks": [],
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "Implementation approved and validated: 2109 passed/2 existing skips. Authorized rollout updated 19 Windows and 29 Linux shared-workspace checkouts; source checkout already fixed. Native hook probes: Windows 19/19, 4L40S/8A100-1/4A100 each 30/30. 8A100 SSH refused; Windows CLI absent. Linux installed CLI templates and fresh generated project verified. See deployment.md. Source/marketplace and deployment commits approved 2026-10-14; executing locally without publication. See verification and deployment receipts.",
+  "notes": "Approved Trellis and retired-repository commit scopes are committed locally; source mirrors include Windows f5a4397c, Linux 53d457aa, and compatibility 022b99b7. See commit-receipt.json and deployment.md. No push. Windows native runtime activation is pending because register would enable the currently disabled hourly task; 8A100 SSH native validation remains blocked.",
   "meta": {}
 }

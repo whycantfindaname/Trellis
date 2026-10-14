@@ -1,0 +1,773 @@
+{
+  "source": {
+    "marketplace": "f6eaa7163dbcf002a3b46c2f6cbd1bde5297b7e3",
+    "status": "committed",
+    "retry_cpu_affinity": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "retry_exit": 0,
+    "retry_log": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/source-commit-retry.log",
+    "trellis": "2ab93b55ef51240a2f8c5053463773eed8111365"
+  },
+  "deployments": {
+    "windows": [
+      {
+        "path": "D:\\Users\\S9063923\\cp794",
+        "before": "0ac8ee8ae407b3ee597dd2f29221c88cca7dd21a",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "a07021d9ad2052c0dbe3f58b33df007d496c428d",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\5-knowledge\\smartsearch",
+        "before": "e6f57f73c9244cb68fabe9b96b2f5f6b7b6fac94",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "306badd4052dc9e4c14b2af3c2a9eb43120525ad",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\7-coding\\ccstatusline",
+        "before": "ff6a40a5786b082adbb441fb23bf96a2d38a7254",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "bb6d28433676aa37c277016bfcfba724cb890fcd",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-macos",
+        "before": "9ae663ef96f54682edc17245bda2ebb608aa3693",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "a458198ac5b1cd17fab9a989fd0e3245430b96b3",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-main",
+        "before": "0b880dd8d77ad368ee9bf330ea75efbfc3f7af59",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "4302a70a843ef7e66b1e8d028670bdbee54b3ead",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-oppo_linux",
+        "before": "e7cd3e4f0446709b18752771a3d604882fe7f2bc",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "f4c66d285624e6b81ec54141970c11195acdbe1a",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\jason-liao-skills-oppo_windows",
+        "before": "49118cde25e817ea89427736ce80d878b81fbb14",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "dad2f3c0b5e2be8ac093cc22ca5aaad8df604723",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\CLIProxyAPI",
+        "before": "eb554af77c8f38d8ffb50a8f38dbd6b4e8652618",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "c21945b056b43533cf77e92c4722b97793a6b292",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\CPA-Manager-Plus",
+        "before": "fce4eb468960a7b6bf0515cca6a8a1a019896de4",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "ead101e3c19dce714dbafee5081bb3f8bc4982ee",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\grok2api",
+        "before": "4f7f2201c7e8fd7fedfe8437e89fc3cfae06b1c1",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "3dd5d0b17cdb257999c7a2882d9687af503afb7d",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-macos",
+        "before": "65a4eadfbb59a28fbd306b95a3edee2911014e75",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "b7d0d7f5795d2af06b926629365c64493500431a",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-main",
+        "before": "8c8c5dd36cab2f0cd051bf209efd4fc76f44da6c",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "7175d081e813e4c91e9996f4e9ecd205a7802a62",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-oppo_linux",
+        "before": "2cf85dac01d21f2c0f995ff43c06fc3925e7044b",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "6f928401eade7ec4279f8f34acabce7e90bdc984",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\jason-liao-agent-infra-oppo_windows",
+        "before": "e80ab27039b2521c41fab4ba34245966d7d4f701",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "5bb37b79c0cbd9c5fd22574e82d7bcb6170942fc",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\jason-liao-language-system",
+        "before": "87ddbf19a23e5bca4ee08138b7730c330ade5af0",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "3bdf956509b245c891689ff474bb0eb82308854e",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Tools\\vscode-claude-image-paste-ws",
+        "before": "45f8159abefdfbad3568a9c7ca324bf1c0240c31",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "c44688f8fee45cd449c285c07320a207c8dc1d70",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\5-knowledge\\trellis-marketplace-preview-rc",
+        "before": "aed5b26cf97d977151181c0f5359c5d7f2fa4448",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py"
+        ],
+        "commit": "4489da0b708f626f08459c9252217e59d1485c72",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Skills\\7-coding\\Trellis",
+        "before": "f2e5b2b0c39100af9a741eadba683ab5aab231ef",
+        "files": [
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/workflow_phase.py"
+        ],
+        "commit": "38017f8f849989f7b5cbccfcda3426711398fa3f",
+        "status": "committed"
+      },
+      {
+        "path": "D:\\Users\\S9063923\\Code\\daily-research-digest",
+        "before": "390ef1fc81d4451708755f2627fd3b4f5e602c5c",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "6d672bf59c088cc6ad90f2de4f8bd312826a6677",
+        "status": "committed"
+      }
+    ],
+    "linux": [
+      {
+        "path": "/home/notebook/code/personal/S9063923/Code/Q-Anchor",
+        "before": "d511dc4724cfbcad89594e73e62ee660c6777415",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py",
+          ".trellis/workflows/selective-worktree-handoff.md"
+        ],
+        "commit": "53c6fa09a024989a5ccbb191f1c3756da9351b1c",
+        "status": "committed",
+        "error": "fatal: Unable to create '/home/notebook/code/personal/S9063923/Code/Q-Anchor/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n",
+        "reconciled": "stale empty lock quarantined; index reset only for committed task paths"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Code/reality_iqa",
+        "before": "4f1b8c098283b89ce2dc11f9a5fbe3f408c384af",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "343363ba5271ef18ee60b1989e09e0a6eafcf85f",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/5-knowledge/smartsearch",
+        "before": "28b1d75cb4d16e823a7bcecfe9b255d2b7bb82b5",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "8ce412ce7881d4d0fda67aebd6a7a018cc1c8e82",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/5-knowledge/trellis-marketplace",
+        "before": "20c6d5d705bf054cc8c6079560ca9cc5bf118617",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "a303d9e055b50ad6a26fd6e843942cb597497003",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/7-coding/ccstatusline",
+        "before": "5ce26084f0d49cee0dca0ad2b8166d5a4be05d03",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "1dc51f5a1aefbf3094cb8d46a465cd3f388b256d",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/7-coding/ccstatusline-qoder",
+        "before": "fa40f27208bfa77f39a72aa5a282bd1704c77400",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "f48ffe7de8a3c038ee77dbefa352abdcfe4457c1",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-macos",
+        "before": "8e9fa1164f02de2b33946785766be07be7361a09",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "b97fed7eade8f136f91ac17b59aa46558046b361",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-main",
+        "before": "4ab746b2d785c70037ea7fb89d3bf8c01858ecaf",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "b385d81d66440511ab7ba711daf37f2e0bdaddf7",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-oppo_linux",
+        "before": "438801fbb91cd6333f20212805837304a2f3448b",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "89f406cf832bba116320dd280a365f75212f9e5d",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Skills/jason-liao-skills-oppo_windows",
+        "before": "9c56b791c71af721734e5a1b6fedf84642ff2983",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "8d81ec2f81e23a7c433dac43f8e2fc7e9bf27f38",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/CLIProxyAPI",
+        "before": "b5d9f398c5627c6654929060057f533b65a34e59",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "fbc6d829e9782c9364323ee30e9640b8a1042561",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/CPA-Manager-Plus",
+        "before": "c1c5a5ecac3f97c760476895c7ab45082637e763",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "a50ed9d71e626f915dc9e033115b00aceecdc97d",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/Trellis",
+        "before": "688a0b5efdc23fa65d78a51887854c4dde973bda",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "deab43170aeab5670c72f75e4c33b354b53a14e2",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/agent-loop-runtime",
+        "before": "15c70075410d814b3f3631ecb38dd5bf163c50b6",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "a1299c1f7ae48af9941195e6b0b26097c642dad6",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/agent-storage-governance",
+        "before": "ca7488eb44a38939d45a6a6646309984f204f41b",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py",
+          ".trellis/workflow.md",
+          ".trellis/workflows/selective-worktree-handoff.md"
+        ],
+        "commit": "0209dfb541052eaf5f0b03d906632c698d49fe94",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/grok2api",
+        "before": "c69e4ace8d2c982721d1a5fffacd3dd8127745ea",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "509346dbc30f64f021f360b9ac365ec9f7253db8",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-macos",
+        "before": "1881aa62c049ade67441418c8a2b75975ffa196f",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "805d5c24bc5cd56a086f2028f750acde8527fcea",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-main",
+        "before": "cf50520d2527453c9594a649ac164b537fc37caf",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "eee6529f7966377da19c499e188410d3bcad8598",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-oppo_linux",
+        "before": "1e7f66a25dede3a7ec58d2c0c03f77a04cf94bf5",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "ad110ad802b9ae02ca92e41cc5e07292496c2cf7",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-agent-infra-oppo_windows",
+        "before": "ce88f2caf46ad280b418e3cb90a007f3e60f2de7",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "d1fc6101b5d235adb58348592ef808480d15eb37",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-benchmarks",
+        "before": "c4bdd2a9f18a2948c2f112498fd51db94bebdcaa",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py",
+          ".trellis/workflow.md"
+        ],
+        "commit": "6f90454bcbe93ec67178b318502d8d0cba29539d",
+        "status": "committed",
+        "error": "fatal: Unable to create '/home/notebook/code/personal/S9063923/Tools/jason-liao-benchmarks/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n",
+        "reconciled": "Verified scoped index reconciliation receipt; foreign staging preserved"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/jason-liao-language-system",
+        "before": "a6f4b9af04fde5917aa739e138c4a36f474ab415",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "f2350d32b3a52ce7855bf99ae4f556b6e78d725c",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/vscode-claude-image-paste-ws",
+        "before": "077d2f80af0e7ec4e77be8695549335983ce8fdb",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "831b6dbb3dd64ec1e22c137dda911393ff4d19a8",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Code/grounding-iqa-agent",
+        "before": "06902cc377f163ab6b98281836ab67cca48b81cc",
+        "files": [
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".trellis/workflow.md",
+          ".trellis/config.yaml"
+        ],
+        "commit": "eb7ccc40273c175bf95f752e5ef34189029c4b31",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Code/Q-Anchor/.claude/worktrees/peaceful-bohr-ce9b01",
+        "before": "d511dc4724cfbcad89594e73e62ee660c6777415",
+        "files": [
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".trellis/workflow.md",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py",
+          ".trellis/workflows/selective-worktree-handoff.md"
+        ],
+        "commit": "a4691c5ce27f198a83d55823e011575b5fb94064",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Tools/Trellis/.codex/worktrees/trellis-beta-compat-repair",
+        "before": "84c82d333dcfe85899a1182482c1bf19835e2a48",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "status": "committed",
+        "commit": "022b99b799c0e6627bb983c7fa1b79b8aec3df7f"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Code/daily-research-digest",
+        "before": "390ef1fc81d4451708755f2627fd3b4f5e602c5c",
+        "files": [
+          ".trellis/workflow.md",
+          ".trellis/config.yaml",
+          ".trellis/scripts/common/config.py",
+          ".trellis/scripts/common/workflow_phase.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".claude/hooks/inject-workflow-state.py"
+        ],
+        "commit": "1601fecbfcd4bd1be8b54f000c59f615b8408b6f",
+        "status": "committed"
+      },
+      {
+        "path": "/home/notebook/code/personal/S9063923/Code/grounding-iqa-agent/.codex/worktrees/marketplace-research-progress-reorg",
+        "before": "5580e271505b5a4ef2fd0f35d086432323714440",
+        "files": [
+          ".trellis/scripts/common/config.py",
+          ".codex/hooks/inject-workflow-state.py",
+          ".trellis/workflow.md",
+          ".trellis/config.yaml"
+        ],
+        "commit": "77ff672bb59313c68659c062d706b5a4e24da3b8",
+        "status": "committed"
+      }
+    ]
+  },
+  "additional_source_mirrors": [
+    {
+      "root": "D:\\Users\\S9063923\\Skills\\7-coding\\Trellis",
+      "path": "packages/cli/src/templates/shared-hooks/inject-workflow-state.py",
+      "status": "committed",
+      "before": "D:\\Users\\S9063923\\Documents\\Codex\\2026-10-13\\shared-rule-convergence\\before-source-mirrors\\windows\\Trellis\\packages\\cli\\src\\templates\\shared-hooks\\inject-workflow-state.py",
+      "matches_local": false,
+      "diff": "--- \n+++ \n@@ -223,33 +223,50 @@\n         return {}\n \n \n-def _codex_mode_banner(config: dict) -> str:\n-    \"\"\"Emit a `<codex-mode>` banner for the additionalContext payload.\n-\n-    Reads `codex.dispatch_mode` from .trellis/config.yaml; defaults to\n-    `inline` when missing or invalid because Codex sub-agents run with\n-    `fork_turns=\"none\"` isolation and can't inherit the parent session's\n-    task context. The banner makes the active mode explicit to Codex AI\n-    per turn, complementing the workflow-state body which is per-status.\n-    Mode tells AI which dispatch protocol to follow; workflow-state tells\n-    AI what step it's at.\n-    \"\"\"\n-    mode = \"inline\"\n+def _resolve_codex_dispatch_mode(config: dict) -> str:\n+    \"\"\"Normalize `codex.dispatch_mode` from .trellis/config.yaml to \"auto\" or \"inline\".\n+\n+    Defaults to `auto`. The legacy `sub-agent` value is an alias for `auto`.\n+    Any other explicit value (including invalid ones) falls back to `inline`\n+    without per-turn warnings. Shared by `_codex_mode_banner` (the per-turn\n+    banner) and `resolve_breadcrumb_key` (the breadcrumb tag key) so the two\n+    stay in lockstep.\n+    \"\"\"\n+    mode = \"auto\"\n     if isinstance(config, dict):\n         codex_cfg = config.get(\"codex\")\n+        if codex_cfg is not None and not isinstance(codex_cfg, dict):\n+            return \"inline\"\n         if isinstance(codex_cfg, dict):\n-            cfg_mode = codex_cfg.get(\"dispatch_mode\")\n-            if cfg_mode in (\"inline\", \"sub-agent\"):\n-                mode = cfg_mode\n-    if mode == \"sub-agent\":\n+            cfg_mode = str(codex_cfg.get(\"dispatch_mode\", mode)).strip().lower()\n+            if cfg_mode == \"inline\":\n+                mode = \"inline\"\n+            elif cfg_mode in (\"auto\", \"sub-agent\"):\n+                mode = \"auto\"\n+            else:\n+                mode = \"inline\"\n+    return mode\n+\n+\n+def _codex_mode_banner(config: dict) -> str:\n+    \"\"\"Describe adaptive ownership and the explicit inline choice.\n+\n+    ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use\n+    ``inline``. Neither mode overrides the project's ownership decisions.\n+    \"\"\"\n+    mode = _resolve_codex_dispatch_mode(config)\n+    if mode == \"auto\":\n         meaning = (\n-            \"sub-agent: implement/check work defaults to Trellis sub-agents; \"\n-            \"the main session still coordinates, clarifies, updates specs, commits, and finishes.\"\n+            \"auto: native Codex context injection is available for delegated work, \"\n+            \"with child-side loading as fallback. Follow project workflow and \"\n+            \"routing rules to choose main-session or sub-agent ownership. \"\n+            \"Keep continuous, tightly coupled work in the main session; delegate \"\n+            \"only for concrete parallel, isolation, specialized capability, or review benefit.\"\n         )\n     else:\n         meaning = (\n-            \"inline: the main session implements/checks directly; \"\n-            \"do not dispatch implement/check sub-agents.\"\n+            \"inline: the main session loads context and implements/checks directly \"\n+            \"without dispatching implement/check sub-agents.\"\n         )\n     return f\"<codex-mode>{meaning}</codex-mode>\"\n \n@@ -259,23 +276,20 @@\n ) -> str:\n     \"\"\"Pick the breadcrumb tag key based on Codex dispatch_mode.\n \n-    Codex defaults to ``inline`` because sub-agents run with ``fork_turns=\"none\"``\n-    isolation and can't inherit the parent session's task context. Users can\n-    opt into ``codex.dispatch_mode: sub-agent`` in ``.trellis/config.yaml``\n-    to use the parallel ``<status>-inline`` tag → ``<status>`` flip. Invalid\n-    or missing values fall back to inline.\n+    For planning/execution, Codex defaults to the adaptive ``<status>-auto``\n+    breadcrumb. ``inline`` selects ``<status>-inline``; ``sub-agent`` remains\n+    an alias for ``auto``. Invalid explicit values use inline without per-turn\n+    warnings. Inline keeps its existing suffix for every status, including\n+    user-defined tags; auto leaves non-active statuses unchanged.\n \n     Non-codex platforms return the plain status unchanged.\n     \"\"\"\n     if platform == \"codex\":\n-        mode = \"inline\"\n-        if isinstance(config, dict):\n-            codex_cfg = config.get(\"codex\")\n-            if isinstance(codex_cfg, dict):\n-                cfg_mode = codex_cfg.get(\"dispatch_mode\")\n-                if cfg_mode in (\"inline\", \"sub-agent\"):\n-                    mode = cfg_mode\n-        return f\"{status}-inline\" if mode == \"inline\" else status\n+        mode = _resolve_codex_dispatch_mode(config)\n+        if mode == \"inline\":\n+            return f\"{status}-inline\"\n+        if status in (\"planning\", \"in_progress\"):\n+            return f\"{status}-auto\"\n     return status\n \n \n",
+      "commit": "f5a4397c03737f475544eab38500debc30f1f5b1"
+    },
+    {
+      "root": "D:\\Users\\S9063923\\Skills\\7-coding\\Trellis",
+      "path": "packages/cli/src/templates/trellis/scripts/common/workflow_phase.py",
+      "status": "committed",
+      "before": "D:\\Users\\S9063923\\Documents\\Codex\\2026-10-13\\shared-rule-convergence\\before-source-mirrors\\windows\\Trellis\\packages\\cli\\src\\templates\\trellis\\scripts\\common\\workflow_phase.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -144,27 +144,37 @@\n def resolve_effective_platform(platform: str, config: dict) -> str:\n     \"\"\"Map ``codex`` to a dispatch-mode-namespaced virtual platform name.\n \n-    When ``--platform codex`` is passed, return ``\"codex-inline\"`` (default)\n-    or ``\"codex-sub-agent\"`` based on ``.trellis/config.yaml`` ``codex.dispatch_mode``.\n+    When ``--platform codex`` is passed, return ``\"codex-sub-agent\"`` by\n+    default or ``\"codex-inline\"`` when explicitly configured in\n+    ``.trellis/config.yaml``. ``sub-agent`` remains an alias for ``auto``.\n     ``filter_platform`` then surfaces blocks whose marker lists include the\n     namespaced name (e.g. ``[codex-sub-agent, ...]`` or ``[codex-inline, Kilo,\n     Antigravity, Devin]``).\n \n-    Default is ``inline`` because Codex sub-agents run with ``fork_turns=\"none\"``\n-    isolation and can't inherit the parent session's task context — inline\n-    keeps the main agent in charge so context isn't lost. Invalid / missing\n-    values also fall back to inline.\n-\n-    Other platforms are returned unchanged.\n+    The legacy ``codex-sub-agent`` label is kept for custom workflow compatibility;\n+    its native workflow blocks choose ownership by actual benefit, not mandatory\n+    delegation. Native context injection is available when auto delegates. Invalid\n+    explicit values fall back to ``inline`` safely; this renderer deliberately\n+    does not warn because it can run in normal CLI output flows.\n+\n+    Platforms whose marker label differs from their id resolve through\n+    ``_PLATFORM_MARKER_LABELS``. Everything else is returned unchanged.\n     \"\"\"\n     if platform == \"codex\":\n-        mode = \"inline\"\n+        mode = \"auto\"\n         codex_cfg = config.get(\"codex\") if isinstance(config, dict) else None\n-        if isinstance(codex_cfg, dict):\n-            cfg_mode = codex_cfg.get(\"dispatch_mode\")\n-            if cfg_mode in (\"inline\", \"sub-agent\"):\n-                mode = cfg_mode\n-        return f\"codex-{mode}\"\n+        if codex_cfg is not None:\n+            if not isinstance(codex_cfg, dict):\n+                mode = \"inline\"\n+            else:\n+                cfg_mode = str(codex_cfg.get(\"dispatch_mode\", mode)).strip().lower()\n+                if cfg_mode == \"inline\":\n+                    mode = \"inline\"\n+                elif cfg_mode in (\"auto\", \"sub-agent\"):\n+                    mode = \"auto\"\n+                else:\n+                    mode = \"inline\"\n+        return \"codex-sub-agent\" if mode == \"auto\" else \"codex-inline\"\n     return platform\n \n \n",
+      "commit": "f5a4397c03737f475544eab38500debc30f1f5b1"
+    },
+    {
+      "root": "/home/notebook/code/personal/S9063923/Tools/Trellis",
+      "path": "packages/cli/src/templates/shared-hooks/inject-workflow-state.py",
+      "status": "committed",
+      "before": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-source-mirrors/linux/Trellis/packages/cli/src/templates/shared-hooks/inject-workflow-state.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -307,31 +307,24 @@\n \n \n def _codex_mode_banner(config: dict) -> str:\n-    \"\"\"Emit a `<codex-mode>` banner for the additionalContext payload.\n-\n-    Reads `codex.dispatch_mode` from .trellis/config.yaml; defaults to\n-    `auto`, which dispatches Trellis sub-agents using native Codex context\n-    injection with a child-side fallback. This does not rely on inherited\n-    parent transcripts: `fork_turns` remains caller-controlled, and\n-    fresh-history sub-agents still receive their explicit delegated task and\n-    inherited session configuration. `inline` is an explicit opt-out; the\n-    legacy `sub-agent` value is an alias for `auto`. Invalid explicit values\n-    fall back to `inline` without per-turn warnings. The banner makes the\n-    active mode explicit to Codex AI per turn, complementing the workflow-state\n-    body which is per-status. Mode tells AI which dispatch protocol to follow;\n-    workflow-state tells AI what step it's at.\n+    \"\"\"Describe adaptive ownership and the explicit inline choice.\n+\n+    ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use\n+    ``inline``. Neither mode overrides the project's ownership decisions.\n     \"\"\"\n     mode = _resolve_codex_dispatch_mode(config)\n     if mode == \"auto\":\n         meaning = (\n-            \"auto: implement/check work defaults to Trellis sub-agents; native Codex \"\n-            \"context injection is preferred and child-side loading is the fallback. \"\n-            \"The main session still coordinates, clarifies, updates specs, commits, and finishes.\"\n+            \"auto: native Codex context injection is available for delegated work, \"\n+            \"with child-side loading as fallback. Follow project workflow and \"\n+            \"routing rules to choose main-session or sub-agent ownership. \"\n+            \"Keep continuous, tightly coupled work in the main session; delegate \"\n+            \"only for concrete parallel, isolation, specialized capability, or review benefit.\"\n         )\n     else:\n         meaning = (\n-            \"inline: the main session implements/checks directly; \"\n-            \"do not dispatch implement/check sub-agents.\"\n+            \"inline: the main session loads context and implements/checks directly \"\n+            \"without dispatching implement/check sub-agents.\"\n         )\n     return f\"<codex-mode>{meaning}</codex-mode>\"\n \n@@ -341,18 +334,20 @@\n ) -> str:\n     \"\"\"Pick the breadcrumb tag key based on Codex dispatch_mode.\n \n-    Codex defaults to ``auto`` and therefore uses the ordinary ``<status>``\n-    breadcrumb for native SubagentStart dispatch with child-side fallback;\n-    it does not depend on an inherited parent transcript. ``inline`` selects\n-    the parallel ``<status>-inline`` tag; ``sub-agent`` remains an alias for\n-    ``auto``. Invalid explicit values fall back to inline without per-turn\n-    warnings.\n+    For planning/execution, Codex defaults to the adaptive ``<status>-auto``\n+    breadcrumb. ``inline`` selects ``<status>-inline``; ``sub-agent`` remains\n+    an alias for ``auto``. Invalid explicit values use inline without per-turn\n+    warnings. Inline keeps its existing suffix for every status, including\n+    user-defined tags; auto leaves non-active statuses unchanged.\n \n     Non-codex platforms return the plain status unchanged.\n     \"\"\"\n     if platform == \"codex\":\n         mode = _resolve_codex_dispatch_mode(config)\n-        return f\"{status}-inline\" if mode == \"inline\" else status\n+        if mode == \"inline\":\n+            return f\"{status}-inline\"\n+        if status in (\"planning\", \"in_progress\"):\n+            return f\"{status}-auto\"\n     return status\n \n \n",
+      "commit": "53d457aae38c7d1947ac918b7749be09a9b9a2a0"
+    },
+    {
+      "root": "/home/notebook/code/personal/S9063923/Tools/Trellis",
+      "path": "packages/cli/src/templates/trellis/scripts/common/config.py",
+      "status": "committed",
+      "before": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-source-mirrors/linux/Trellis/packages/cli/src/templates/trellis/scripts/common/config.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -140,9 +140,10 @@\n def get_codex_dispatch_mode(repo_root: Path | None = None) -> str:\n     \"\"\"Return Codex dispatch mode.\n \n-    Default is ``auto``, which dispatches Trellis sub-agents and uses native\n-    context injection with a child-side fallback. ``inline`` is an explicit\n-    opt-out. ``sub-agent`` remains a backwards-compatible alias for ``auto``.\n+    Default is ``auto``, which chooses main-session or delegated ownership by\n+    actual benefit. Delegated work uses native context injection with a child-side\n+    fallback. ``inline`` keeps implementation/checks in the main session.\n+    ``sub-agent`` remains a backwards-compatible alias for ``auto``.\n \n     Invalid explicit configuration falls back to ``inline`` rather than\n     unexpectedly dispatching a sub-agent. This CLI-facing parser is the only\n",
+      "commit": "53d457aae38c7d1947ac918b7749be09a9b9a2a0"
+    },
+    {
+      "root": "/home/notebook/code/personal/S9063923/Tools/Trellis",
+      "path": "packages/cli/src/templates/trellis/scripts/common/workflow_phase.py",
+      "status": "committed",
+      "before": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-source-mirrors/linux/Trellis/packages/cli/src/templates/trellis/scripts/common/workflow_phase.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -170,7 +170,9 @@\n     namespaced name (e.g. ``[codex-sub-agent, ...]`` or ``[codex-inline, Kilo,\n     Antigravity, Devin]``).\n \n-    Native Codex context injection supports the ``auto`` default. Invalid\n+    The legacy ``codex-sub-agent`` label is kept for custom workflow compatibility;\n+    its native workflow blocks choose ownership by actual benefit, not mandatory\n+    delegation. Native context injection is available when auto delegates. Invalid\n     explicit values fall back to ``inline`` safely; this renderer deliberately\n     does not warn because it can run in normal CLI output flows.\n \n",
+      "commit": "53d457aae38c7d1947ac918b7749be09a9b9a2a0"
+    },
+    {
+      "root": "/home/notebook/code/personal/S9063923/Tools/Trellis/.codex/worktrees/trellis-beta-compat-repair",
+      "path": "packages/cli/src/templates/shared-hooks/inject-workflow-state.py",
+      "status": "committed",
+      "before": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-source-mirrors/linux/trellis-beta-compat-repair/packages/cli/src/templates/shared-hooks/inject-workflow-state.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -321,6 +321,8 @@\n     mode = \"auto\"\n     if isinstance(config, dict):\n         codex_cfg = config.get(\"codex\")\n+        if codex_cfg is not None and not isinstance(codex_cfg, dict):\n+            return \"inline\"\n         if isinstance(codex_cfg, dict):\n             cfg_mode = str(codex_cfg.get(\"dispatch_mode\", mode)).strip().lower()\n             if cfg_mode == \"inline\":\n@@ -333,7 +335,7 @@\n \n \n def _codex_mode_banner(config: dict) -> str:\n-    \"\"\"Describe context-loading defaults; project rules decide delegation.\n+    \"\"\"Describe adaptive ownership and the explicit inline choice.\n \n     ``sub-agent`` remains an alias for ``auto``. Invalid explicit values use\n     ``inline``. Neither mode overrides the project's ownership decisions.\n@@ -343,12 +345,14 @@\n         meaning = (\n             \"auto: native Codex context injection is available for delegated work, \"\n             \"with child-side loading as fallback. Follow project workflow and \"\n-            \"routing rules to choose main-session or sub-agent ownership.\"\n+            \"routing rules to choose main-session or sub-agent ownership. \"\n+            \"Keep continuous, tightly coupled work in the main session; delegate \"\n+            \"only for concrete parallel, isolation, specialized capability, or review benefit.\"\n         )\n     else:\n         meaning = (\n             \"inline: the main session loads context and implements/checks directly \"\n-            \"by default. Project workflow and routing rules may justify independent delegation.\"\n+            \"without dispatching implement/check sub-agents.\"\n         )\n     return f\"<codex-mode>{meaning}</codex-mode>\"\n \n@@ -358,18 +362,20 @@\n ) -> str:\n     \"\"\"Pick the breadcrumb tag key based on Codex dispatch_mode.\n \n-    Codex defaults to ``auto`` and therefore uses the ordinary ``<status>``\n-    breadcrumb for native SubagentStart dispatch with child-side fallback;\n-    it does not depend on an inherited parent transcript. ``inline`` selects\n-    the parallel ``<status>-inline`` tag; ``sub-agent`` remains an alias for\n-    ``auto``. Invalid explicit values fall back to inline without per-turn\n-    warnings.\n+    For planning/execution, Codex defaults to the adaptive ``<status>-auto``\n+    breadcrumb. ``inline`` selects ``<status>-inline``; ``sub-agent`` remains\n+    an alias for ``auto``. Invalid explicit values use inline without per-turn\n+    warnings. Inline keeps its existing suffix for every status, including\n+    user-defined tags; auto leaves non-active statuses unchanged.\n \n     Non-codex platforms return the plain status unchanged.\n     \"\"\"\n     if platform == \"codex\":\n         mode = _resolve_codex_dispatch_mode(config)\n-        return f\"{status}-inline\" if mode == \"inline\" else status\n+        if mode == \"inline\":\n+            return f\"{status}-inline\"\n+        if status in (\"planning\", \"in_progress\"):\n+            return f\"{status}-auto\"\n     return status\n \n \n",
+      "commit": "022b99b799c0e6627bb983c7fa1b79b8aec3df7f"
+    },
+    {
+      "root": "/home/notebook/code/personal/S9063923/Tools/Trellis/.codex/worktrees/trellis-beta-compat-repair",
+      "path": "packages/cli/src/templates/trellis/scripts/common/config.py",
+      "status": "committed",
+      "before": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-source-mirrors/linux/trellis-beta-compat-repair/packages/cli/src/templates/trellis/scripts/common/config.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -140,9 +140,10 @@\n def get_codex_dispatch_mode(repo_root: Path | None = None) -> str:\n     \"\"\"Return Codex dispatch mode.\n \n-    Default is ``auto``, which dispatches Trellis sub-agents and uses native\n-    context injection with a child-side fallback. ``inline`` is an explicit\n-    opt-out. ``sub-agent`` remains a backwards-compatible alias for ``auto``.\n+    Default is ``auto``, which chooses main-session or delegated ownership by\n+    actual benefit. Delegated work uses native context injection with a child-side\n+    fallback. ``inline`` keeps implementation/checks in the main session.\n+    ``sub-agent`` remains a backwards-compatible alias for ``auto``.\n \n     Invalid explicit configuration falls back to ``inline`` rather than\n     unexpectedly dispatching a sub-agent. This CLI-facing parser is the only\n",
+      "commit": "022b99b799c0e6627bb983c7fa1b79b8aec3df7f"
+    },
+    {
+      "root": "/home/notebook/code/personal/S9063923/Tools/Trellis/.codex/worktrees/trellis-beta-compat-repair",
+      "path": "packages/cli/src/templates/trellis/scripts/common/workflow_phase.py",
+      "status": "committed",
+      "before": "/home/notebook/code/personal/S9063923/backup/hosts/oppo-remote-4L40S/trellis-adaptive-deployment-20261014/before-source-mirrors/linux/trellis-beta-compat-repair/packages/cli/src/templates/trellis/scripts/common/workflow_phase.py",
+      "matches_local": true,
+      "diff": "--- \n+++ \n@@ -171,7 +171,9 @@\n     namespaced name (e.g. ``[codex-sub-agent, ...]`` or ``[codex-inline, Kilo,\n     Antigravity, Devin]``).\n \n-    Native Codex context injection supports the ``auto`` default. Invalid\n+    The legacy ``codex-sub-agent`` label is kept for custom workflow compatibility;\n+    its native workflow blocks choose ownership by actual benefit, not mandatory\n+    delegation. Native context injection is available when auto delegates. Invalid\n     explicit values fall back to ``inline`` safely; this renderer deliberately\n     does not warn because it can run in normal CLI output flows.\n \n",
+      "commit": "022b99b799c0e6627bb983c7fa1b79b8aec3df7f"
+    }
+  ],
+  "slime": "Applied and backed up; preexisting untracked Trellis files are not included in Git commits.",
+  "publication": "No push performed.",
+  "status": "Original source and marketplace batches, 19 Windows and 28 Linux deployment commits, eight additional source mirrors, and three related task metadata artifacts approved. All approved commits are local; no push. Original 8A100 native validation remains blocked by SSH availability. Windows runtime manager preview passed but register would enable the currently disabled hourly RepositoryUpdates task; native activation is paused pending explicit approval.",
+  "additional_source_commits": [
+    {
+      "path": "D:\\Users\\S9063923\\Skills\\7-coding\\Trellis",
+      "commit": "f5a4397c03737f475544eab38500debc30f1f5b1",
+      "scope": "source template mirrors"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/Trellis",
+      "commit": "53d457aae38c7d1947ac918b7749be09a9b9a2a0",
+      "scope": "source template mirrors"
+    },
+    {
+      "path": "/home/notebook/code/personal/S9063923/Tools/Trellis/.codex/worktrees/trellis-beta-compat-repair",
+      "commit": "022b99b799c0e6627bb983c7fa1b79b8aec3df7f",
+      "scope": "source template mirrors"
+    }
+  ]
+}
