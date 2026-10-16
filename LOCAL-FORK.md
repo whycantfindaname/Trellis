@@ -6,20 +6,22 @@ Use `develop` as the GitHub default branch and the source for daily work.
 
 ## Branches and local checkout
 
-| Branch in the personal fork | Purpose | Update rule |
+| Branch or retired name | Purpose | Update rule |
 | --- | --- | --- |
 | `develop` | Personal development, including adaptive Codex auto workflows | Merge upstream changes and retain personal patches |
 | `main` | Upstream stable mirror | Fast-forward only; no personal patches |
 | `feat/v0.7-beta` | Upstream beta mirror | Fast-forward only; no personal patches |
-| `local/beta` | Previous published development name | Historical checkpoint; use `develop` for new work |
+| `local/beta` (retired) | Previous development name | No checkout or automatic fetch; use `develop` |
 
 The canonical Linux checkout remains
 `Tools/Trellis/.claude/worktrees/beta4-local-fixes`. Its historical directory
 name is independent of its current branch, `develop`. Other mirror and
 compatibility worktrees retain their existing roles and local changes.
 The earlier `jason/beta4-local-fixes` remote branch was already deleted.
-The `local/beta` remote checkpoint is retained; branch deletion needs its own
-authorization. Existing tags and commit identities are preserved.
+The former `local/beta` branch is retired. Its tip `589efca1` and all ancestors
+are included in `develop`, so retaining a separate branch is unnecessary for
+source recovery. No worktree, tracking branch, or fetch selection uses it.
+Existing tags and commit identities are preserved.
 
 On 2026-10-16, fetching upstream confirmed that both `main` (`f089cb32`) and
 `feat/v0.7-beta` (`be9e19b2`, beta.4) are already ancestors of the personal

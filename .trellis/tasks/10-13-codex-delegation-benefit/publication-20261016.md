@@ -4,7 +4,7 @@
 
 ## Trellis 来源
 
-个人 fork 为 `whycantfindaname/Trellis`，日常来源分支已按用户接续要求改为 `develop`，本机对应 remote 名为 `fork`。上游镜像 `main` / `feat/v0.7-beta` 不发布个人补丁；兼容工作树保持其原有用途。新机器从个人分支获取来源，不能用上游 `origin/main` 代替。原 `local/beta` 远端检查点保留。
+个人 fork 为 `whycantfindaname/Trellis`，日常来源分支已按用户接续要求改为 `develop`，本机对应 remote 名为 `fork`。上游镜像 `main` / `feat/v0.7-beta` 不发布个人补丁；兼容工作树保持其原有用途。新机器从个人分支获取来源，不能用上游 `origin/main` 代替。旧 `local/beta` 已退役，自动获取配置仅选择 `develop`；其全部历史已包含在 `develop`，无需依靠旧分支恢复。
 
 用户随后明确选择把 marketplace 的个人修改直接保存在 Trellis 分支中。`develop` 将 `514f4f712b8ab46af45601b4d6319a5a2e3f4b7a` 的 160 个文件作为普通文件跟踪，其中包含 native 祖先修复 `f6eaa7163dbcf002a3b46c2f6cbd1bde5297b7e3` 和 TDD 修复。159 个文件的 Git blob 与子仓库快照完全一致；`specs/electron-fullstack/backend/text-input.md` 的一处双空格换行改为等效 Markdown 反斜杠换行，以通过 diff 空白检查；全部文件模式保留。`.gitmodules` 仅保留 docs-site。旧子仓库对象及兼容 TDD 提交仍保留在原位置和冷备份中，未新建远端仓库。
 
