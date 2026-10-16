@@ -2,25 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - 'packages/cli/**'
       - 'packages/core/**'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
       - 'package.json'
-      - 'marketplace'
+      - 'marketplace/**'
       - '**/*.py'
       - '.github/workflows/ci.yml'
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - 'packages/cli/**'
       - 'packages/core/**'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
       - 'package.json'
-      - 'marketplace'
+      - 'marketplace/**'
       - '**/*.py'
       - '.github/workflows/ci.yml'
 

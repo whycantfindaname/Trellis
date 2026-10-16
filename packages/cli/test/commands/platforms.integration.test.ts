@@ -42,7 +42,9 @@ function writeTrackedPlatforms(
   );
 }
 
-describe("trellis platforms (#396)", () => {
+// Real CLI startup reads the shared workspace; keep the subprocess budget
+// separate from fast unit tests on hosts with a network-backed filesystem.
+describe("trellis platforms (#396)", { timeout: 30_000 }, () => {
   let tmpDir: string;
 
   beforeEach(() => {

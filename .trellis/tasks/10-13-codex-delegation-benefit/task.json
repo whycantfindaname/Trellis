@@ -12,7 +12,7 @@
   "assignee": "wenjie-liao",
   "createdAt": "2026-10-13",
   "completedAt": null,
-  "branch": "local/beta",
+  "branch": "develop",
   "base_branch": "main",
   "worktree_path": "/home/notebook/code/personal/S9063923/Tools/Trellis/.claude/worktrees/beta4-local-fixes",
   "commit": "2ab93b55ef51240a2f8c5053463773eed8111365",
@@ -24,7 +24,8 @@
     ".trellis/tasks/10-13-codex-delegation-benefit/repair-20261016.md",
     ".trellis/tasks/10-13-codex-delegation-benefit/repair-20261016-scope.json",
     ".trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md",
-    ".trellis/tasks/10-13-codex-delegation-benefit/verify-adoption.py"
+    ".trellis/tasks/10-13-codex-delegation-benefit/verify-adoption.py",
+    ".trellis/tasks/10-13-codex-delegation-benefit/develop-migration-20261016.md"
   ],
   "notes": "Approved Trellis and retired-repository commit scopes are committed locally; source mirrors include Windows f5a4397c, Linux 53d457aa, and compatibility 022b99b7. See commit-receipt.json and deployment.md. No push. Windows native runtime activation is pending because register would enable the currently disabled hourly task; 8A100 SSH native validation remains blocked.\n2026-10-16 follow-up: repaired the five audited issues for the available current Linux scope; 28 non-retired checkouts and the selected Linux CLI passed actual hook/phase consumer checks. 593 source tests, lint, typecheck, and 30 scoped diff checks passed. See repair-20261016.md and repair-20261016-scope.json. Current 8A100 validation supersedes the historical SSH gap for these consumers. No new commits or push; retired repositories unchanged; Windows/macOS native files and remote publication remain outside this repair.",
   "meta": {
@@ -32,8 +33,8 @@
       "authorization": "User requested scoped commits and push so other machines can fetch and synchronize; CPA Git transport approved separately.",
       "source_actor": "linux+codex",
       "canonical_remote": "https://github.com/whycantfindaname/Trellis.git",
-      "canonical_branch": "local/beta",
-      "marketplace": "User deferred personal fork creation; child commits stay local and parent retains its existing native mirror f6eaa71. Full child adoption requires the existing Linux source route; TDD gitlink is deferred.",
+      "canonical_branch": "develop",
+      "marketplace": "User selected in-tree marketplace source on develop instead of a separate fork. All 160 tracked files at 514f4f7, including native ancestor f6eaa71, are preserved as regular Trellis files; explicit marketplace source selects them.",
       "handoff": ".trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md",
       "result_record": "Existing repair evidence root: publication/RESULT.md; source publication does not prove native adoption."
     },

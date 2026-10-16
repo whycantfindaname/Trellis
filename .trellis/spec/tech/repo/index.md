@@ -21,11 +21,13 @@ load the right guidance.
 
 - `pnpm-workspace.yaml` declares `packages/*`, so the pnpm workspace packages
   are `packages/cli` and `packages/core`.
-- `.gitmodules` declares `docs-site` and `marketplace` as submodules.
+- On the personal `develop` branch, `.gitmodules` declares only `docs-site`.
 - `docs-site` has its own package manifest and Trellis specs, so it is a
   configured Trellis package with `type: submodule`.
-- `marketplace` is a submodule but currently has no package manifest and no
-  Trellis package-scoped specs. Do not add it to `.trellis/config.yaml` unless
+- `marketplace/` is vendored source on `develop`, with its personal native/TDD
+  workflow fixes tracked directly in Trellis. Its provenance and upstream-sync
+  rules are in `LOCAL-FORK.md`. It has no package manifest or Trellis
+  package-scoped specs. Do not add it to `.trellis/config.yaml` unless
   it gains package-level implementation ownership or specs.
 
 ## Contracts

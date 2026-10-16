@@ -1,96 +1,93 @@
-# 本 fork 的现状与管理方案
+# Personal Trellis development
 
-> 本文件只存在于 `local/beta` 分支,是本 fork 自己的说明,不属于上游。
-> 文件为新增文件,不会与上游改动产生合并冲突。
+This fork is `whycantfindaname/Trellis`. Its personal development branch is
+`develop`: upstream beta and stable fixes, followed by personal patches.
+Use `develop` as the GitHub default branch and the source for daily work.
 
-## 1. 仓库现状
+## Branches and local checkout
 
-本仓库是上游 Trellis(`mindfold-ai/Trellis`,见 `packages/cli/package.json` 的 `repository` 字段)的 fork,submodule `mindfold-ai/docs`、`mindfold-ai/marketplace` 同属该组织。
-fork 时带入了上游的全部开发分支,已清理,现在远程只保留 3 个分支:
+| Branch in the personal fork | Purpose | Update rule |
+| --- | --- | --- |
+| `develop` | Personal development, including adaptive Codex auto workflows | Merge upstream changes and retain personal patches |
+| `main` | Upstream stable mirror | Fast-forward only; no personal patches |
+| `feat/v0.7-beta` | Upstream beta mirror | Fast-forward only; no personal patches |
+| `local/beta` | Previous published development name | Historical checkpoint; use `develop` for new work |
 
-| 分支 | 作用 | 规则 |
-|---|---|---|
-| `main` | 上游 main 的镜像(0.6 线,最近为 PR #629 合并) | 只快进,不放自己的提交 |
-| `feat/v0.7-beta` | 上游 beta 线的镜像(当前即 tag `v0.7.0-beta.4`,`be9e19b`) | 只快进,不放自己的提交 |
-| `local/beta` | **日常使用分支**:beta 线 + 本地补丁 | 保持最新,上游更新时合并进来 |
+The canonical Linux checkout remains
+`Tools/Trellis/.claude/worktrees/beta4-local-fixes`. Its historical directory
+name is independent of its current branch, `develop`. Other mirror and
+compatibility worktrees retain their existing roles and local changes.
+The earlier `jason/beta4-local-fixes` remote branch was already deleted.
+The `local/beta` remote checkpoint is retained; branch deletion needs its own
+authorization. Existing tags and commit identities are preserved.
 
-`local/beta` 同时是 GitHub 默认分支。旧分支名 `jason/beta4-local-fixes` 已删除。
+On 2026-10-16, fetching upstream confirmed that both `main` (`f089cb32`) and
+`feat/v0.7-beta` (`be9e19b2`, beta.4) are already ancestors of the personal
+head `589efca1`. No additional merge commit is needed for those heads.
+The earlier merge `7a723f1` integrated stable main into the personal beta line.
 
-tag 全部保留(约 149 个,含 `v0.6.*`、`v0.7.0-beta.0` 到 `beta.4`),不影响分支列表。
+## Preserved personal fixes
 
-## 2. 本地补丁
+| Commit | Fix |
+| --- | --- |
+| `c4d676b` | Skip moved archive paths; equivalent upstream fix: PR #629 / `36292d6` |
+| `47d14b1` | Guard stdin reads in the other three hooks |
+| `53b6f4e` | Document the changed hook functions |
+| `6034627` | Allow research dispatches to write the task research directory (#634) |
+| `ccc8de8` | Scope archive commits, fix list filtering and subtask unlinking, ignore `hooks.local.json` |
+| `3b26d17` | Parse arriving hook stdin without waiting for EOF |
+| `acbbe09` | Keep Codex research agents as leaf agents under multi-agent v2 |
+| `2ab93b55`, `589efca1` | Choose Codex auto delegation by concrete benefit and align hooks, phase guidance, and trellis-meta |
 
-位于 beta.4 合并(`84c82d3`)之后,共 7 个提交:
+Project journal/archive auto-commit remains disabled. Publication and native
+adoption evidence live in
+`.trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md`.
 
-| 提交 | 内容 |
-|---|---|
-| `c4d676b` | 归档提交时跳过已移走的路径(与上游 PR #629 的 `36292d6` 等价) |
-| `47d14b1` | 把带保护的 stdin 读取移植到其余 3 个 hook |
-| `53b6f4e` | 给改动涉及的函数补 docstring |
-| `6034627` | 让 research 派发可以写入任务的 research 目录(#634) |
-| `ccc8de8` | 限定归档提交范围,修复 list 过滤、subtask 解除关联,并忽略 `hooks.local.json` |
-| `3b26d17` | hook 按到达顺序解析 stdin,不再等 EOF |
-| `acbbe09` | 在 multi-agent v2 下让 codex 的 research agent 保持叶子节点 |
+## Marketplace source inside this branch
 
-2026-10-16 补充：`codex-delegation-benefit` 将 Codex auto 改为按独立并行、上下文隔离、专门能力或独立审查的实际收益选择执行者，并补齐 trellis-meta 与平台集成说明。此项目关闭日志／归档自动提交，提交仍由用户决定。修复和跨机器采用入口见 `.trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md`。
+`marketplace/` is a regular tracked directory on `develop`. Its snapshot comes
+from `https://github.com/mindfold-ai/marketplace`, upstream commit `62a77c9`,
+plus personal native workflow fix `f6eaa71` and TDD fix `514f4f7`.
+Existing upstream files and notices are retained. The snapshot has no separate
+LICENSE file; this document does not assign it a new license.
+Both personal fixes travel with this Trellis branch; a separate marketplace
+repository and access to unpublished submodule objects are unnecessary.
 
-此外有一个合并提交 `7a723f1`,把 main 合入 `local/beta`。main 的内容此前已全部包含,合并没有产生净改动。
+Native workflow content must remain identical to the bundled CLI workflow;
+the existing template tests check that contract. Personal marketplace templates
+can be selected through the existing source option:
 
-当前状态:`local/beta` 相对 `main` 落后 0、领先 77;相对 `feat/v0.7-beta` 落后 0。
-
-## 3. submodule 的处理
-
-`docs-site`(`mindfold-ai/docs`)和 `marketplace`(`mindfold-ai/marketplace`)是 submodule,指针在 main 与 beta 线上各自独立升级,合并时必然冲突。
-
-约定:**保留 beta 线的指针**(当前为 `docs-site` = `ec975c3`,`marketplace` = `62a77c9`)。main 的指针对应 0.6 线,采用它会回退 beta.4 的文档和 marketplace 内容。
-
-2026-10-16 用户选择暂不创建 marketplace 个人 fork。Codex auto 的来源提交已使用本地 native 镜像修复 `f6eaa71`，此次保留该指针，不推进尚未发布的 TDD 提交。子模块完整检出仍需从已有 Linux 来源定向获取本地提交，或等待其发布目标获准；可先以关闭递归子模块获取的方式同步父仓库来源文件。接续入口见本任务 publication 记录。
-
-解决命令:
-
-```
-git update-index --cacheinfo 160000,<beta线的sha>,docs-site
-git update-index --cacheinfo 160000,<beta线的sha>,marketplace
-```
-
-## 4. 日常同步流程
-
-一次性准备(在本地):
-
-```
-git remote add upstream https://github.com/mindfold-ai/Trellis
-```
-
-每次上游有更新:
-
-```
-git fetch upstream
-# 1) 镜像分支只快进
-git push origin upstream/main:main upstream/feat/v0.7-beta:feat/v0.7-beta
-# 2) 合进日常分支
-git switch local/beta
-git fetch origin
-git merge origin/feat/v0.7-beta      # 需要时再 merge origin/main
-git push origin local/beta
+```bash
+trellis workflow --marketplace gh:whycantfindaname/Trellis/marketplace#develop --template tdd
 ```
 
-- 第 1 步不会产生冲突;冲突只会出现在第 2 步,并且只涉及补丁所在的文件和上面的 submodule 指针。
-- 使用 merge 而不是 rebase:补丁只有 7 个,但 beta 线更新频繁,merge 不改历史、不需要强制推送。
-- 不要把补丁合进 `main` 或 `feat/v0.7-beta`,否则镜像分支无法快进,GitHub 的 Sync fork 按钮也会失效。
+The CLI's default external marketplace remains the upstream registry. Select
+the personal source explicitly to use this branch's marketplace content.
 
-## 5. 给上游提 PR
+Only `docs-site` remains a submodule, currently at beta pointer `ec975c3`.
+When merging upstream, preserve the vendored marketplace directory and
+reconcile incoming marketplace changes inside it. Read the upstream gitlink
+and import its reviewed file changes; do not restore a marketplace gitlink or
+overwrite the personal workflow fixes. Review docs-site pointers separately.
 
-`local/beta` 带着整条 beta 线,不能直接作为 PR 来源。需要提补丁时:
+## Synchronizing upstream and publishing
 
+Remote names are local configuration. In this checkout, `origin` and `upstream`
+refer to `mindfold-ai/Trellis`; **`fork` refers to the personal repository**.
+Verify `git remote -v` before writing. With authorized publication:
+
+```bash
+git -c fetch.recurseSubmodules=false fetch upstream main feat/v0.7-beta
+git switch develop
+git merge upstream/feat/v0.7-beta
+git merge upstream/main
+# Resolve template and docs-site conflicts, preserving personal behavior;
+# run the project checks before publishing.
+git push -u fork develop
 ```
-git switch -c pr/<名称> upstream/main      # 或 upstream/feat/v0.7-beta
-git cherry-pick <补丁提交>
-```
 
-上游合并后,下次同步时这些补丁会在 `local/beta` 里变成重复内容,通常不再冲突。可以在第 2 节的表里把它标为"已进上游"。
-
-## 6. 注意事项
-
-- 不要再执行 `git push origin --all` 之类的操作,避免把无关分支再次推上来。
-- 新增本地补丁时直接提交到 `local/beta`,并更新第 2 节的表格。
-- 仓库默认分支可在 GitHub 设置中改为 `local/beta`,可选。
+Merge rather than rebase to preserve published history. Mirror branches may be
+fast-forwarded separately after reviewing their incoming refs. Never publish
+personal patches to the upstream repository or use a blanket push of all refs.
+Prepare upstream PRs from an upstream branch with selected cherry-picks instead
+of submitting the complete personal development branch.

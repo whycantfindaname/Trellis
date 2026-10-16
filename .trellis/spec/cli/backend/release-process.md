@@ -99,7 +99,11 @@ Full docs details live in `.trellis/spec/docs-site/docs/release-lifecycle.md`.
 
 ## Submodule commit ordering
 
-When a release touches `docs-site` or `marketplace`, commit and push the submodule first, then commit the submodule pointer in the main repo.
+On this personal `develop` branch, only `docs-site` is a submodule. Commit and
+publish its changes before updating its pointer in Trellis. `marketplace/` is
+vendored source: commit its reviewed changes directly in this repository.
+Upstream branches and older tags can still contain a marketplace submodule;
+the historical incident below describes that layout.
 
 Correct order:
 
@@ -113,7 +117,9 @@ git commit -m "chore: bump docs-site for v<version>"
 git push origin <branch>
 ```
 
-`packages/cli/scripts/release.js` excludes `docs-site` and `marketplace` from its automatic pre-release staging so submodule pointer changes cannot be hidden inside a generic release commit.
+`packages/cli/scripts/release.js` excludes `docs-site` from automatic pre-release
+staging so its pointer changes cannot be hidden inside a generic release commit.
+Vendored marketplace files follow normal source staging.
 
 ### Contract: every modified submodule must be pushed before the version tag
 
@@ -124,7 +130,8 @@ fatal: remote error: upload-pack: not our ref <SHA>
 fatal: Fetched in submodule path '<name>', but it did not contain <SHA>. Direct fetching of that commit failed.
 ```
 
-This is per-submodule. Pushing `docs-site` but forgetting `marketplace` (or vice versa) still fails. Verify all submodules before `pnpm release`:
+This is per-submodule. Verify every entry in the current branch's `.gitmodules`
+before `pnpm release`; on `develop` this selects only `docs-site`:
 
 ```bash
 git submodule foreach 'git fetch origin -q; sha=$(git rev-parse HEAD); \
@@ -160,11 +167,10 @@ Any `FAIL` line means: `cd <submodule> && git checkout -B main && git push origi
 ### Contract: the pre-release sweep MUST exclude `.trellis/`
 
 The pre-release `git add` in `release.js` (the `chore: pre-release updates`
-commit) **must** exclude `.trellis/` from its pathspec, alongside `docs-site`
-and `marketplace`:
+commit) **must** exclude `.trellis/` from its pathspec, alongside `docs-site`:
 
 ```js
-run("git add -A -- ':!docs-site' ':!marketplace' ':!.trellis'");
+run("git add -A -- ':!docs-site' ':!.trellis'");
 ```
 
 `.trellis/tasks/` is not gitignored, so a blanket `git add -A` sweeps in any
@@ -221,7 +227,7 @@ pnpm release:promote
 2. `check-docs-changelog --type beta|rc|promote` for prerelease/promotion tracks
 3. core tests
 4. CLI tests
-5. pre-release commit excluding `docs-site`, `marketplace`, and `.trellis`
+5. pre-release commit excluding `docs-site` and `.trellis` (marketplace is vendored source)
 6. `bump-versions.js <type>` to update both package versions together
 7. `release-preflight check-versions`
 8. version commit with the version string as the commit message
