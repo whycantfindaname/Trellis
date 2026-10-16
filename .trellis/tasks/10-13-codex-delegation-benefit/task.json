@@ -20,7 +20,33 @@
   "subtasks": [],
   "children": [],
   "parent": null,
-  "relatedFiles": [],
-  "notes": "Approved Trellis and retired-repository commit scopes are committed locally; source mirrors include Windows f5a4397c, Linux 53d457aa, and compatibility 022b99b7. See commit-receipt.json and deployment.md. No push. Windows native runtime activation is pending because register would enable the currently disabled hourly task; 8A100 SSH native validation remains blocked.",
-  "meta": {}
+  "relatedFiles": [
+    ".trellis/tasks/10-13-codex-delegation-benefit/repair-20261016.md",
+    ".trellis/tasks/10-13-codex-delegation-benefit/repair-20261016-scope.json",
+    ".trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md",
+    ".trellis/tasks/10-13-codex-delegation-benefit/verify-adoption.py"
+  ],
+  "notes": "Approved Trellis and retired-repository commit scopes are committed locally; source mirrors include Windows f5a4397c, Linux 53d457aa, and compatibility 022b99b7. See commit-receipt.json and deployment.md. No push. Windows native runtime activation is pending because register would enable the currently disabled hourly task; 8A100 SSH native validation remains blocked.\n2026-10-16 follow-up: repaired the five audited issues for the available current Linux scope; 28 non-retired checkouts and the selected Linux CLI passed actual hook/phase consumer checks. 593 source tests, lint, typecheck, and 30 scoped diff checks passed. See repair-20261016.md and repair-20261016-scope.json. Current 8A100 validation supersedes the historical SSH gap for these consumers. No new commits or push; retired repositories unchanged; Windows/macOS native files and remote publication remain outside this repair.",
+  "meta": {
+    "publication_20261016": {
+      "authorization": "User requested scoped commits and push so other machines can fetch and synchronize; CPA Git transport approved separately.",
+      "source_actor": "linux+codex",
+      "canonical_remote": "https://github.com/whycantfindaname/Trellis.git",
+      "canonical_branch": "local/beta",
+      "marketplace": "User deferred personal fork creation; child commits stay local and parent retains its existing native mirror f6eaa71. Full child adoption requires the existing Linux source route; TDD gitlink is deferred.",
+      "handoff": ".trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md",
+      "result_record": "Existing repair evidence root: publication/RESULT.md; source publication does not prove native adoption."
+    },
+    "all_managed_rollout_20261016": {
+      "authorization": "Apply the repaired policy to all active managed repositories, excluding retired repositories; reuse existing knowledge.",
+      "linux_checkout_count": 28,
+      "linux_repository_family_count": 17,
+      "fresh_consumer_checks": "28/28 passed; no additional project writes needed",
+      "evidence": "WS/backup/hosts/oppo-remote-8A100/manual/20261016-trellis-delegation-repair/all-managed-rollout/RESULT.md",
+      "overall_status": "native_windows_macos_pending",
+      "blocker": "No native Windows/macOS filesystem or general execution route exposed in this session; historical Windows inventory has 19 targets, current macOS native inventory unknown.",
+      "committed": false,
+      "pushed": false
+    }
+  }
 }

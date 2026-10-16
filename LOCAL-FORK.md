@@ -32,6 +32,8 @@ tag 全部保留(约 149 个,含 `v0.6.*`、`v0.7.0-beta.0` 到 `beta.4`),不影
 | `3b26d17` | hook 按到达顺序解析 stdin,不再等 EOF |
 | `acbbe09` | 在 multi-agent v2 下让 codex 的 research agent 保持叶子节点 |
 
+2026-10-16 补充：`codex-delegation-benefit` 将 Codex auto 改为按独立并行、上下文隔离、专门能力或独立审查的实际收益选择执行者，并补齐 trellis-meta 与平台集成说明。此项目关闭日志／归档自动提交，提交仍由用户决定。修复和跨机器采用入口见 `.trellis/tasks/10-13-codex-delegation-benefit/publication-20261016.md`。
+
 此外有一个合并提交 `7a723f1`,把 main 合入 `local/beta`。main 的内容此前已全部包含,合并没有产生净改动。
 
 当前状态:`local/beta` 相对 `main` 落后 0、领先 77;相对 `feat/v0.7-beta` 落后 0。
@@ -41,6 +43,8 @@ tag 全部保留(约 149 个,含 `v0.6.*`、`v0.7.0-beta.0` 到 `beta.4`),不影
 `docs-site`(`mindfold-ai/docs`)和 `marketplace`(`mindfold-ai/marketplace`)是 submodule,指针在 main 与 beta 线上各自独立升级,合并时必然冲突。
 
 约定:**保留 beta 线的指针**(当前为 `docs-site` = `ec975c3`,`marketplace` = `62a77c9`)。main 的指针对应 0.6 线,采用它会回退 beta.4 的文档和 marketplace 内容。
+
+2026-10-16 用户选择暂不创建 marketplace 个人 fork。Codex auto 的来源提交已使用本地 native 镜像修复 `f6eaa71`，此次保留该指针，不推进尚未发布的 TDD 提交。子模块完整检出仍需从已有 Linux 来源定向获取本地提交，或等待其发布目标获准；可先以关闭递归子模块获取的方式同步父仓库来源文件。接续入口见本任务 publication 记录。
 
 解决命令:
 

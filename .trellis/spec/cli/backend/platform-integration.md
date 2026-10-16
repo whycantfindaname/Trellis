@@ -2046,12 +2046,15 @@ resolution or file reads. Contract:
 
 Breadcrumb text lives in `workflow.md` as `[workflow-state:STATUS]...[/workflow-state:STATUS]` blocks (same tag style as existing `[Platform, ...]` blocks). Users who fork the Trellis workflow edit **only the markdown**; the hook script stays untouched.
 
+Codex auto selects the adaptive variant; other platforms keep their own shared
+status blocks. For example:
+
 ```markdown
-[workflow-state:in_progress]
-Flow: trellis-implement → trellis-check → trellis-update-spec → finish
-Next required action: inspect conversation history + git status, then execute the next uncompleted step in that sequence.
-For agent-capable platforms, do NOT edit code in the main session; dispatch `trellis-implement` for implementation and dispatch `trellis-check` before reporting completion.
-[/workflow-state:in_progress]
+[workflow-state:in_progress-auto]
+Keep continuous, tightly coupled work in the main session: trellis-before-dev → implement → trellis-check skill → validation → trellis-update-spec → commit decision → finish.
+Delegate bounded work only for independent parallel work, useful context isolation, specialized capability, or independent review. Keep one writer per scope; continue independent parent work and wait when the result is needed.
+Respect explicit inline requests. Planning completion or a phase transition does not require a child.
+[/workflow-state:in_progress-auto]
 ```
 
 STATUS matches `task.json.status`. Built-in: `planning` / `in_progress` / `completed`. Custom statuses (including hyphenated like `in-review`) are recognized — STATUS regex is `[A-Za-z0-9_-]+`.
